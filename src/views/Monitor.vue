@@ -11,7 +11,7 @@
       </a-menu>
     </a-layout-sider>
     <a-layout-content style="padding: 24px;">
-        <MonitorItem :data="stationData[current[0]]" />
+        <MonitorItem v-if="stationData.length > 0" :data="stationData[current[0]]" />
     </a-layout-content>
   </a-layout>
 </template>
