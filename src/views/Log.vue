@@ -1,7 +1,7 @@
 <template>
-  <a-content style="padding: 24px;">
+  <a-layout-content style="padding: 24px;">
     <a-table :columns="column" :data-source="dataSource" />
-  </a-content>
+  </a-layout-content>
 </template>
 
 <script>

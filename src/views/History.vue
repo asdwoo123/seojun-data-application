@@ -1,5 +1,5 @@
 <template>
-  <a-content style="padding: 24px;">
+  <a-layout-content style="padding: 24px;">
     <div class="flex between" style="margin-bottom: 20px;">
       <div class="row">
         <a-select :default-value="productNames[0]" style="width: 120px; margin-right: 10px;">
@@ -29,7 +29,7 @@
       </a-button>
     </div>
     <SaveDataTable />
-  </a-content>
+  </a-layout-content>
 </template>
 
 <script>
