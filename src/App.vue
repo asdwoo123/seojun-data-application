@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <MainLayout />
+    <MainLayout v-if="isConnect" />
   </div>
 </template>
 
@@ -8,13 +8,21 @@
 import MainLayout from "@/layouts/MainLayout";
 import { mongodbConnect } from '@/utils/mongodb'
 import { connectOPC } from '@/utils/opcua'
+import bus from '@/utils/bus'
 
 export default {
   name: 'app',
   components: {
     MainLayout
   },
+  data: () => ({
+    isConnect: false
+  }),
   mounted() {
+    bus.$on('mongodb', () => {
+      this.isConnect = true
+    })
+
     mongodbConnect()
     connectOPC()
   }

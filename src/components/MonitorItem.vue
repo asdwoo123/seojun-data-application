@@ -6,7 +6,7 @@
                type="error" message="All machine must be connected"/>
     </div>
     <a-row type="flex" :gutter="16">
-      <a-col :span="12" style="padding-bottom: 16px;" v-for="(station, index) in data[1]" :key="index">
+      <a-col :lg="6" :md="12" style="padding-bottom: 16px;" v-for="(station, index) in data[1]" :key="index">
         <a-card class="con-box" :title="station.stationName">
           <div slot="extra" :class="(station.state) ? 'led-green' : 'led-red'"></div>
           <p class="flex between" style="padding-bottom: 8px;">

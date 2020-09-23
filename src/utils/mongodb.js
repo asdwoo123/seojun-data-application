@@ -23,7 +23,7 @@ export const mongodbConnect = () => {
     if (err) {
       console.error(err)
     } else {
-      db = client.db(dbName)
+      db = client.db('seojunDB')
       bus.$emit('mongodb', true)
 
       /*const p = ['A/C', 'CSD', 'DSD']
@@ -53,7 +53,11 @@ export const mongodbConnect = () => {
 
 export const getMongoDB = () => db
 
-export const getCollection = (collectionName) => db.collection(collectionName)
+export const getCollection = (collectionName) => {
+ if (db) {
+  return db.collection(collectionName)
+ }
+}
 
 export const saveStation = async ({ productName, stationName, productId, data }) => {
 

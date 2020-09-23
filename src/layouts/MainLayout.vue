@@ -27,6 +27,9 @@ export default {
     current: [routeNames[0]],
     routeNames
   }),
+  mounted() {
+    this.current = [this.$route.name]
+  },
   methods: {
     onModeChange({ key }) {
       if (this.$route.path === `/${key.toLowerCase()}`) return
