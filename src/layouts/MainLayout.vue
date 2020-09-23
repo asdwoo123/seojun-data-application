@@ -28,7 +28,8 @@ export default {
     routeNames
   }),
   mounted() {
-    this.current = [this.$route.name]
+    if (this.$route.name === '') this.current = 'Monitor'
+    else this.current = [this.$route.name]
   },
   methods: {
     onModeChange({ key }) {

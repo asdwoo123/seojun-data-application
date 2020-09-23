@@ -16,7 +16,7 @@ export default {
     MainLayout
   },
   data: () => ({
-    isConnect: false
+    isConnect: true
   }),
   mounted() {
     bus.$on('mongodb', () => {
