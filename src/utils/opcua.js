@@ -14,7 +14,7 @@ let clients = []
 
 export const connectOPC = () => {
   store.commit('insertRealTime', [])
-  project.forEach((product, projectIndex) => {
+  project.forEach((product, productIndex) => {
     const productName = product.productName
 
     if (!productName || !Array.isArray(product.stations)) return
@@ -137,11 +137,12 @@ export const connectOPC = () => {
   })
 }
 
-export const disconnect = () => {
+export const disconnect = (callback) => {
   clients.forEach(async client => {
     await client.disconnect()
+    clients = []
+    callback()
   })
-  clients = []
 }
 
 async function dmcFormat(session, dmc) {

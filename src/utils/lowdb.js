@@ -30,13 +30,13 @@ db.defaults({
   stations: range(1, 4).map(i => ({
     stationName: 'station' + i,
     url: `192.168.1.${ii}${i}:4840`,
+    barcode: [
+      "ns=3;s=\"As\".\"DATA\".\"DMC\""
+    ],
+    scan: "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
     done: "ns=3;s=\"As\".\"DATA\".\"Done\"",
     result: "ns=3;s=\"As\".\"DATA\".\"Result\"",
     pcState: "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
-    scan: "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
-    dmc: [
-      "ns=3;s=\"As\".\"DATA\".\"DMC\""
-    ],
     data: range(1, 2).map(d => ({
       nodeId: `ns=1;s=light${d}`,
       dataName: 'signal' + d,

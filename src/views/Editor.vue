@@ -4,10 +4,18 @@
       <a-button type="primary" style="margin-right: 16px;" @click="addProject">
         Add project
       </a-button>
-      <a-button type="primary" style="margin-right: 16px;">
-        Save
-      </a-button>
-      <a-button type="primary" style="margin-right: 16px;">
+      <a-popover trigger="click" placement="bottom">
+        <template slot="content">
+          <div class="flex">
+            <a-input-password v-model="password" style="margin-right: 8px;" />
+            <a-button @click="saveProject">Save</a-button>
+          </div>
+        </template>
+        <a-button type="primary" style="margin-right: 16px;">
+          Save
+        </a-button>
+      </a-popover>
+      <a-button type="primary" style="margin-right: 16px;" @click="projectReset">
         Reset
       </a-button>
       <a-button type="primary">
@@ -30,30 +38,30 @@
               <a-popover trigger="click">
                 <template slot="content">
                   <div>
-                    <a-input style="width: 120px; margin-right: 10px;" v-model="product.productName" />
+                    <a-input style="width: 120px; margin-right: 10px;" v-model="product.productName"/>
                   </div>
                 </template>
-              <a-button size="small" style="margin-right: 8px;">Rename</a-button>
+                <a-button size="small" style="margin-right: 8px;">Rename</a-button>
               </a-popover>
               <a-dropdown-button size="small">
                 {{ index + 1 }}st order
-                <a-menu slot="overlay">
-                    <a-menu-item v-for="(product, i) in project" :key="i">
-                      {{ i + 1 }}st order
-                    </a-menu-item>
+                <a-menu slot="overlay" @click="orderChange(index, $event)">
+                  <a-menu-item v-for="(product, i) in project" :key="i">
+                    {{ i + 1 }}st order
+                  </a-menu-item>
                 </a-menu>
               </a-dropdown-button>
             </div>
           </div>
-          <Container>
+          <Container @drop="stationDrop(index, $event)">
             <Draggable v-for="(station, ii) in product.stations" :key="ii" style="cursor: pointer; margin-bottom: 8px;">
               <div class="flex between draggable">
                 <span>{{ station.stationName }}</span>
                 <div>
-                  <a-button style="margin-right: 8px;">
+                  <a-button style="margin-right: 8px;" @click="showStationDetail(index, ii)">
                     Detail
                   </a-button>
-                  <a-button>
+                  <a-button @click="removeStation(index, ii)">
                     Delete
                   </a-button>
                 </div>
@@ -63,6 +71,55 @@
         </a-card>
       </a-col>
     </a-row>
+
+    <a-modal :visible="visible" style="top: 20px;" :width="1024" :closable="false" @ok="saveStation"
+             @cancel="modalClose">
+      <template v-if="station">
+        <div class="flex between">
+          <div class="flex">
+            <span style="width: 100px;">station name</span>
+            <a-input v-model="station.stationName"/>
+          </div>
+          <a-button type="primary" @click="addData(station)">Add data</a-button>
+        </div>
+        <a-row>
+          <a-col :span="12"
+                 v-for="[key] in Object.entries(station).filter(v => ['stationName', 'data'].every(k => k !== v[0]))"
+                 :key="key">
+            <div class="flex">
+              <span style="width: 70px;">
+              {{ key }}
+            </span>
+              <a-input style="width: 250px;" v-model="station[key]"/>
+            </div>
+          </a-col>
+        </a-row>
+
+        <div>
+          <div class="flex" v-for="(v, vi) in station.data" :key="vi">
+            <div class="flex">
+              <span style="width: 70px;">Data name</span>
+              <a-input style="width: 250px;" v-model="v.dataName"/>
+            </div>
+            <div class="flex">
+              <span style="width: 70px;">Node id</span>
+              <a-input style="width: 250px;" v-model="v.nodeId"/>
+            </div>
+            <div>
+              <a-checkbox v-model="v.monitor">
+                Monitor
+              </a-checkbox>
+              <a-checkbox v-model="v.save">
+                Save
+              </a-checkbox>
+            </div>
+            <div>
+              <a-button type="danger" shape="circle" icon="delete" @click="removeData(station, vi)"/>
+            </div>
+          </div>
+        </div>
+      </template>
+    </a-modal>
   </a-layout-content>
 </template>
 
@@ -70,7 +127,7 @@
 import {connectOPC, disconnect} from '@/utils/opcua'
 import {clone} from 'lodash'
 import {Container, Draggable} from 'vue-smooth-dnd'
-import {getDB} from '@/utils/lowdb'
+import {getDB, setDB} from '@/utils/lowdb'
 
 
 export default {
@@ -79,7 +136,10 @@ export default {
     project: getDB('project'),
     password: '',
     changePassword: '',
-    station: {}
+    station: null,
+    visible: false,
+    productIndex: 0,
+    stationIndex: 0
   }),
   components: {
     Container, Draggable
@@ -99,11 +159,52 @@ export default {
     resetProject() {
       this.project = getDB('project')
     },
-    saveStation(pi, si) {
-
+    saveStation() {
+      this.project[this.productIndex].stations[this.stationIndex] = this.station
+      this.visible = false
     },
-    orderChange() {
-
+    removeStation(productIndex, stationIndex) {
+      this.project[productIndex].stations.splice(stationIndex, 1)
+      this.$forceUpdate()
+    },
+    modalClose() {
+      this.visible = false
+    },
+    orderChange(removedIndex, e) {
+      const addedIndex = parseInt(e.key)
+      const [removed] = this.project.splice(removedIndex, 1)
+      this.project.splice(addedIndex, 0, removed)
+      this.$forceUpdate()
+    },
+    showStationDetail(productIndex, stationIndex) {
+      this.productIndex = productIndex
+      this.stationIndex = stationIndex
+      this.station = clone(this.project[productIndex].stations[stationIndex])
+      this.visible = true
+    },
+    addData(station) {
+      station.data.push({dataName: '', nodeId: '', monitor: true, save: true})
+    },
+    removeData(station, dataIndex) {
+      station.data.splice(dataIndex, 1)
+    },
+    stationDrop(productIndex, e) {
+      const {removedIndex, addedIndex} = e
+      const [removed] = this.project[productIndex].stations.splice(removedIndex, 1)
+      this.project[productIndex].stations.splice(addedIndex, 0, removed)
+      this.$forceUpdate()
+    },
+    projectReset() {
+      this.project = getDB('project')
+      this.$forceUpdate()
+    },
+    saveProject() {
+      if (this.password === getDB('password')) {
+        setDB('project', this.project)
+        setTimeout(() => {
+          disconnect(connectOPC)
+        }, 100)
+      }
     }
   }
 }

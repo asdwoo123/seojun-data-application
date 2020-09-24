@@ -28,8 +28,11 @@ export default {
     routeNames
   }),
   mounted() {
-    if (this.$route.name === '') this.current = 'Monitor'
-    else this.current = [this.$route.name]
+    if (this.$route.name) {
+      this.current = [this.$route.name]
+    } else {
+      this.$router.push('/monitor')
+    }
   },
   methods: {
     onModeChange({ key }) {
