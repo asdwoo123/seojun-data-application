@@ -7,7 +7,7 @@
       <a-popover trigger="click" placement="bottom">
         <template slot="content">
           <div class="flex">
-            <a-input-password v-model="password" style="margin-right: 8px;" />
+            <a-input-password v-model="password" style="margin-right: 8px;"/>
             <a-button @click="saveProject">Save</a-button>
           </div>
         </template>
@@ -15,7 +15,7 @@
           Save
         </a-button>
       </a-popover>
-      <a-button type="primary" style="margin-right: 16px;" @click="projectReset">
+      <a-button type="primary" style="margin-right: 16px;" @click="resetProject">
         Reset
       </a-button>
       <a-button type="primary">
@@ -133,7 +133,7 @@ import {getDB, setDB} from '@/utils/lowdb'
 export default {
   name: "Editor",
   data: () => ({
-    project: getDB('project'),
+    project: [...getDB('project')],
     password: '',
     changePassword: '',
     station: null,
@@ -157,6 +157,7 @@ export default {
       this.$forceUpdate()
     },
     resetProject() {
+      console.log(Array.isArray(getDB('project')))
       this.project = getDB('project')
     },
     saveStation() {
@@ -192,10 +193,6 @@ export default {
       const {removedIndex, addedIndex} = e
       const [removed] = this.project[productIndex].stations.splice(removedIndex, 1)
       this.project[productIndex].stations.splice(addedIndex, 0, removed)
-      this.$forceUpdate()
-    },
-    projectReset() {
-      this.project = getDB('project')
       this.$forceUpdate()
     },
     saveProject() {

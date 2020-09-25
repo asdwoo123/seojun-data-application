@@ -1,7 +1,11 @@
 {
-  "name": "seojun-data-application",
+  "name": "seojuneng-application",
   "version": "0.1.0",
   "private": true,
+  "author": {
+    "name": "An sang kyu",
+    "email": "sangkyu_an@seojuneng.com"
+  },
   "scripts": {
     "start": "npm run electron:serve",
     "serve": "vue-cli-service serve",

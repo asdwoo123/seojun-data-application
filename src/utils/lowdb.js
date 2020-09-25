@@ -60,3 +60,4 @@ export const getDB = name => clone(db.get(name).value())
 export const addDB = (name, value) => {
   db.get(name).unshift(value).write()
 }
+
