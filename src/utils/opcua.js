@@ -29,7 +29,7 @@ export const connectOPC = () => {
         stationName,
         state: false,
         data: [
-          ...station.data.filter(v => v.dataName && v.nodeId).map(
+          ...station.data.filter(v => v.dataName && v.nodeId).filter(v => v.monitor).map(
             v => ({
               dataName: v.dataName,
               dataValue: ''
@@ -123,12 +123,24 @@ export const connectOPC = () => {
           })
         )
 
+        const [monitorFilter, saveFilter] = ['monitor', 'save'].map(n => station.data.filter(v => v[n]).map(v => v.dataName))
+
+        store.commit('insertRealTime', {
+          productName,
+          stationName,
+          productId,
+          state: true,
+          data: [
+            ...stationData.filter(d => monitorFilter.some(n => d.dataName === n))
+          ]
+        })
+
         saveStation({
           productName,
           stationName,
           productId,
           data: [
-            ...stationData
+            ...stationData.filter(d => saveFilter.some(n => d.dataName === n))
           ]
         })
       })

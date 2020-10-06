@@ -27,7 +27,7 @@
         <a-card class="con-box" style="margin-bottom: 16px;" :title="product.productName">
           <div slot="extra">
             <div class="flex">
-              <a-button size="small" style="margin-right: 8px; margin-bottom: 8px;">
+              <a-button size="small" style="margin-right: 8px; margin-bottom: 8px;" @click="addStation(index)">
                 Add station
               </a-button>
               <a-button size="small" @click="removeProject(index)">
@@ -83,10 +83,10 @@
           <a-button type="primary" @click="addData(station)">Add data</a-button>
         </div>
         <a-row>
-          <a-col :span="12"
+          <a-col :span="10"
                  v-for="[key] in Object.entries(station).filter(v => ['stationName', 'data'].every(k => k !== v[0]))"
                  :key="key">
-            <div class="flex">
+            <div class="flex" style="margin-bottom: 8px;">
               <span style="width: 70px;">
               {{ key }}
             </span>
@@ -96,16 +96,19 @@
         </a-row>
 
         <div>
-          <div class="flex" v-for="(v, vi) in station.data" :key="vi">
+          <div class="flex" v-for="(v, vi) in station.data" :key="vi" style="margin-bottom: 8px;">
+            <a-col :span="10">
             <div class="flex">
               <span style="width: 70px;">Data name</span>
               <a-input style="width: 250px;" v-model="v.dataName"/>
             </div>
+            </a-col>
+            <a-col :span="14" class="flex">
             <div class="flex">
               <span style="width: 70px;">Node id</span>
               <a-input style="width: 250px;" v-model="v.nodeId"/>
             </div>
-            <div>
+            <div class="flex center-v" style="margin-left: 10px; margin-right: 5px;">
               <a-checkbox v-model="v.monitor">
                 Monitor
               </a-checkbox>
@@ -116,6 +119,7 @@
             <div>
               <a-button type="danger" shape="circle" icon="delete" @click="removeData(station, vi)"/>
             </div>
+            </a-col>
           </div>
         </div>
       </template>
@@ -169,6 +173,8 @@ export default {
       this.$forceUpdate()
     },
     modalClose() {
+      console.log(this.project[this.productIndex].stations[this.stationIndex])
+      this.station = clone(this.project[this.productIndex].stations[this.stationIndex])
       this.visible = false
     },
     orderChange(removedIndex, e) {
@@ -202,6 +208,17 @@ export default {
           disconnect(connectOPC)
         }, 100)
       }
+    },
+    addStation(projectIndex) {
+      this.project[projectIndex].stations.push({
+        stationName: 'Untitled',
+        barcode: [],
+        scan: '',
+        done: '',
+        result: '',
+        pcState: '',
+        data: []
+      })
     }
   }
 }

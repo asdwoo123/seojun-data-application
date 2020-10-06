@@ -7,6 +7,7 @@
 <script>
 import { getDB } from '@/utils/lowdb'
 import moment from 'moment'
+import bus from '../utils/bus'
 
 const column = [
   {
@@ -48,6 +49,10 @@ export default {
 
       this.dataSource = dataSource
     }
+  },
+  mounted() {
+    this.loadDataSource()
+    bus.$on('logUpdate', () => this.loadDataSource())
   }
 }
 </script>
