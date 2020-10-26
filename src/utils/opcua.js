@@ -8,17 +8,16 @@ import { remote } from 'electron'
 
 const { app } = remote
 
-const project = getDB('project')
 
 let clients = []
 
 export const connectOPC = () => {
+  const project = getDB('project')
   store.commit('insertRealTime', [])
   project.forEach((product, productIndex) => {
     const productName = product.productName
 
     if (!productName || !Array.isArray(product.stations)) return
-
     product.stations.forEach(async (station, stationIndex) => {
       const stationName = station.stationName
 
@@ -143,18 +142,21 @@ export const connectOPC = () => {
             ...stationData.filter(d => saveFilter.some(n => d.dataName === n))
           ]
         })
+
+        bus.$emit('historyUpdate', true)
       })
 
     })
   })
 }
 
-export const disconnect = (callback) => {
-  clients.forEach(async client => {
-    await client.disconnect()
-    clients = []
-    callback()
-  })
+export const disconnect = async (callback) => {
+  if (clients.length > 0) {
+    await Promise.all(clients.map(client => client.disconnect()))
+  }
+
+  clients = []
+  callback()
 }
 
 async function dmcFormat(session, dmc) {

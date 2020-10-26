@@ -18,9 +18,18 @@
       <a-button type="primary" style="margin-right: 16px;" @click="resetProject">
         Reset
       </a-button>
-      <a-button type="primary">
-        Change password
-      </a-button>
+      <a-popover trigger="click" placement="bottom">
+        <template slot="content">
+          <div class="flex">
+            <a-input-password placeholder="Password" v-model="password" style="margin-right: 8px;"/>
+            <a-input-password placeholder="Change password" v-model="changePassword" style="margin-right: 8px;"/>
+            <a-button @click="handleChangePassword">Change</a-button>
+          </div>
+        </template>
+        <a-button type="primary">
+          Change password
+        </a-button>
+      </a-popover>
     </div>
     <a-row :gutter="16">
       <a-col :sm="12" :xl="8" :xxl="6" v-for="(product, index) in project" :key="index">
@@ -129,7 +138,7 @@
 
 <script>
 import {connectOPC, disconnect} from '@/utils/opcua'
-import {clone} from 'lodash'
+import {cloneDeep} from 'lodash'
 import {Container, Draggable} from 'vue-smooth-dnd'
 import {getDB, setDB} from '@/utils/lowdb'
 
@@ -173,8 +182,7 @@ export default {
       this.$forceUpdate()
     },
     modalClose() {
-      console.log(this.project[this.productIndex].stations[this.stationIndex])
-      this.station = clone(this.project[this.productIndex].stations[this.stationIndex])
+      this.station = cloneDeep(this.project[this.productIndex].stations[this.stationIndex])
       this.visible = false
     },
     orderChange(removedIndex, e) {
@@ -186,7 +194,7 @@ export default {
     showStationDetail(productIndex, stationIndex) {
       this.productIndex = productIndex
       this.stationIndex = stationIndex
-      this.station = clone(this.project[productIndex].stations[stationIndex])
+      this.station = cloneDeep(this.project[productIndex].stations[stationIndex])
       this.visible = true
     },
     addData(station) {
@@ -204,6 +212,7 @@ export default {
     saveProject() {
       if (this.password === getDB('password')) {
         setDB('project', this.project)
+        this.password = ''
         setTimeout(() => {
           disconnect(connectOPC)
         }, 100)
@@ -219,6 +228,15 @@ export default {
         pcState: '',
         data: []
       })
+    },
+    handleChangePassword() {
+      if (this.password === getDB('password')) {
+        if (this.changePassword !== '') {
+          setDB('password', this.changePassword)
+          this.password = ''
+          this.changePassword = ''
+        }
+      }
     }
   }
 }
