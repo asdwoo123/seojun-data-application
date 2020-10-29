@@ -2,7 +2,7 @@ import { OPCUAClient, ClientSubscription, ClientMonitoredItem, AttributeIds, Dat
 import store from '@/store'
 import { getDB, addDB } from '@/utils/lowdb'
 import bus from '../utils/bus'
-import { saveStation } from '@/utils/mongodb'
+import { searchStation, saveStation } from '@/utils/mongodb'
 import path from 'path'
 import { remote } from 'electron'
 
@@ -12,6 +12,8 @@ const { app } = remote
 let clients = []
 
 export const connectOPC = () => {
+
+
   const project = getDB('project')
   store.commit('insertRealTime', [])
   project.forEach((product, productIndex) => {
@@ -19,9 +21,12 @@ export const connectOPC = () => {
 
     if (!productName || !Array.isArray(product.stations)) return
     product.stations.forEach(async (station, stationIndex) => {
+      const checkStationProperty = ['stationName', 'url', 'barcode', 'pcState', 'scan', 'pass', 'notPass', 'done', 'result', 'data']
+
+      if (checkStationProperty.some(p => !station[p])) return
       const stationName = station.stationName
 
-      if (!station.url || !stationName || !Array.isArray(station.data)) return
+      if (!Array.isArray(station.data)) return
       store.commit('insertRealTime', {
         productName,
         productId: '',
@@ -88,8 +93,6 @@ export const connectOPC = () => {
                 state
               })
 
-              bus.$emit('logUpdate', true)
-
 
               const logLevel = (state) ? 'success' : 'error'
               const message = (state) ? 'Connected to equipment' : 'The connection to the equipment has been lost'
@@ -101,16 +104,52 @@ export const connectOPC = () => {
                 message,
                 time: new Date()
               })
+
+              bus.$emit('logUpdate', true)
             }
           }, 500)
 
         }, 1500)
       })
 
+      opcUASubscribe(subscription, station.scan, async () => {
+        const productId = await dmcFormat(session, station.dmc)
+        const isPass = searchStation({
+          productName,
+          productIndex,
+          stationIndex,
+          productId
+        })
+
+        let nodeId = 'notPass'
+
+        if (isPass) {
+          nodeId = 'pass'
+        }
+
+        const nodesToWrite = [{
+          nodeId: station[nodeId],
+          attributedId: AttributeIds.Value,
+          value: {
+            value: {
+              dataType: DataType.Boolean,
+              value: true
+            }
+          }
+        }]
+
+        session.write(nodesToWrite).then(() => {
+          setTimeout(() => {
+            nodesToWrite[0].value.value.value = false
+            session.write(nodesToWrite)
+          }, 500)
+        })
+      })
+
       opcUASubscribe(subscription, station.done, async () => {
         const productId = await dmcFormat(session, station.dmc)
         const result = (await session.readVariableValue(station.result)).value.value
-        if ((!productId && result)) return
+        if (!productId || !result) return
 
         const stationData = await Promise.all(
           station.data.map(async node => {
@@ -134,7 +173,7 @@ export const connectOPC = () => {
           ]
         })
 
-        saveStation({
+        await saveStation({
           productName,
           stationName,
           productId,
@@ -168,6 +207,8 @@ async function dmcFormat(session, dmc) {
     )
 
     return (await productPro).join('')
+  } else {
+    return (await session.readVariableValue(dmc)).value.value
   }
 }
 
@@ -190,7 +231,7 @@ function opcUASubscribe(subscription, nodeId, callback) {
   )
 
   monitoredItem.on('changed', async (dataValue) => {
-    if (store().state.stationData.every(v => v.state)) {
+    if (store.state.stationData.every(v => v.state)) {
       const data = dataValue.value.value
       if (data) callback(data)
     }

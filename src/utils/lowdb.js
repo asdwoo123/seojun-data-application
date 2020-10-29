@@ -1,5 +1,6 @@
 import low from 'lowdb'
 import LocalStorage from 'lowdb/adapters/LocalStorage'
+import { range } from 'lodash'
 
 const adapter = new LocalStorage('db')
 const db = low(adapter)
@@ -28,23 +29,25 @@ db.defaults({
   productName: s,
   stations: range(1, 4).map(i => ({
     stationName: 'station' + i,
-    url: `192.168.1.${ii}${i}:4840`,
+    url: `192.168.0.22:${(ii * 3) + i}000`,
     barcode: [
       "ns=3;s=\"As\".\"DATA\".\"DMC\""
     ],
+    pcState: "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
     scan: "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+    pass: "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+    notPass: "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
     done: "ns=3;s=\"As\".\"DATA\".\"Done\"",
     result: "ns=3;s=\"As\".\"DATA\".\"Result\"",
-    pcState: "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
-    data: range(1, 2).map(d => ({
+    data: range(1, 10).map(d => ({
       nodeId: `ns=1;s=light${d}`,
       dataName: 'signal' + d,
       monitor: true,
       save: true,
       standard: {
         maximum: 0,
-        minimum: 3,
-        same: 1
+        minimum: 0,
+        same: 0
       }
     }))
   }))

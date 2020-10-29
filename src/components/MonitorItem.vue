@@ -2,7 +2,7 @@
   <div>
     <div class="flex">
       <div style="font-size: 1.3125rem; font-weight: 500; padding: 14px 0 25px 24px;">{{ productName }}</div>
-      <a-alert v-if="projectData && projectData[1].every(station => station.state)" style="height: 40px; margin-top: 7px; margin-left: 30px;"
+      <a-alert v-if="projectData && !projectData[1].every(station => station.state)" style="height: 40px; margin-top: 7px; margin-left: 30px;"
                type="error" message="All machine must be connected"/>
     </div>
         <a-row v-if="projectData" type="flex" :gutter="16">

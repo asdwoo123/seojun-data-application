@@ -1,4 +1,3 @@
-<script src="../../../async-test/app.js"></script>
 <template>
   <a-layout-content style="padding: 24px;">
     <div class="flex between" style="margin-bottom: 20px;">
@@ -39,7 +38,8 @@
         </a-button>
       </a-popover>
     </div>
-    <SaveDataTable :columns="columns" :dataSource="dataSource" :loading="loading" :pageCount="pageCount"
+    <SaveDataTable :columns="columns" :dataSource="dataSource" :loading="loading" :pageCount="pageCount" :completes="completes" :productName="productName"
+                   :project="project" :option="option" :loadColumns="loadColumns"
                    :pageNumber="pageNumber" :pageChange="pageChange" :rowSelection="rowSelection"/>
   </a-layout-content>
 </template>
@@ -62,7 +62,9 @@ export default {
   name: "History",
   components: {SaveDataTable},
   data: () => ({
+    project: [],
     productNames: [],
+    productName: '',
     defaultProductName: '',
     option: 0,
     search: '',
@@ -71,6 +73,7 @@ export default {
     columns: [],
     dataSource: [],
     dateString: [],
+    completes: [],
     visible: false,
     modalData: null,
     pageCount: null,
@@ -81,8 +84,10 @@ export default {
     popupVisible: false
   }),
   created() {
-    this.productNames = getDB('project').map(p => p.productName)
+    this.project = getDB('project')
+    this.productNames = this.project.map(p => p.productName)
     this.defaultProductName = this.productNames[0]
+    this.productName = this.defaultProductName
     this.collections = this.productNames.map(n => getCollection(n))
   },
   mounted() {
@@ -90,11 +95,14 @@ export default {
     this.loadDataSource()
 
     bus.$on('historyUpdate', () => {
-      this.loadDataSource()
+      if (this.search === '' && this.period === [] && this.dateString === []) {
+        this.loadDataSource()
+      }
     })
   },
   methods: {
     optionChange(option) {
+      this.productName = option
       this.option = this.productNames.indexOf(option)
       this.loadColumns()
       this.loadDataSource()
@@ -128,6 +136,8 @@ export default {
         this.selectedRowKeys.forEach(id => {
           this.collections[this.option].deleteOne({'id': id}, (err) => {
             if (err) return
+            console.log(id)
+            this.password = ''
             this.loadData()
           })
         });
@@ -151,8 +161,9 @@ export default {
           title: upperFirst(station.stationName),
           children: station.data.map(v => ({
             title: upperFirst(v.dataName),
-            dataIndex: v.dataName,
-            key: v.dataName
+            dataIndex: `${v.dataName}-${station.stationName}`,
+            key: v.dataName,
+            standard: v.standard
           }))
         }))
       ]
@@ -160,6 +171,7 @@ export default {
     },
     loadDataSource(paging) {
       if (this.collections.length === 0) return
+      this.$message.loading('Data loading...')
       const collection = this.collections[this.option]
       const query = {}
 
@@ -186,7 +198,7 @@ export default {
             const productId = complete.productId
             const createdAt = moment(complete.createdAt).format('YYYY-MM-DD h:mm:ss a');
             const com = (complete['station'] || complete['stations']).map((station, index) => station.data.reduce((acc, one) => (
-                {...acc, [one.dataName + '-' + (index + 1)]: one.dataValue}
+                {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
             ), {}));
             const data = com.reduce((acc, one) => ({...acc, ...one}), {});
             return {
@@ -198,8 +210,11 @@ export default {
           })
 
           this.dataSource = [...dataSource]
+        } else {
+          this.dataSource = []
         }
         this.loading = false
+        /*this.$message.success('Data load complete')*/
       })
     },
     pageChange(pageNumber) {
@@ -215,6 +230,8 @@ export default {
       const query = {}
       dialog.showSaveDialog(null, options)
           .then(({filePath}) => {
+            this.$message.loading('Saving...')
+
             if (key === '0') {
               if (this.search !== '') query.productId = {'$regex': this.search}
               if (this.period.length > 0) query.createdAt = {
@@ -250,17 +267,17 @@ export default {
                   const values = saveData.map(v => Object.values(v));
                   stringify(values, {header: true, columns}, (err, output) => {
                     if (!err) {
-                      fs.writeFile(filePath, output, function (err) {
+                      fs.writeFile(filePath, output, (err) => {
                         if (err) {
-                          this.$notification.open({message: 'Save failed', duration: 1.5});
+                          this.$message.error('Save failed');
                         } else {
-                          this.$notification.open({message: 'Saved successfully', duration: 1.5});
+                          this.$message.success('Saved successfully');
                         }
                       });
                     }
                   });
                 }
-              }
+              } else this.$message.error('Save failed');
             })
           })
     }

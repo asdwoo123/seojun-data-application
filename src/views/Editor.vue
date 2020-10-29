@@ -81,13 +81,13 @@
       </a-col>
     </a-row>
 
-    <a-modal :visible="visible" style="top: 20px;" :width="1024" :closable="false" @ok="saveStation"
+    <a-modal :visible="visible" style="top: 20px;" :width="1024" :closable="false" :maskClosable="false" @ok="saveStation"
              @cancel="modalClose">
       <template v-if="station">
         <div class="flex between">
-          <div class="flex">
-            <span style="width: 100px;">station name</span>
-            <a-input v-model="station.stationName"/>
+          <div class="flex between" style="margin-bottom: 8px; width: 320px;">
+            <a-tooltip placement="topLeft" :title="tooltips.stationName"><span style="flex: 1;">station name</span></a-tooltip>
+            <a-input style="flex: 3;" v-model="station.stationName"/>
           </div>
           <a-button type="primary" @click="addData(station)">Add data</a-button>
         </div>
@@ -96,9 +96,9 @@
                  v-for="[key] in Object.entries(station).filter(v => ['stationName', 'data'].every(k => k !== v[0]))"
                  :key="key">
             <div class="flex" style="margin-bottom: 8px;">
-              <span style="width: 70px;">
+              <a-tooltip placement="topLeft" :title="tooltips[key]"><span style="width: 70px;">
               {{ key }}
-            </span>
+            </span></a-tooltip>
               <a-input style="width: 250px;" v-model="station[key]"/>
             </div>
           </a-col>
@@ -152,7 +152,18 @@ export default {
     station: null,
     visible: false,
     productIndex: 0,
-    stationIndex: 0
+    stationIndex: 0,
+    tooltips: {
+      stationName: '스테이션 식별자',
+      url: 'PLC 아이피 주소 예)192.168.0.1:4840',
+      barcode: '바코드 값 노드',
+      pcState: 'PC에서 PLC로 지속적으로 보내는 생존신호 노드',
+      scan: '바코드스캐너에 바코드 값이 입력될때 true 값이 되는 노드',
+      pass: '이전 공정이 모두 완료 되었을때 PLC에서 펄스신호로 받을 노드',
+      notPass: '이전 공정이 완료가 안되었을때 PLC에서 펄스신호로 받을 노드',
+      done: '생산이 완료되었을때 PC로 보내는 완료신호 노드',
+      result: '제품의 합/불 여부'
+    }
   }),
   components: {
     Container, Draggable
@@ -222,10 +233,12 @@ export default {
       this.project[projectIndex].stations.push({
         stationName: 'Untitled',
         barcode: [],
+        pcState: '',
         scan: '',
+        pass: '',
+        notPass: '',
         done: '',
         result: '',
-        pcState: '',
         data: []
       })
     },
@@ -248,5 +261,12 @@ export default {
   border-radius: 3px;
   padding: 5px;
   background: #ffffff;
+}
+.dataName {
+
+}
+
+.dataInput {
+
 }
 </style>
