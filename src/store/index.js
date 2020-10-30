@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import { cloneDeep } from 'lodash'
 
 Vue.use(Vuex)
 
@@ -18,10 +19,14 @@ export default new Vuex.Store({
       const result = state.stationData.find(v => (v.productName === payload.productName) && (v.stationName === payload.stationName))
       if (result) {
         const index = state.stationData.indexOf(result)
-        state.stationData[index] = {
+        const stationData = cloneDeep(state.stationData)
+        stationData[index] = {
           ...state.stationData[index],
           ...payload
         }
+
+        state.stationData = stationData
+
       } else {
         state.stationData.push(payload)
       }
