@@ -64,6 +64,7 @@ export const connectOPC = () => {
             let isLive = true
             let state = false
             let currentState = false
+
             subscription.on('started', () => {
                 setInterval(async () => {
                     state = false
@@ -82,7 +83,9 @@ export const connectOPC = () => {
                     session.write(nodesToWrite).then(() => {
                         isLive = !isLive
                         state = true
-                    }).catch(() => state = false).finally(() => {
+                    })
+
+                    setTimeout(() => {
                         if (state !== currentState) {
                             currentState = state
                             store.commit('insertRealTime', {
@@ -105,8 +108,10 @@ export const connectOPC = () => {
 
                             bus.$emit('logUpdate', true)
                         }
-                    })
-                }, 1000)
+                    }, 500)
+
+
+                }, 1500)
             })
 
             opcUASubscribe(subscription, station.scan, async () => {
