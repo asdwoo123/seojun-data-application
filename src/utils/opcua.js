@@ -8,7 +8,6 @@ import { remote } from 'electron'
 
 const { app } = remote
 
-
 let clients = []
 
 export const connectOPC = () => {
