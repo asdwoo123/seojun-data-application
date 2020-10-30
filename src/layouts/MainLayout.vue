@@ -1,5 +1,5 @@
 <template>
-  <a-layout style="height: 100%;">
+  <a-layout style="min-height: 100%;">
     <a-layout-header>
       <div style="float: left; width: 240px;"><img width="100" src="../assets/seojuneng-logo.png" alt="logo"></div>
       <a-menu @click="onModeChange" style="display: inline-block; line-height: 64px;" v-model="current" mode="horizontal">

@@ -128,19 +128,18 @@ export default {
     },
     rowSelection() {
       return {
-        onChange: (selectedRowKeys) => {
-          this.selectedRowKeys = selectedRowKeys
+        onChange: (selectedRowKeys, data) => {
+          this.selectedRowKeys = data
         }
       }
     },
     deleteRowSelected() {
       if (this.password === getDB('password')) {
-        this.selectedRowKeys.forEach(id => {
-          this.collections[this.option].deleteOne({'id': id}, (err) => {
+        this.selectedRowKeys.forEach(({productId}) => {
+          this.collections[this.option].deleteOne({productId}, (err) => {
             if (err) return
-            console.log(id)
             this.password = ''
-            this.loadData()
+            this.loadDataSource()
           })
         });
       }

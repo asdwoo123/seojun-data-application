@@ -25,6 +25,8 @@ export const mongodbConnect = () => {
             db = client.db('seojunDB')
             bus.$emit('mongodb', true)
 
+            const collection = db.collection('A/C')
+
             /*const p = ['A/C', 'CSD', 'DSD']
             const data = range(3).map(nnn => ({
               dataName: `data${nnn + 1}`,
@@ -71,9 +73,10 @@ export const searchStation = async ({ productName, productIndex, stationIndex, p
         if (document) {
             const project = getDB('project')[productIndex]
             const stations = project.stations.filter(s => {
-                return project.stations.indexOf(s) > stationIndex
+                return project.stations.indexOf(s) < stationIndex
             })
-            return stations.map(s => s.stationName).every(sn => document[sn])
+            if (stations.length === 0) return true
+            else return stations.map(s => s.stationName).every(sn => document.stations.some(s => s.stationName === sn))
         } else {
             return stationIndex === 0
         }
