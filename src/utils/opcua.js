@@ -7,7 +7,6 @@ import path from 'path'
 import { app } from 'electron'
 
 
-
 let clients = []
 
 export const connectOPC = () => {
