@@ -47,7 +47,7 @@
 <script>
 import moment from 'moment'
 import {upperFirst} from 'lodash'
-import {dialog} from 'electron'
+import {remote} from 'electron'
 import fs from 'fs'
 import stringify from 'csv-stringify'
 import {getDB} from '@/utils/lowdb'
@@ -55,6 +55,7 @@ import {getCollection} from '@/utils/mongodb'
 import SaveDataTable from "@/components/SaveDataTable";
 import bus from '@/utils/bus'
 
+const {dialog} = remote
 
 export default {
   name: "History",

@@ -4,8 +4,9 @@ import { getDB, addDB } from '@/utils/lowdb'
 import bus from '../utils/bus'
 import { searchStation, saveStation } from '@/utils/mongodb'
 import path from 'path'
-import { app } from 'electron'
+import { remote } from 'electron'
 
+const { app } = remote
 
 let clients = []
 
