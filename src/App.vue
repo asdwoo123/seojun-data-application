@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <MainLayout v-if="isConnect" />
+    <DatabaseLoading v-else />
   </div>
 </template>
 
@@ -9,14 +10,16 @@ import MainLayout from "@/layouts/MainLayout";
 import { mongodbConnect } from '@/utils/mongodb'
 import { connectOPC } from '@/utils/opcua'
 import bus from '@/utils/bus'
+import DatabaseLoading from "@/layouts/DatabaseLoading";
 
 export default {
   name: 'app',
   components: {
+    DatabaseLoading,
     MainLayout
   },
   data: () => ({
-    isConnect: true
+    isConnect: false
   }),
   mounted() {
     bus.$on('mongodb', () => {

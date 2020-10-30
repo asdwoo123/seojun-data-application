@@ -104,6 +104,7 @@ export default {
     optionChange(option) {
       this.productName = option
       this.option = this.productNames.indexOf(option)
+      this.loading = true
       this.loadColumns()
       this.loadDataSource()
       this.pageNumber = 1
@@ -114,14 +115,17 @@ export default {
       this.loadDataSource()
     },
     daySearch(date, dateString) {
+      console.log(date, dateString)
       this.period = date
       this.dateString = dateString
       this.loadDataSource()
     },
     reset() {
       this.search = ''
+      this.pageNumber = 1
       this.period = []
       this.dateString = []
+      this.loading = true
       this.loadDataSource()
     },
     rowSelection() {
@@ -171,12 +175,12 @@ export default {
     },
     loadDataSource(paging) {
       if (this.collections.length === 0) return
-      this.$message.loading('Data loading...')
+
       const collection = this.collections[this.option]
       const query = {}
 
       if (this.search !== '') query.productId = {'$regex': this.search};
-      if (this.dateString.length > 0) query.createdAt = {
+      if (this.dateString.length > 0 && (this.dateString[0] && this.dateString[1])) query.createdAt = {
         '$gte': moment(this.dateString[0]).toDate(),
         '$lt': moment(this.dateString[1]).toDate()
       };
@@ -214,10 +218,10 @@ export default {
           this.dataSource = []
         }
         this.loading = false
-        /*this.$message.success('Data load complete')*/
       })
     },
     pageChange(pageNumber) {
+      this.loading = true
       this.pageNumber = pageNumber
       this.loadDataSource(pageNumber)
     },

@@ -19,7 +19,7 @@
                 <template slot="content">
                   <div class="flex column">
                     <a-input :key="n" style="width: 200px; margin-bottom: 10px;" :addonBefore="upperFirst(n)"
-                             v-model="standard[n]" v-for="n in ['minimum', 'maximum', 'same']"/>
+                             v-model="standard[n]" v-for="n in ['minimum', 'maximum']"/>
                     <a-button @click="standardSave(columnIndex - 2, dcIndex)" type="primary">
                       Save
                     </a-button>
@@ -110,21 +110,29 @@ export default {
       this.$message.success('Standard save')
     },
     selectColor(value, standard) {
-      console.log(standard)
 
       const result = Object.entries(standard).filter(v => v[1] !== '')
       .every(v => {
+        let r
         switch (v[0]) {
           case 'minimum':
-            return value > v[1]
+            r = value > v[1]
+                break
           case 'maximum':
-            return value < v[1];
-          /*case 'same':
-            return value === v[1];*/
+            r = value < v[1];
+            break
+          case 'same':
+            r = true;
+            break
           default:
-            return false
+            r = false
+                break
         }
+
+        return r
       })
+
+
 
       if (result) {
         return ''
