@@ -10,7 +10,6 @@ export default new Vuex.Store({
   },
   mutations: {
     insertRealTime(state, payload) {
-
       if (Array.isArray(payload) && payload.length === 0) {
         state.stationData = []
         return

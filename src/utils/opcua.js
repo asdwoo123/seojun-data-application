@@ -49,6 +49,7 @@ export const connectOPC = () => {
       }
 
       const client = OPCUAClient.create(options)
+
       await client.connect(url)
       clients.push(client)
 

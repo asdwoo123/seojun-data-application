@@ -25,12 +25,14 @@
 
 <script>
 
+import {chain} from "lodash";
+
 export default {
   name: "MonitorItem",
   props: ['data', 'productName'],
   computed: {
     projectData() {
-      return this.data.find(p => p[0] === this.productName)
+      return chain(this.data).groupBy('productName').toPairs().value().find(p => p[0] === this.productName)
     }
   }
 }
