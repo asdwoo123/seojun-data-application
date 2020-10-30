@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="projectData">
     <div class="flex">
       <div style="font-size: 1.3125rem; font-weight: 500; padding: 14px 0 25px 24px;">{{ productName }}</div>
       <a-alert v-if="projectData && !projectData[1].every(station => station.state)" style="height: 40px; margin-top: 7px; margin-left: 30px;"
@@ -32,7 +32,7 @@ export default {
   props: ['data', 'productName'],
   computed: {
     projectData() {
-      return chain(this.data).groupBy('productName').toPairs().value().find(p => p[0] === this.productName)
+      return chain(this.$store.state.stationData).groupBy('productName').toPairs().value().find(p => p[0] === this.productName)
     }
   }
 }
