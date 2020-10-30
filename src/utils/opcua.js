@@ -19,11 +19,11 @@ export const connectOPC = () => {
 
         if (!productName || !Array.isArray(product.stations)) return
         product.stations.forEach(async (station, stationIndex) => {
+
             const checkStationProperty = ['stationName', 'url', 'barcode', 'pcState', 'scan', 'pass', 'notPass', 'done', 'result', 'data']
 
             if (checkStationProperty.some(p => !station[p])) return
             const stationName = station.stationName
-
             if (!Array.isArray(station.data)) return
             store.commit('insertRealTime', {
                 productName,
@@ -52,8 +52,8 @@ export const connectOPC = () => {
             await client.connect(url)
             clients.push(client)
 
+
             const session = await client.createSession(null)
-            sessions.push(session)
 
             const subscription = await ClientSubscription.create(session, {
                 requestedPublishingInterval: 500,
@@ -82,7 +82,7 @@ export const connectOPC = () => {
                     session.write(nodesToWrite).then(() => {
                         isLive = !isLive
                         state = true
-                    }).finally(() => {
+                    }).catch(() => state = false).finally(() => {
                         if (state !== currentState) {
                             currentState = state
                             store.commit('insertRealTime', {
@@ -106,7 +106,7 @@ export const connectOPC = () => {
                             bus.$emit('logUpdate', true)
                         }
                     })
-                }, 1500)
+                }, 1000)
             })
 
             opcUASubscribe(subscription, station.scan, async () => {
