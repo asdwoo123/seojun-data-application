@@ -83,9 +83,7 @@ export const connectOPC = () => {
                     session.write(nodesToWrite).then(() => {
                         isLive = !isLive
                         state = true
-                    })
-
-                    setTimeout(() => {
+                    }).finally(() => {
                         if (state !== currentState) {
                             currentState = state
                             store.commit('insertRealTime', {
@@ -108,10 +106,10 @@ export const connectOPC = () => {
 
                             bus.$emit('logUpdate', true)
                         }
-                    }, 500)
+                    })
 
 
-                }, 1500)
+                }, 1000)
             })
 
             opcUASubscribe(subscription, station.scan, async () => {
