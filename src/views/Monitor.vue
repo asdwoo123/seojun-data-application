@@ -31,7 +31,7 @@ export default {
   }),
   computed: {
     stationData() {
-      return chain(this.$store.state.stationData).groupBy('productName').toPairs().value()
+      return this.$store.state.stationData
     }
   },
   created() {
