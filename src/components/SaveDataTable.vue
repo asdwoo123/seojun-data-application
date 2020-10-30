@@ -110,6 +110,7 @@ export default {
       this.$message.success('Standard save')
     },
     selectColor(value, standard) {
+      if (!value) return ''
 
       const result = Object.entries(standard).filter(v => v[1] !== '')
       .every(v => {
