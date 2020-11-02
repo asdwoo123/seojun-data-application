@@ -69,7 +69,7 @@ export const connectOPC = () => {
 
             const session = await client.createSession(null)
 
-            let state = false
+            /*let state = false
 
             session.on('keepalive', () => {
                 console.log('keepalive...')
@@ -91,7 +91,7 @@ export const connectOPC = () => {
                     stationName,
                     state
                 })
-            })
+            })*/
 
             const subscription = await ClientSubscription.create(session, {
                 requestedPublishingInterval: 500,
@@ -99,7 +99,7 @@ export const connectOPC = () => {
                 priority: 10
             })
 
-            /*let isLive = true
+            let isLive = true
             let state = false
             let currentState = false
 
@@ -148,7 +148,7 @@ export const connectOPC = () => {
 
 
                 }, 1000)
-            })*/
+            })
 
             opcUASubscribe(subscription, station.scan, async () => {
                 const productId = await dmcFormat(session, station.dmc)
