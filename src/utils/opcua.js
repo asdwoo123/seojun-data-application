@@ -185,6 +185,8 @@ export const connectOPC = () => {
                     productId
                 })
 
+                console.log(productId)
+
                 let nodeId = 'notPass'
 
                 if (isPass) {
