@@ -18,7 +18,6 @@
 
 <script>
 import {getDB} from '@/utils/lowdb'
-import {chain} from 'lodash'
 import MonitorItem from "@/components/MonitorItem";
 
 

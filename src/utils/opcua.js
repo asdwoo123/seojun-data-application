@@ -11,6 +11,25 @@ const {app} = remote
 let clients = []
 let sessions = []
 
+const options = {
+    certificateFile: path.join(app.getAppPath(), 'assets/client_selfsigned_cert_2048.pem'),
+    privateKeyFile: path.join(app.getAppPath(), 'assets/private_key.pem'),
+    endpoint_must_exist: false
+}
+
+export const testingOPC = (url, callback) => {
+    const opcUrl = `opc.tcp://${url}`
+    const client = OPCUAClient.create(options)
+    client.connect(opcUrl).then(() => {
+        client.disconnect().then(() => {
+            callback(true)
+        })
+    }).catch(() => {
+        callback(false)
+    })
+}
+
+
 export const connectOPC = () => {
     const project = getDB('project')
     store.commit('insertRealTime', [])
@@ -41,11 +60,6 @@ export const connectOPC = () => {
             })
 
             const url = `opc.tcp://${station.url}`
-            const options = {
-                certificateFile: path.join(app.getAppPath(), 'assets/client_selfsigned_cert_2048.pem'),
-                privateKeyFile: path.join(app.getAppPath(), 'assets/private_key.pem'),
-                endpoint_must_exist: false
-            }
 
             const client = OPCUAClient.create(options)
 
@@ -55,13 +69,37 @@ export const connectOPC = () => {
 
             const session = await client.createSession(null)
 
+            let state = false
+
+            session.on('keepalive', () => {
+                console.log('keepalive...')
+                if (state) return
+                state = true
+                store.commit('insertRealTime', {
+                    productName,
+                    stationName,
+                    state
+                })
+            })
+
+            session.on('keepalive_failure', () => {
+                console.log('keepalive_failure...')
+                if (!state) return
+                state = false
+                store.commit('insertRealTime', {
+                    productName,
+                    stationName,
+                    state
+                })
+            })
+
             const subscription = await ClientSubscription.create(session, {
                 requestedPublishingInterval: 500,
                 publishingEnabled: true,
                 priority: 10
             })
 
-            let isLive = true
+            /*let isLive = true
             let state = false
             let currentState = false
 
@@ -110,7 +148,7 @@ export const connectOPC = () => {
 
 
                 }, 1000)
-            })
+            })*/
 
             opcUASubscribe(subscription, station.scan, async () => {
                 const productId = await dmcFormat(session, station.dmc)
