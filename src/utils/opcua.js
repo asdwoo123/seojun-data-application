@@ -69,42 +69,68 @@ export const connectOPC = () => {
 
             const session = await client.createSession(null)
 
-            let state = false
-
-            session.on('keepalive', () => {
-                console.log('keepalive...')
-                if (state) return
-                state = true
-                store.commit('insertRealTime', {
-                    productName,
-                    stationName,
-                    state
-                })
-            })
-
-            session.on('keepalive_failure', () => {
-                console.log('keepalive_failure...')
-                if (!state) return
-                state = false
-                store.commit('insertRealTime', {
-                    productName,
-                    stationName,
-                    state
-                })
-            })
-
             const subscription = await ClientSubscription.create(session, {
                 requestedPublishingInterval: 500,
                 publishingEnabled: true,
                 priority: 10
             })
 
-            /*let isLive = true
-            let state = false
+            let isLive = true
             let currentState = false
 
             subscription.on('started', () => {
-                setInterval(async () => {
+                (function checkConnectOPC() {
+                    let state = false
+
+                    const nodesToWrite = [{
+                        nodeId: station.pcState,
+                        attributedId: AttributeIds.Value,
+                        value: {
+                            value: {
+                                dataType: DataType.Boolean,
+                                value: isLive
+                            }
+                        }
+                    }]
+
+                    session.write(nodesToWrite).then(() => {
+                        isLive = !isLive
+                        state = true
+                    })
+
+                    setTimeout(() => {
+                        if (state !== currentState) {
+                            currentState = state
+                            store.commit('insertRealTime', {
+                                productName,
+                                stationName,
+                                state
+                            })
+
+
+                            const logLevel = (state) ? 'success' : 'error'
+                            const message = (state) ? 'Connected to equipment' : 'The connection to the equipment has been lost'
+
+                            addDB('log', {
+                                logLevel,
+                                stationName,
+                                ip: station.url || '',
+                                message,
+                                time: new Date()
+                            })
+
+                            bus.$emit('logUpdate', true)
+                        }
+
+                        checkConnectOPC()
+                    }, 500)
+                }())
+
+
+
+
+
+                /*setInterval(async () => {
                     state = false
 
                     const nodesToWrite = [{
@@ -147,8 +173,8 @@ export const connectOPC = () => {
                     })
 
 
-                }, 1000)
-            })*/
+                }, 1000)*/
+            })
 
             opcUASubscribe(subscription, station.scan, async () => {
                 const productId = await dmcFormat(session, station.dmc)
