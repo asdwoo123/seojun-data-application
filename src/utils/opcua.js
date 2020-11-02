@@ -21,6 +21,7 @@ export const testingOPC = (url, callback) => {
     const opcUrl = `opc.tcp://${url}`
     const client = OPCUAClient.create(options)
     client.connect(opcUrl).then(() => {
+        console.log('connect!')
         client.disconnect().then(() => {
             callback(true)
         })
@@ -68,6 +69,12 @@ export const connectOPC = () => {
 
 
             const session = await client.createSession(null)
+
+            const browseResult = await session.browse("RootFolder");
+
+            for(const reference of browseResult.references) {
+                console.log(reference.browseName.toString());
+            }
 
             const subscription = await ClientSubscription.create(session, {
                 requestedPublishingInterval: 500,
@@ -126,54 +133,6 @@ export const connectOPC = () => {
                     }, 500)
                 }())
 
-
-
-
-
-                /*setInterval(async () => {
-                    state = false
-
-                    const nodesToWrite = [{
-                        nodeId: station.pcState,
-                        attributedId: AttributeIds.Value,
-                        value: {
-                            value: {
-                                dataType: DataType.Boolean,
-                                value: isLive
-                            }
-                        }
-                    }]
-
-                    session.write(nodesToWrite).then(() => {
-                        isLive = !isLive
-                        state = true
-                    }).finally(() => {
-                        if (state !== currentState) {
-                            currentState = state
-                            store.commit('insertRealTime', {
-                                productName,
-                                stationName,
-                                state
-                            })
-
-
-                            const logLevel = (state) ? 'success' : 'error'
-                            const message = (state) ? 'Connected to equipment' : 'The connection to the equipment has been lost'
-
-                            addDB('log', {
-                                logLevel,
-                                stationName,
-                                ip: station.url || '',
-                                message,
-                                time: new Date()
-                            })
-
-                            bus.$emit('logUpdate', true)
-                        }
-                    })
-
-
-                }, 1000)*/
             })
 
             opcUASubscribe(subscription, station.scan, async () => {
