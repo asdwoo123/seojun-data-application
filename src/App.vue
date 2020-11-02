@@ -26,8 +26,7 @@ export default {
       this.isConnect = true
     })
 
-    mongodbConnect()
-    connectOPC()
+    mongodbConnect(connectOPC)
   }
 }
 </script>

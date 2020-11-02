@@ -1,6 +1,7 @@
 <template>
   <a-layout-content style="padding: 24px; background-color: #f0f2f5;">
     <div class="flex" style="margin-bottom: 16px; justify-content: flex-end;">
+      <a-button type="primary" style="margin-right: 16px;" @click="opcViewOpen">opc viewer open</a-button>
       <a-button type="primary" style="margin-right: 16px;" @click="addProject">
         Add project
       </a-button>
@@ -142,6 +143,7 @@ import {connectOPC, disconnect, testingOPC} from '@/utils/opcua'
 import {cloneDeep} from 'lodash'
 import {Container, Draggable} from 'vue-smooth-dnd'
 import {getDB, setDB} from '@/utils/lowdb'
+import { spawn } from 'child_process'
 
 
 export default {
@@ -196,6 +198,9 @@ export default {
     modalClose() {
       this.station = cloneDeep(this.project[this.productIndex].stations[this.stationIndex])
       this.visible = false
+    },
+    modalClose2() {
+      this.visible2 = false
     },
     orderChange(removedIndex, e) {
       const addedIndex = parseInt(e.key)
@@ -267,6 +272,9 @@ export default {
           this.$message.error('not connect')
         }
       })
+    },
+    opcViewOpen() {
+      spawn()
     }
   }
 }

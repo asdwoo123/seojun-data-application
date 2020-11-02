@@ -15,7 +15,7 @@ const {url, dbName} = getDB('databaseInfo')
 
 let db = null
 
-export const mongodbConnect = () => {
+export const mongodbConnect = (callback) => {
     MongoClient.connect(url, {
         useUnifiedTopology: true
     }, function (err, client) {
@@ -24,6 +24,7 @@ export const mongodbConnect = () => {
         } else {
             db = client.db('seojunDB')
             bus.$emit('mongodb', true)
+            callback()
 
             /*const p = ['A/C', 'CSD', 'DSD']
             const data = range(3).map(nnn => ({
