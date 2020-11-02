@@ -25,8 +25,6 @@ export const mongodbConnect = () => {
             db = client.db('seojunDB')
             bus.$emit('mongodb', true)
 
-            const collection = db.collection('A/C')
-
             /*const p = ['A/C', 'CSD', 'DSD']
             const data = range(3).map(nnn => ({
               dataName: `data${nnn + 1}`,
@@ -122,6 +120,7 @@ export const saveStation = async ({productName, stationName, productId, data}) =
             } else {
                 id = 1
             }
+
             await collection?.insertOne({
                 id,
                 stationName,

@@ -85,9 +85,10 @@
              @cancel="modalClose">
       <template v-if="station">
         <div class="flex between">
-          <div class="flex between" style="margin-bottom: 8px; width: 320px;">
+          <div class="flex between" style="margin-bottom: 8px; width: 450px;">
             <a-tooltip placement="topLeft" :title="tooltips.stationName"><span style="flex: 1;">station name</span></a-tooltip>
             <a-input style="flex: 3;" v-model="station.stationName"/>
+            <a-button type="primary" style="margin-left: 20px;" :loading="netLoading" @click="connectTest">Connect test</a-button>
           </div>
           <a-button type="primary" @click="addData(station)">Add data</a-button>
         </div>
@@ -137,7 +138,7 @@
 </template>
 
 <script>
-import {connectOPC, disconnect} from '@/utils/opcua'
+import {connectOPC, disconnect, testingOPC} from '@/utils/opcua'
 import {cloneDeep} from 'lodash'
 import {Container, Draggable} from 'vue-smooth-dnd'
 import {getDB, setDB} from '@/utils/lowdb'
@@ -151,6 +152,7 @@ export default {
     changePassword: '',
     station: null,
     visible: false,
+    netLoading: false,
     productIndex: 0,
     stationIndex: 0,
     tooltips: {
@@ -181,7 +183,6 @@ export default {
       this.$forceUpdate()
     },
     resetProject() {
-      console.log(Array.isArray(getDB('project')))
       this.project = getDB('project')
     },
     saveStation() {
@@ -250,6 +251,22 @@ export default {
           this.changePassword = ''
         }
       }
+    },
+    connectTest() {
+      this.netLoading = true
+      setTimeout(() => {
+        this.netLoading = false
+      }, 5000)
+
+      testingOPC(this.station.url, (result) => {
+        this.netLoading = false
+
+        if (result) {
+          this.$message.success('connect')
+        } else {
+          this.$message.error('not connect')
+        }
+      })
     }
   }
 }
@@ -262,11 +279,5 @@ export default {
   padding: 5px;
   background: #ffffff;
 }
-.dataName {
 
-}
-
-.dataInput {
-
-}
 </style>
