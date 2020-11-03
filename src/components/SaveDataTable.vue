@@ -93,6 +93,9 @@ export default {
             if (this.stationData) {
               this.visible = true
             }
+          },
+          hover: () => {
+
           }
         }
       }
@@ -117,10 +120,10 @@ export default {
         let r
         switch (v[0]) {
           case 'minimum':
-            r = value > v[1]
+            r = value >= v[1]
                 break
           case 'maximum':
-            r = value < v[1];
+            r = value <= v[1];
             break
           case 'same':
             r = true;
@@ -132,8 +135,6 @@ export default {
 
         return r
       })
-
-
 
       if (result) {
         return ''

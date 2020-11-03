@@ -47,13 +47,15 @@
 <script>
 import moment from 'moment'
 import {upperFirst} from 'lodash'
-import {dialog} from 'electron'
+import {remote} from 'electron'
 import fs from 'fs'
 import stringify from 'csv-stringify'
 import {getDB} from '@/utils/lowdb'
 import {getCollection} from '@/utils/mongodb'
 import SaveDataTable from "@/components/SaveDataTable";
 import bus from '@/utils/bus'
+
+const { dialog } = remote
 
 
 export default {
@@ -244,14 +246,14 @@ export default {
               if (!err) {
                 if (completes.length > 0) {
                   saveData = completes.map((complete) => {
-                    const productId = complete.productId;
+                    const barcode = complete.productId;
                     const createdAt = moment(complete.createdAt).format('YYYY-MM-DD h:mm:ss a');
                     const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) => (
                         {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
                     ), {}));
                     const data = com.reduce((acc, one) => ({...acc, ...one}), {});
                     return {
-                      productId,
+                      barcode,
                       createdAt,
                       ...data
                     }
@@ -269,10 +271,10 @@ export default {
                   stringify(values, {header: true, columns}, (err, output) => {
                     if (!err) {
                       fs.writeFile(filePath, output, (err) => {
-                        if (err) {
+                        if (err) {this.$message.success('Saved successfully');
                           this.$message.error('Save failed');
                         } else {
-                          this.$message.success('Saved successfully');
+
                         }
                       });
                     }

@@ -7,9 +7,9 @@
 
 <script>
 import MainLayout from "@/layouts/MainLayout";
-import { mongodbConnect } from '@/utils/mongodb'
-import { connectOPC } from '@/utils/opcua'
-import bus from '@/utils/bus'
+import { mongodbConnect } from '@/utils/mongodb';
+import { connectOPC } from '@/utils/opcua';
+import bus from '@/utils/bus';
 import DatabaseLoading from "@/layouts/DatabaseLoading";
 
 export default {

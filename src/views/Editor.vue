@@ -1,8 +1,10 @@
 <template>
   <a-layout-content style="padding: 24px; background-color: #f0f2f5;">
-    <div class="flex" style="margin-bottom: 16px; justify-content: flex-end;">
-      <a-button type="primary" style="margin-right: 16px;" @click="opcViewOpen">opc viewer open</a-button>
-      <a-button type="primary" style="margin-right: 16px;" @click="addProject">
+    <div class="flex" style="margin-bottom: 24px; justify-content: flex-end;">
+      <a-button type="primary" style="margin-right: 8px;" @click="importSettingFile">Import Settings</a-button>
+      <a-button type="primary" style="margin-right: 8px;" @click="exportSettingFile">Export Settings</a-button>
+      <a-button type="primary" style="margin-right: 8px;" @click="opcViewOpen">OPC viewer open</a-button>
+      <a-button type="primary" style="margin-right: 8px;" @click="addProject">
         Add project
       </a-button>
       <a-popover trigger="click" placement="bottom">
@@ -12,12 +14,12 @@
             <a-button @click="saveProject">Save</a-button>
           </div>
         </template>
-        <a-button type="primary" style="margin-right: 16px;">
-          Save
+        <a-button type="primary" style="margin-right: 8px;">
+          Save project
         </a-button>
       </a-popover>
-      <a-button type="primary" style="margin-right: 16px;" @click="resetProject">
-        Reset
+      <a-button type="primary" style="margin-right: 8px;" @click="resetProject">
+        Reset project
       </a-button>
       <a-popover trigger="click" placement="bottom">
         <template slot="content">
@@ -144,7 +146,13 @@ import {cloneDeep} from 'lodash'
 import {Container, Draggable} from 'vue-smooth-dnd'
 import {getDB, setDB} from '@/utils/lowdb'
 import { spawn } from 'child_process'
+import xlsx from 'xlsx'
+import fs from 'fs'
+import { remote } from 'electron'
 
+const { dialog } = remote
+
+const book = xlsx.utils.book_new()
 
 export default {
   name: "Editor",
@@ -154,6 +162,7 @@ export default {
     changePassword: '',
     station: null,
     visible: false,
+    visible2: false,
     netLoading: false,
     productIndex: 0,
     stationIndex: 0,
@@ -198,9 +207,6 @@ export default {
     modalClose() {
       this.station = cloneDeep(this.project[this.productIndex].stations[this.stationIndex])
       this.visible = false
-    },
-    modalClose2() {
-      this.visible2 = false
     },
     orderChange(removedIndex, e) {
       const addedIndex = parseInt(e.key)
@@ -274,7 +280,28 @@ export default {
       })
     },
     opcViewOpen() {
-      spawn()
+      spawn('nvh-client')
+    },
+
+    async importSettingFile() {
+      const {filePaths} = await dialog.showOpenDialog(null)
+      const data = JSON.parse(fs.readFileSync(filePaths[0]))
+      this.project = data.projects
+    },
+    async exportSettingFile() {
+      if (this.project.length === 0) return
+
+      const options = {
+        defaultPath: '/settings.json'
+      }
+
+      try {
+        const {filePath} = await dialog.showSaveDialog(null, options)
+        fs.writeFileSync(filePath, JSON.stringify({projects: this.project}), 'utf8')
+        this.$message.success('Export successfully');
+      } catch {
+        this.$message.error('Export failed');
+      }
     }
   }
 }

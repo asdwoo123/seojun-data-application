@@ -11,7 +11,7 @@ server.open((err) => {
     }
 })
 
-const {url, dbName} = getDB('databaseInfo')
+const {url} = getDB('databaseInfo')
 
 let db = null
 
@@ -26,26 +26,6 @@ export const mongodbConnect = (callback) => {
             bus.$emit('mongodb', true)
             callback()
 
-            /*const p = ['A/C', 'CSD', 'DSD']
-            const data = range(3).map(nnn => ({
-              dataName: `data${nnn + 1}`,
-              dataValue: nnn + 1
-            }))
-
-            range(1000).forEach((n) => {
-              const productId = uid()
-              const productName = p[random(0, 2)]
-              range(3).forEach(nn => {
-                const stationName = `station${nn}`
-
-                saveStation({
-                  productName,
-                  stationName,
-                  productId,
-                  data
-                })
-              })
-            })*/
 
         }
     })
