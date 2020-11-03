@@ -1,7 +1,7 @@
 <template>
   <a-layout-content style="padding: 24px; background-color: #f0f2f5;">
     <div class="flex" style="margin-bottom: 16px; justify-content: flex-end;">
-      <a-button type="primary" style="margin-right: 16px;" @click="opcViewOpen">opc viewer open</a-button>
+      <a-button type="primary" style="margin-right: 16px;" @click="opcViewOpen">find nodeId</a-button>
       <a-button type="primary" style="margin-right: 16px;" @click="addProject">
         Add project
       </a-button>
@@ -274,7 +274,7 @@ export default {
       })
     },
     opcViewOpen() {
-      spawn()
+      spawn('opcua-client')
     }
   }
 }
