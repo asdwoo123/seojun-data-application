@@ -1,5 +1,6 @@
 import {getDB} from './lowdb'
 import bus from '../utils/bus'
+import { range, random } from 'lodash'
 
 const Mongod = require('mongod')
 const MongoClient = require('mongodb').MongoClient
@@ -22,11 +23,19 @@ export const mongodbConnect = (callback) => {
         if (err) {
             console.error(err)
         } else {
-            db = client.db('seojunDB')
+            db = client.db('seojunDB3')
             bus.$emit('mongodb', true)
             callback()
 
+            const data = []
 
+            range(1, 1001).forEach(() => {
+                ['A/C', 'CSD', 'DSD'].forEach(pn => {
+                    range(1, 4).forEach(nn => {
+                        saveStation({productName: pn, stationName: `station${nn}`, productId: random(10000, 99999), data})
+                    })
+                })
+            })
         }
     })
 }
@@ -73,19 +82,27 @@ export const saveStation = async ({productName, stationName, productId, data}) =
 
     try {
         const document = await collection.findOne({
-            stationName,
             productId
         })
 
-        const updatedAt = new Date()
-
         if (document) {
+            if (!document['stations']) return
+
+            const stations = document['stations']
+            const station = stations.find(s => s.stationName === stationName)
+            if (station) {
+                station.data = data
+            } else {
+                stations.push({stationName, data})
+            }
+
+            const updatedAt = new Date()
+
             await collection.updateOne({
-                stationName,
                 productId
             }, {
                 $set: {
-                    data,
+                    stations,
                     updatedAt
                 }
             })
@@ -104,9 +121,8 @@ export const saveStation = async ({productName, stationName, productId, data}) =
 
             await collection?.insertOne({
                 id,
-                stationName,
                 productId,
-                data,
+                stations: [{stationName, data}],
                 createdAt,
                 updatedAt
             })

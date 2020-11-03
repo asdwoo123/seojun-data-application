@@ -70,13 +70,8 @@ export const connectOPC = () => {
 
             const session = await client.createSession(null)
 
-            try {
-                const productId = await dmcFormat(session, station.barcode)
-
-                /*console.log(productId)*/
-            } catch (e) {
-                console.log(e)
-            }
+            const res = await session.readVariableValue("ns=iNOK_DMC_forPC")
+            console.log(res.value)
 
             const subscription = await ClientSubscription.create(session, {
                 requestedPublishingInterval: 500,

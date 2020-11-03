@@ -193,12 +193,11 @@ export default {
       collection.find(query).sort({createdAt: -1}).limit(10)
           .skip((paging - 1) * 10).toArray((err, completes) => {
         if (err) return
-
         if (completes.length > 0) {
           this.completes = completes
           const dataSource = completes.map(complete => {
-            const key = complete.id.toString()
-            const productId = complete.productId
+            const key = complete.id.toString() || '1'
+            const productId = complete.productId || ''
             const createdAt = moment(complete.createdAt).format('YYYY-MM-DD h:mm:ss a');
             const com = (complete['station'] || complete['stations']).map((station, index) => station.data.reduce((acc, one) => (
                 {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
