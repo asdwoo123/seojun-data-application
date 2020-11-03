@@ -4,5 +4,17 @@ module.exports = {
             nodeIntegration: true
         }
     },
-    lintOnSave: false
+    lintOnSave: false,
+    css: {
+        loaderOptions: {
+            less: {
+                lessOptions: {
+                    modifyVars: {
+                        'primary-color': '#727cf5'
+                    },
+                    javascriptEnabled: true
+                }
+            }
+        }
+    }
 }

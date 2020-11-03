@@ -30,9 +30,7 @@ db.defaults({
   stations: range(1, 4).map(i => ({
     stationName: 'station' + i,
     url: `192.168.0.22:${(ii * 3) + i}000`,
-    barcode: [
-      "ns=3;s=\"As\".\"DATA\".\"DMC\""
-    ],
+    barcode: "ns=3;s=\"As\".\"DATA\".\"DMC\"",
     pcState: "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
     scan: "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
     pass: "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",

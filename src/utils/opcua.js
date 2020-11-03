@@ -70,10 +70,12 @@ export const connectOPC = () => {
 
             const session = await client.createSession(null)
 
-            const browseResult = await session.browse("RootFolder");
+            try {
+                const productId = await dmcFormat(session, station.barcode)
 
-            for(const reference of browseResult.references) {
-                console.log(reference.browseName.toString());
+                /*console.log(productId)*/
+            } catch (e) {
+                console.log(e)
             }
 
             const subscription = await ClientSubscription.create(session, {
@@ -136,7 +138,7 @@ export const connectOPC = () => {
             })
 
             opcUASubscribe(subscription, station.scan, async () => {
-                const productId = await dmcFormat(session, station.dmc)
+                const productId = await dmcFormat(session, station.barcode)
                 const isPass = searchStation({
                     productName,
                     productIndex,
@@ -230,9 +232,9 @@ async function dmcFormat(session, dmc) {
                 return (await session.readVariableValue(barcode)).value.value
             })
         )
-
         return (await productPro).join('')
     } else {
+        console.log((await session.readVariableValue(dmc)).value)
         return (await session.readVariableValue(dmc)).value.value
     }
 }
