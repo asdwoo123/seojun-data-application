@@ -219,17 +219,22 @@ export const disconnect = async (callback) => {
 }
 
 async function dmcFormat(session, dmc) {
+    let value
+
     if (Array.isArray(dmc) && dmc.length > 0) {
         const productPro = Promise.all(
             dmc.map(async (barcode) => {
                 return (await session.readVariableValue(barcode)).value.value
             })
         )
-        return (await productPro).join('')
+        value = (await productPro).join('')
     } else {
-        console.log((await session.readVariableValue(dmc)).value)
-        return (await session.readVariableValue(dmc)).value.value
+        value = (await session.readVariableValue(dmc)).value.value
     }
+
+    if (typeof value === 'number') value.toString()
+
+    return value
 }
 
 function opcUASubscribe(subscription, nodeId, callback) {
