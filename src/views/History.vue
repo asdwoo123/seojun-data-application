@@ -199,7 +199,7 @@ export default {
             const key = complete.id.toString() || '1'
             const productId = complete.productId || ''
             const createdAt = moment(complete.createdAt).format('YYYY-MM-DD h:mm:ss a');
-            const com = (complete['station'] || complete['stations']).map((station, index) => station.data.reduce((acc, one) => (
+            const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) => (
                 {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
             ), {}));
             const data = com.reduce((acc, one) => ({...acc, ...one}), {});

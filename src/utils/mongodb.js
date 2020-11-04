@@ -1,6 +1,6 @@
 import {getDB} from './lowdb'
 import bus from '../utils/bus'
-import { range, random } from 'lodash'
+import {range, random} from 'lodash'
 
 const Mongod = require('mongod')
 const MongoClient = require('mongodb').MongoClient
@@ -27,17 +27,23 @@ export const mongodbConnect = (callback) => {
             bus.$emit('mongodb', true)
             callback()
 
-            const data = []
-
-            range(1, 1001).forEach(() => {
+            /*range(1, 1000).forEach(() => {
                 ['A/C', 'CSD', 'DSD'].forEach(pn => {
-                    range(1, 4).forEach(nn => {
-                        saveStation({productName: pn, stationName: `station${nn}`, productId: random(10000, 99999), data})
+                    const productId = random(10000, 99999).toString();
+                    saveStation({productName: pn, stationName: `station1`, productId, data: getData()}, () => {
+                        saveStation({productName: pn, stationName: `station2`, productId, data: getData()}, () => {
+                            saveStation({productName: pn, stationName: `station3`, productId, data: getData()})
+                        })
                     })
                 })
-            })
+            })*/
+
         }
     })
+}
+
+function getData() {
+    return range(1, 10).map(n => ({ dataName: `signal${n}`, dataValue: random(1, 100) }))
 }
 
 export const getMongoDB = () => db
@@ -48,7 +54,7 @@ export const getCollection = (collectionName) => {
     }
 }
 
-export const searchStation = async ({ productName, productIndex, stationIndex, productId }) => {
+export const searchStation = async ({productName, productIndex, stationIndex, productId}) => {
     if (!db) return
 
     const collection = db.collection(productName)
@@ -74,20 +80,18 @@ export const searchStation = async ({ productName, productIndex, stationIndex, p
     }
 }
 
-export const saveStation = async ({productName, stationName, productId, data}) => {
+export const saveStation = ({productName, stationName, productId, data}, callback) => {
     if (!db) return
     data = data.filter(v => v.dataName && v.dataValue)
 
     const collection = db.collection(productName)
 
-    try {
-        const document = await collection.findOne({
-            productId
-        })
-
+    collection.findOne({
+        productId
+    }, {}, (err, document) => {
+        if (err) return;
         if (document) {
             if (!document['stations']) return
-
             const stations = document['stations']
             const station = stations.find(s => s.stationName === stationName)
             if (station) {
@@ -98,40 +102,49 @@ export const saveStation = async ({productName, stationName, productId, data}) =
 
             const updatedAt = new Date()
 
-            await collection.updateOne({
+
+            collection?.updateOne({
                 productId
             }, {
                 $set: {
-                    stations,
+                    stations: stations,
                     updatedAt
                 }
+            }, null, err => {
+                if (!err) bus.$emit('historyUpdate', productName)
+                if (callback) callback()
             })
+
+
         } else {
-            const result = await collection.find({}).sort({createdAt: -1}).limit(1)
+            collection.find({}).sort({createdAt: -1}).limit(1).toArray((err, result) => {
+                if (err) return;
+                let id;
+                const createdAt = new Date()
+                const updatedAt = createdAt
 
-            let id = 1
-            const createdAt = new Date()
-            const updatedAt = createdAt
+                if (result?.length > 0) {
+                    id = result[0]?.id + 1
+                } else {
+                    id = 1
+                }
 
-            if (result?.length > 0) {
-                id = result[0]?.id + 1
-            } else {
-                id = 1
-            }
-
-            await collection?.insertOne({
-                id,
-                productId,
-                stations: [{stationName, data}],
-                createdAt,
-                updatedAt
+                collection?.insertOne({
+                    id,
+                    productId,
+                    stations: [{stationName, data}],
+                    createdAt,
+                    updatedAt
+                }, {}, () => {
+                    bus.$emit('historyUpdate', productName)
+                    if (callback) callback()
+                })
             })
-
         }
+    })
 
-        bus.$emit('historyUpdate', productName)
-    } catch (e) {
-        console.error(e)
-    }
+
+
+
 }
 
