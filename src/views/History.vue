@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content style="padding: 24px;">
+  <a-layout-content style="padding: 28px;">
     <div class="flex between" style="margin-bottom: 20px;">
       <div class="row">
         <a-select :default-value="defaultProductName" style="width: 120px; margin-right: 10px;" @change="optionChange">

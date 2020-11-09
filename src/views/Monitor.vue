@@ -10,7 +10,7 @@
         </template>
       </a-menu>
     </a-layout-sider>
-    <a-layout-content style="padding: 24px;">
+    <a-layout-content style="padding: 28px;">
         <MonitorItem v-if="stationData.length > 0" :data="stationData" :productName="productNames[current[0]]" />
     </a-layout-content>
   </a-layout>
