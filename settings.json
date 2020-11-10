@@ -1,0 +1,927 @@
+{
+  "projects": [
+    {
+      "productName": "A/C",
+      "stations": [
+        {
+          "stationName": "station1",
+          "url": "192.168.1.91:4840",
+          "barcode": "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+          "pcState": "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+          "scan": "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+          "pass": "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+          "notPass": "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+          "done": "ns=3;s=\"As\".\"DATA\".\"Done\"",
+          "result": "ns=3;s=\"As\".\"DATA\".\"Result\"",
+          "data": [
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-1\"",
+              "dataName": "rAngle-1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-2\"",
+              "dataName": "rAngle-2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-3\"",
+              "dataName": "rAngle-3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-4\"",
+              "dataName": "rAngle-4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-5\"",
+              "dataName": "rAngle-5",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-1\"",
+              "dataName": "rTorque-1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-2\"",
+              "dataName": "rTorque-2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-3\"",
+              "dataName": "rTorque-3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-4\"",
+              "dataName": "rTorque-4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "dataName": "rTorque-5",
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-5\"",
+              "monitor": true,
+              "save": true
+            }
+          ]
+        },
+        {
+          "stationName": "station2",
+          "url": "192.168.1.101:4840",
+          "barcode": "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+          "pcState": "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+          "scan": "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+          "pass": "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+          "notPass": "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+          "done": "ns=3;s=\"As\".\"DATA\".\"Done\"",
+          "result": "ns=3;s=\"As\".\"DATA\".\"Result\"",
+          "data": [
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-1\"",
+              "dataName": "rAngle-1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-2\"",
+              "dataName": "rAngle-2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-3\"",
+              "dataName": "rAngle-3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-4\"",
+              "dataName": "rAngle-4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rAngle-5\"",
+              "dataName": "rAngle-5",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-1\"",
+              "dataName": "rTorque-1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-2\"",
+              "dataName": "rTorque-2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-3\"",
+              "dataName": "rTorque-3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-4\"",
+              "dataName": "rTorque-4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "dataName": "rTorque-5",
+              "nodeId": "ns=3;s=\"As\".\"DATA\".\"rTorque-5\"",
+              "monitor": true,
+              "save": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "productName": "CSD",
+      "stations": [
+        {
+          "stationName": "station1",
+          "url": "192.168.0.22:4000",
+          "barcode": "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+          "pcState": "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+          "scan": "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+          "pass": "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+          "notPass": "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+          "done": "ns=3;s=\"As\".\"DATA\".\"Done\"",
+          "result": "ns=3;s=\"As\".\"DATA\".\"Result\"",
+          "data": [
+            {
+              "nodeId": "ns=1;s=light1",
+              "dataName": "signal1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light2",
+              "dataName": "signal2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light3",
+              "dataName": "signal3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light4",
+              "dataName": "signal4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light5",
+              "dataName": "signal5",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light6",
+              "dataName": "signal6",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light7",
+              "dataName": "signal7",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light8",
+              "dataName": "signal8",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light9",
+              "dataName": "signal9",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            }
+          ]
+        },
+        {
+          "stationName": "station2",
+          "url": "192.168.0.22:5000",
+          "barcode": "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+          "pcState": "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+          "scan": "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+          "pass": "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+          "notPass": "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+          "done": "ns=3;s=\"As\".\"DATA\".\"Done\"",
+          "result": "ns=3;s=\"As\".\"DATA\".\"Result\"",
+          "data": [
+            {
+              "nodeId": "ns=1;s=light1",
+              "dataName": "signal1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light2",
+              "dataName": "signal2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light3",
+              "dataName": "signal3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light4",
+              "dataName": "signal4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light5",
+              "dataName": "signal5",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light6",
+              "dataName": "signal6",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light7",
+              "dataName": "signal7",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light8",
+              "dataName": "signal8",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light9",
+              "dataName": "signal9",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            }
+          ]
+        },
+        {
+          "stationName": "station3",
+          "url": "192.168.0.22:6000",
+          "barcode": "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+          "pcState": "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+          "scan": "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+          "pass": "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+          "notPass": "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+          "done": "ns=3;s=\"As\".\"DATA\".\"Done\"",
+          "result": "ns=3;s=\"As\".\"DATA\".\"Result\"",
+          "data": [
+            {
+              "nodeId": "ns=1;s=light1",
+              "dataName": "signal1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light2",
+              "dataName": "signal2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light3",
+              "dataName": "signal3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light4",
+              "dataName": "signal4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light5",
+              "dataName": "signal5",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light6",
+              "dataName": "signal6",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light7",
+              "dataName": "signal7",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light8",
+              "dataName": "signal8",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light9",
+              "dataName": "signal9",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "productName": "DSD",
+      "stations": [
+        {
+          "stationName": "station1",
+          "url": "192.168.0.22:7000",
+          "barcode": "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+          "pcState": "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+          "scan": "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+          "pass": "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+          "notPass": "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+          "done": "ns=3;s=\"As\".\"DATA\".\"Done\"",
+          "result": "ns=3;s=\"As\".\"DATA\".\"Result\"",
+          "data": [
+            {
+              "nodeId": "ns=1;s=light1",
+              "dataName": "signal1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light2",
+              "dataName": "signal2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light3",
+              "dataName": "signal3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light4",
+              "dataName": "signal4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light5",
+              "dataName": "signal5",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light6",
+              "dataName": "signal6",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light7",
+              "dataName": "signal7",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light8",
+              "dataName": "signal8",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light9",
+              "dataName": "signal9",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            }
+          ]
+        },
+        {
+          "stationName": "station2",
+          "url": "192.168.0.22:8000",
+          "barcode": "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+          "pcState": "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+          "scan": "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+          "pass": "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+          "notPass": "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+          "done": "ns=3;s=\"As\".\"DATA\".\"Done\"",
+          "result": "ns=3;s=\"As\".\"DATA\".\"Result\"",
+          "data": [
+            {
+              "nodeId": "ns=1;s=light1",
+              "dataName": "signal1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light2",
+              "dataName": "signal2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light3",
+              "dataName": "signal3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light4",
+              "dataName": "signal4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light5",
+              "dataName": "signal5",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light6",
+              "dataName": "signal6",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light7",
+              "dataName": "signal7",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light8",
+              "dataName": "signal8",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light9",
+              "dataName": "signal9",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            }
+          ]
+        },
+        {
+          "stationName": "station3",
+          "url": "192.168.0.22:9000",
+          "barcode": "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+          "pcState": "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+          "scan": "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+          "pass": "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+          "notPass": "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+          "done": "ns=3;s=\"As\".\"DATA\".\"Done\"",
+          "result": "ns=3;s=\"As\".\"DATA\".\"Result\"",
+          "data": [
+            {
+              "nodeId": "ns=1;s=light1",
+              "dataName": "signal1",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light2",
+              "dataName": "signal2",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light3",
+              "dataName": "signal3",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light4",
+              "dataName": "signal4",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light5",
+              "dataName": "signal5",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light6",
+              "dataName": "signal6",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light7",
+              "dataName": "signal7",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light8",
+              "dataName": "signal8",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            },
+            {
+              "nodeId": "ns=1;s=light9",
+              "dataName": "signal9",
+              "monitor": true,
+              "save": true,
+              "standard": {
+                "maximum": 0,
+                "minimum": 0,
+                "same": 0
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
