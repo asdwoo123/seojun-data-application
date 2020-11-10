@@ -146,13 +146,10 @@ import {cloneDeep} from 'lodash'
 import {Container, Draggable} from 'vue-smooth-dnd'
 import {getDB, setDB} from '@/utils/lowdb'
 import { spawn } from 'child_process'
-import xlsx from 'xlsx'
 import fs from 'fs'
 import { remote } from 'electron'
 
 const { dialog } = remote
-
-const book = xlsx.utils.book_new()
 
 export default {
   name: "Editor",
@@ -280,7 +277,7 @@ export default {
       })
     },
     opcViewOpen() {
-      spawn('nvh-client')
+      spawn('opcua-client')
     },
 
     async importSettingFile() {
