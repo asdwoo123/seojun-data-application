@@ -128,12 +128,14 @@ export const connectOPC = () => {
 
             opcUASubscribe(subscription, station.scan, async () => {
                 const productId = await dmcFormat(session, station.barcode)
-                const isPass = searchStation({
+                const isPass = await searchStation({
                     productName,
                     productIndex,
                     stationIndex,
                     productId
                 })
+
+                console.log(isPass)
 
                 let nodeId = 'notPass'
 
