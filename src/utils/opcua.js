@@ -126,7 +126,7 @@ export const connectOPC = () => {
                 }())
             })
 
-            opcUASubscribe(subscription, station.scan, async () => {
+            opcUASubscribe(productName, subscription, station.scan, async () => {
                 const productId = await dmcFormat(session, station.barcode)
                 const isPass = await searchStation({
                     productName,
@@ -141,6 +141,8 @@ export const connectOPC = () => {
 
                 if (isPass) {
                     nodeId = 'pass'
+                } else {
+                    bus.$emit('stationCheck', { productName, stationName })
                 }
 
                 const nodesToWrite = [{
@@ -162,10 +164,10 @@ export const connectOPC = () => {
                 })
             })
 
-            opcUASubscribe(subscription, station.done, async () => {
+            opcUASubscribe(productName, subscription, station.done, async () => {
                 const productId = await dmcFormat(session, station.barcode)
                 const result = (await session.readVariableValue(station.result)).value.value
-                if (!productId || !result) return
+                if (!productId || result !== 1) return
 
                 const stationData = await Promise.all(
                     station.data.map(async node => {
@@ -173,11 +175,14 @@ export const connectOPC = () => {
                         if (!(nodeId && dataName)) return
 
                         const dataValue = (await session.readVariableValue(nodeId)).value.value
+                        console.log(dataValue)
                         return {dataName, dataValue: (Array.isArray(dataValue)) ? dataValue[1] : dataValue}
                     })
                 )
 
+
                 const [monitorFilter, saveFilter] = ['monitor', 'save'].map(n => station.data.filter(v => v[n]).map(v => v.dataName))
+
 
                 store.commit('insertRealTime', {
                     productName,
@@ -233,7 +238,7 @@ async function dmcFormat(session, dmc) {
     return value
 }
 
-function opcUASubscribe(subscription, nodeId, callback) {
+function opcUASubscribe(productName, subscription, nodeId, callback) {
     const itemToMonitor = {
         nodeId: `${nodeId}`,
         attribute: AttributeIds.Value
@@ -252,7 +257,7 @@ function opcUASubscribe(subscription, nodeId, callback) {
     )
 
     monitoredItem.on('changed', async (dataValue) => {
-        if (store.state.stationData.every(v => v.state)) {
+        if (store.state.stationData.filter(s => s.productName === productName).every(v => v.state)) {
             const data = dataValue.value.value
             if (data) callback(data)
         }

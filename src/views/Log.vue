@@ -53,6 +53,9 @@ export default {
   mounted() {
     this.loadDataSource()
     bus.$on('logUpdate', () => this.loadDataSource())
+  },
+  beforeDestroy() {
+    bus.$off('logUpdate')
   }
 }
 </script>

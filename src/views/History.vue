@@ -41,6 +41,9 @@
     <SaveDataTable :columns="columns" :dataSource="dataSource" :loading="loading" :pageCount="pageCount" :completes="completes" :productName="productName"
                    :project="project" :option="option" :loadColumns="loadColumns"
                    :pageNumber="pageNumber" :pageChange="pageChange" :rowSelection="rowSelection"/>
+    <a-modal :visible="passwordVisible" @ok="deleteRowSelected" >
+
+    </a-modal>
   </a-layout-content>
 </template>
 
@@ -81,7 +84,8 @@ export default {
     collections: [],
     selectedRowKeys: [],
     password: '',
-    popupVisible: false
+    popupVisible: false,
+    passwordVisible: false
   }),
   created() {
     this.project = getDB('project')
@@ -89,16 +93,20 @@ export default {
     this.defaultProductName = this.productNames[0]
     this.productName = this.defaultProductName
     this.collections = this.productNames.map(n => getCollection(n))
+
   },
   mounted() {
     this.loadColumns()
     this.loadDataSource()
 
     bus.$on('historyUpdate', () => {
-      if (this.search === '' && this.period === [] && this.dateString === []) {
+      if (this.search === '' && this.period.length === 0 && this.dateString.length === 0) {
         this.loadDataSource()
       }
     })
+  },
+  beforeDestroy() {
+    bus.$off('historyUpdate')
   },
   methods: {
     optionChange(option) {

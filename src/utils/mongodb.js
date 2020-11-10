@@ -38,6 +38,19 @@ export const mongodbConnect = (callback) => {
                 })
             })*/
 
+            /*setInterval(() => {
+                const productId = random(10000, 99999).toString();
+                saveStation({productName: 'A/C', stationName: `station1`, productId, data: getData()}, () => {
+                    setTimeout(() => {
+                        saveStation({productName: 'A/C', stationName: `station2`, productId, data: getData()}, () => {
+                            setTimeout(() => {
+                                saveStation({productName: 'A/C', stationName: `station3`, productId, data: getData()})
+                            }, 3000)
+                        }, 3000)
+                    })
+                })
+            }, 9000)*/
+
         }
     })
 }
@@ -81,9 +94,8 @@ export const searchStation = async ({productName, productIndex, stationIndex, pr
 }
 
 export const saveStation = ({productName, stationName, productId, data}, callback) => {
-    if (!db) return
-    data = data.filter(v => v.dataName && v.dataValue)
 
+    if (!db) return
     const collection = db.collection(productName)
 
     collection.findOne({

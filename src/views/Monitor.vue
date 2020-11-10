@@ -19,6 +19,7 @@
 <script>
 import {getDB} from '@/utils/lowdb'
 import MonitorItem from "@/components/MonitorItem";
+import bus from "@/utils/bus";
 
 
 export default {
@@ -35,6 +36,16 @@ export default {
   },
   created() {
     this.productNames = getDB('project').map(p => p.productName)
+
+
+    bus.$on('stationCheck', ({ productName, stationName }) => {
+      this.$notification['warning']({
+        message: '이전 공정의 작업이 완료되었는지 확인해주세요',
+        description: `${productName} - ${stationName}`,
+        placement: 'bottomRight',
+        duration: 3
+      })
+    })
   }
 }
 </script>
