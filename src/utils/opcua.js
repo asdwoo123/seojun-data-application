@@ -70,7 +70,6 @@ export const connectOPC = () => {
 
             const session = await client.createSession(null)
 
-
             const subscription = await ClientSubscription.create(session, {
                 requestedPublishingInterval: 500,
                 publishingEnabled: true,
@@ -83,7 +82,6 @@ export const connectOPC = () => {
             subscription.on('started', () => {
                 (function checkConnectOPC() {
                     let state = false
-
                     const nodesToWrite = [{
                         nodeId: station.pcState,
                         attributedId: AttributeIds.Value,
@@ -95,12 +93,13 @@ export const connectOPC = () => {
                         }
                     }]
 
+
                     session.write(nodesToWrite).then(() => {
                         isLive = !isLive
                         state = true
-                    })
-
-                    setTimeout(() => {
+                    }).catch(() => {
+                        state = false
+                    }).finally(() => {
                         if (state !== currentState) {
                             currentState = state
                             store.commit('insertRealTime', {
@@ -108,7 +107,6 @@ export const connectOPC = () => {
                                 stationName,
                                 state
                             })
-
 
                             const logLevel = (state) ? 'success' : 'error'
                             const message = (state) ? 'Connected to equipment' : 'The connection to the equipment has been lost'
@@ -122,12 +120,10 @@ export const connectOPC = () => {
                             })
 
                             bus.$emit('logUpdate', true)
+                            checkConnectOPC()
                         }
-
-                        checkConnectOPC()
-                    }, 500)
+                    })
                 }())
-
             })
 
             opcUASubscribe(subscription, station.scan, async () => {
@@ -138,8 +134,6 @@ export const connectOPC = () => {
                     stationIndex,
                     productId
                 })
-
-                console.log(productId)
 
                 let nodeId = 'notPass'
 
@@ -167,7 +161,7 @@ export const connectOPC = () => {
             })
 
             opcUASubscribe(subscription, station.done, async () => {
-                const productId = await dmcFormat(session, station.dmc)
+                const productId = await dmcFormat(session, station.barcode)
                 const result = (await session.readVariableValue(station.result)).value.value
                 if (!productId || !result) return
 

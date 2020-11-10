@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content style="padding: 24px;">
+  <a-layout-content style="padding: 28px;">
     <a-table :columns="column" :data-source="dataSource" :pagination="{ pageSize: 30 }" />
   </a-layout-content>
 </template>

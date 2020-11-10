@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content style="padding: 24px; background-color: #f0f2f5;">
+  <a-layout-content style="padding: 28px; background-color: #f0f2f5;">
     <div class="flex" style="margin-bottom: 24px; justify-content: flex-end;">
       <a-button type="primary" style="margin-right: 8px;" @click="importSettingFile">Import Settings</a-button>
       <a-button type="primary" style="margin-right: 8px;" @click="exportSettingFile">Export Settings</a-button>
@@ -151,6 +151,7 @@ import { remote } from 'electron'
 
 const { dialog } = remote
 
+
 export default {
   name: "Editor",
   data: () => ({
@@ -231,6 +232,19 @@ export default {
     },
     saveProject() {
       if (this.password === getDB('password')) {
+
+        const result = this.project.some(({productName}, index) => {
+          return this.project.some((project, projectIndex) => {
+            if (index === projectIndex) return false;
+            return productName === project.productName
+          })
+        })
+
+        if (result) {
+          this.$message.error('중복되는 프로젝트명이 있습니다');
+          return;
+        }
+
         setDB('project', this.project)
         this.password = ''
         setTimeout(() => {
@@ -241,6 +255,7 @@ export default {
     addStation(projectIndex) {
       this.project[projectIndex].stations.push({
         stationName: 'Untitled',
+        url: '',
         barcode: [],
         pcState: '',
         scan: '',
@@ -277,7 +292,7 @@ export default {
       })
     },
     opcViewOpen() {
-      spawn('opcua-client')
+      spawn('nvh-client')
     },
 
     async importSettingFile() {

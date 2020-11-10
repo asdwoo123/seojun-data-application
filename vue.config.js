@@ -1,20 +1,21 @@
 module.exports = {
+    css: {
+        loaderOptions: {
+            less: {
+                lessOptions: {
+                    modifyVars: {
+                        'primary-color': '#2962ff'
+                    },
+                    javascriptEnabled: true
+                }
+            }
+        }
+    },
     pluginOptions: {
         electronBuilder: {
             nodeIntegration: true
         }
     },
     lintOnSave: false,
-    css: {
-        loaderOptions: {
-            less: {
-                lessOptions: {
-                    modifyVars: {
-                        'primary-color': '#727cf5'
-                    },
-                    javascriptEnabled: true
-                }
-            }
-        }
-    }
+
 }

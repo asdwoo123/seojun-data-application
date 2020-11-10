@@ -29,6 +29,7 @@ db.defaults({
   productName: s,
   stations: range(1, 4).map(i => ({
     stationName: 'station' + i,
+
     url: `192.168.0.22:${(ii * 3) + i}000`,
     barcode: "ns=3;s=\"As\".\"DATA\".\"DMC\"",
     pcState: "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
@@ -60,4 +61,6 @@ export const getDB = name => db.get(name).cloneDeep().value()
 export const addDB = (name, value) => {
   db.get(name).unshift(value).write()
 }
+
+
 
