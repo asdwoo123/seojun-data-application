@@ -82,47 +82,44 @@ export const connectOPC = () => {
             subscription.on('started', () => {
                 (function checkConnectOPC() {
                     let state = false
-                    const nodesToWrite = [{
-                        nodeId: station.pcState,
-                        attributedId: AttributeIds.Value,
-                        value: {
-                            value: {
-                                dataType: DataType.Boolean,
-                                value: isLive
+
+                    setInterval(() => {
+                        session.writeSingleNode(station.pcState, {
+                            dataType: DataType.Boolean,
+                            value: isLive
+                        }).then(() => {
+                            console.log(isLive)
+                            isLive = !isLive
+                            state = true
+                        }).catch(() => {
+                            state = false
+                        }).finally(() => {
+                            if (state !== currentState) {
+                                currentState = state
+                                store.commit('insertRealTime', {
+                                    productName,
+                                    stationName,
+                                    state
+                                })
+
+                                const logLevel = (state) ? 'success' : 'error'
+                                const message = (state) ? 'Connected to equipment' : 'The connection to the equipment has been lost'
+
+                                addDB('log', {
+                                    logLevel,
+                                    stationName,
+                                    ip: station.url || '',
+                                    message,
+                                    time: new Date()
+                                })
+
+                                bus.$emit('logUpdate', true)
                             }
-                        }
-                    }]
+                        })
+                    }, 500)
 
 
-                    session.write(nodesToWrite).then(() => {
-                        isLive = !isLive
-                        state = true
-                    }).catch(() => {
-                        state = false
-                    }).finally(() => {
-                        if (state !== currentState) {
-                            currentState = state
-                            store.commit('insertRealTime', {
-                                productName,
-                                stationName,
-                                state
-                            })
 
-                            const logLevel = (state) ? 'success' : 'error'
-                            const message = (state) ? 'Connected to equipment' : 'The connection to the equipment has been lost'
-
-                            addDB('log', {
-                                logLevel,
-                                stationName,
-                                ip: station.url || '',
-                                message,
-                                time: new Date()
-                            })
-
-                            bus.$emit('logUpdate', true)
-                            checkConnectOPC()
-                        }
-                    })
                 }())
             })
 
@@ -145,21 +142,16 @@ export const connectOPC = () => {
                     bus.$emit('stationCheck', { productName, stationName })
                 }
 
-                const nodesToWrite = [{
-                    nodeId: station[nodeId],
-                    attributedId: AttributeIds.Value,
-                    value: {
-                        value: {
-                            dataType: DataType.Boolean,
-                            value: true
-                        }
-                    }
-                }]
 
-                session.write(nodesToWrite).then(() => {
+                session.writeSingleNode(station[nodeId], {
+                    dataType: DataType.Boolean,
+                    value: true
+                }).then(() => {
                     setTimeout(() => {
-                        nodesToWrite[0].value.value.value = false
-                        session.write(nodesToWrite)
+                        session.writeSingleNode(station[nodeId], {
+                            dataType: DataType.Boolean,
+                            value: false
+                        })
                     }, 500)
                 })
             })
@@ -175,7 +167,6 @@ export const connectOPC = () => {
                         if (!(nodeId && dataName)) return
 
                         const dataValue = (await session.readVariableValue(nodeId)).value.value
-                        console.log(dataValue)
                         return {dataName, dataValue: (Array.isArray(dataValue)) ? dataValue[1] : dataValue}
                     })
                 )
