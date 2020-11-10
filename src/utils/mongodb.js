@@ -23,7 +23,7 @@ export const mongodbConnect = (callback) => {
         if (err) {
             console.error(err)
         } else {
-            db = client.db('seojunDB3')
+            db = client.db('seojunDB4')
             bus.$emit('mongodb', true)
             callback()
 
