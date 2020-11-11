@@ -163,14 +163,19 @@ export default {
           dataIndex: 'productId',
           key: 'productId'
         },
-        {
+        /*{
           title: 'CreatedAt',
           dataIndex: 'createdAt',
           key: 'createdAt'
+        },*/
+        {
+          title: 'UpdatedAt',
+          dataIndex: 'updatedAt',
+          key: 'updatedAt'
         },
         ...getDB('project')[this.option].stations.map(station => ({
           title: upperFirst(station.stationName),
-          children: station.data.map(v => ({
+          children: station.data.filter(v => v.save).map(v => ({
             title: upperFirst(v.dataName),
             dataIndex: `${v.dataName}-${station.stationName}`,
             key: v.dataName,
@@ -207,6 +212,7 @@ export default {
             const key = complete.id.toString() || '1'
             const productId = complete.productId || ''
             const createdAt = moment(complete.createdAt).format('YYYY-MM-DD h:mm:ss a');
+            const updatedAt = moment(complete.updatedAt).format('YYYY-MM-DD h:mm:ss a');
             const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) => (
                 {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
             ), {}));
@@ -215,6 +221,7 @@ export default {
               key,
               productId,
               createdAt,
+              updatedAt,
               ...data
             }
           })

@@ -13,6 +13,10 @@
                 <span class="key-box">barcode</span>
                 <span class="val-box">{{ station.productId }}</span>
               </p>
+              <p class="flex between" style="padding-bottom: 8px;">
+                <span class="key-box">updatedAt</span>
+                <span class="val-box">{{ station.updatedAt }}</span>
+              </p>
               <p v-for="(v, i) in station.data" :key="i" class="flex between" style="padding-bottom: 8px;">
                 <span class="key-box">{{ v.dataName }}</span>
                 <span class="val-box">{{ v.dataValue }}</span>
