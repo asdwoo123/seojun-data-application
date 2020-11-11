@@ -44,10 +44,6 @@ export const mongodbConnect = (callback) => {
     })
 }
 
-function getData() {
-    return range(1, 10).map(n => ({ dataName: `signal${n}`, dataValue: random(1, 100) }))
-}
-
 export const getMongoDB = () => db
 
 export const getCollection = (collectionName) => {

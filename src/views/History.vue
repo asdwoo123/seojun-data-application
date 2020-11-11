@@ -99,13 +99,12 @@ export default {
     this.loadColumns()
     this.loadDataSource()
 
-    const asd = getDB('project')[this.option].stations
-
     bus.$on('historyUpdate', () => {
-      if (this.search === '' && this.period.length === 0 && this.dateString.length === 0) {
+      if (this.search === '' && this.period.length === 0 && this.dateString.length === 0 && this.pageNumber === 1) {
         this.loadDataSource()
       }
     })
+
   },
   beforeDestroy() {
     bus.$off('historyUpdate')
@@ -215,9 +214,16 @@ export default {
             const productId = complete.productId || ''
             const createdAt = moment(complete.createdAt).format('YYYY-MM-DD h:mm:ss a');
             const updatedAt = moment(complete.updatedAt).format('YYYY-MM-DD h:mm:ss a');
-            const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) => (
-                {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
-            ), {}));
+            const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) => {
+              let dataValue = one.dataValue
+
+              if (!Number.isInteger(dataValue)) {
+                dataValue = dataValue.toFixed(1)
+              }
+
+              return {...acc, [one.dataName + '-' + (station.stationName)]: dataValue}
+                }
+            , {}));
             const data = com.reduce((acc, one) => ({...acc, ...one}), {});
             return {
               key,
@@ -264,6 +270,7 @@ export default {
                   saveData = completes.map((complete) => {
                     const barcode = complete.productId;
                     const createdAt = moment(complete.createdAt).format('YYYY-MM-DD h:mm:ss a');
+                    const updatedAt = moment(complete.updatedAt).format('YYYY-MM-DD h:mm:ss a');
                     const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) => (
                         {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
                     ), {}));
@@ -271,6 +278,7 @@ export default {
                     return {
                       barcode,
                       createdAt,
+                      updatedAt,
                       ...data
                     }
                   });
