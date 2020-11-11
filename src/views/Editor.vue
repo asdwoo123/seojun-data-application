@@ -219,7 +219,11 @@ export default {
       this.visible = true
     },
     addData(station) {
-      station.data.push({dataName: '', nodeId: '', monitor: true, save: true})
+      station.data.push({dataName: '', nodeId: '', monitor: true, save: true, standard: {
+          maximum: 0,
+          minimum: 0,
+          same: 0
+        }})
     },
     removeData(station, dataIndex) {
       station.data.splice(dataIndex, 1)

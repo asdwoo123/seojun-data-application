@@ -99,6 +99,8 @@ export default {
     this.loadColumns()
     this.loadDataSource()
 
+    const asd = getDB('project')[this.option].stations
+
     bus.$on('historyUpdate', () => {
       if (this.search === '' && this.period.length === 0 && this.dateString.length === 0) {
         this.loadDataSource()
@@ -123,7 +125,6 @@ export default {
       this.loadDataSource()
     },
     daySearch(date, dateString) {
-      console.log(date, dateString)
       this.period = date
       this.dateString = dateString
       this.loadDataSource()
@@ -184,6 +185,7 @@ export default {
         }))
       ]
       this.columns = [...columns]
+
     },
     loadDataSource(paging) {
       if (this.collections.length === 0) return

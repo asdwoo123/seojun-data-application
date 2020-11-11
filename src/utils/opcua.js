@@ -22,7 +22,6 @@ export const testingOPC = (url, callback) => {
     const opcUrl = `opc.tcp://${url}`
     const client = OPCUAClient.create(options)
     client.connect(opcUrl).then(() => {
-        console.log('connect!')
         client.disconnect().then(() => {
             callback(true)
         })
@@ -133,8 +132,6 @@ export const connectOPC = () => {
                     productId
                 })
 
-                console.log(isPass)
-
                 let nodeId = 'notPass'
 
                 if (isPass) {
@@ -160,7 +157,6 @@ export const connectOPC = () => {
             opcUASubscribe(productName, subscription, station.done, async () => {
                 const productId = await dmcFormat(session, station.barcode)
                 const result = (await session.readVariableValue(station.result)).value.value
-                console.log(result)
                 if (!productId || result !== 1) return
                 const stationData = await Promise.all(
                     station.data.map(async node => {
