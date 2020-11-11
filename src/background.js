@@ -74,6 +74,11 @@ app.on('ready', async () => {
     }
   }
   createWindow()
+
+  if (!isDevelopment) {
+    win.setFullScreen(true)
+    win.setMenuBarVisibility(false)
+  }
 })
 
 // Exit cleanly on request from parent process in development mode.
