@@ -163,11 +163,11 @@ export default {
           dataIndex: 'productId',
           key: 'productId'
         },
-        /*{
+        {
           title: 'CreatedAt',
           dataIndex: 'createdAt',
           key: 'createdAt'
-        },*/
+        },
         {
           title: 'UpdatedAt',
           dataIndex: 'updatedAt',

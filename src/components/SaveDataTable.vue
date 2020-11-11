@@ -3,7 +3,7 @@
     <a-table :customRow="handleRow" :bordered="true" :pagination="false" :loading="loading"
              :data-source="dataSource" :row-selection="rowSelection()">
       <template v-for="(column, columnIndex) in columns">
-        <a-table-column v-if="columnIndex < 2" :key="column.key" :title="column.title" :data-index="column.dataIndex">
+        <a-table-column v-if="columnIndex < 3" :key="column.key" :title="column.title" :data-index="column.dataIndex">
           <template slot-scope="text">
             <div style="text-align: center; padding: 16px;">{{ text }}</div>
           </template>
@@ -15,12 +15,12 @@
           <a-table-column v-for="(dc, dcIndex) in column.children" :key="dc.key" :data-index="dc.dataIndex">
             <div style="cursor: pointer;" slot="title">
               <!--조건 에디터-->
-              <a-popover trigger="click" @click="initStandard(columnIndex - 2, dcIndex)">
+              <a-popover trigger="click" @click="initStandard(columnIndex - 3, dcIndex)">
                 <template slot="content">
                   <div class="flex column">
                     <a-input :key="n" style="width: 200px; margin-bottom: 10px;" :addonBefore="upperFirst(n)"
                              v-model="standard[n]" v-for="n in ['minimum', 'maximum']"/>
-                    <a-button @click="standardSave(columnIndex - 2, dcIndex)" type="primary">
+                    <a-button @click="standardSave(columnIndex - 3, dcIndex)" type="primary">
                       Save
                     </a-button>
                   </div>
@@ -29,7 +29,7 @@
               </a-popover>
             </div>
             <template slot-scope="text">
-              <div style="text-align: center; padding: 16px;" :class="selectColor(text, dc.standard)">{{ text }}</div>
+              <div style="text-align: center; padding: 16px;" :class="selectColor(text, dc.standard)">{{ text || '' }}</div>
             </template>
           </a-table-column>
         </a-table-column-group>
@@ -44,16 +44,16 @@
         <div/>
       </template>
       <a-descriptions style="margin-top: 30px;" v-if="stationData" bordered>
-        <a-descriptions-item label="Project name">
+        <a-descriptions-item label="Project name" :span="4">
           {{ productName }}
         </a-descriptions-item>
-        <a-descriptions-item label="Barcode">
+        <a-descriptions-item label="Barcode" :span="4">
           {{ stationData.productId }}
         </a-descriptions-item>
-        <a-descriptions-item label="CreatedAt">
+        <a-descriptions-item label="CreatedAt" :span="4">
           {{ moment(stationData.createdAt).format('YYYY-MM-DD h:mm:ss a') }}
         </a-descriptions-item>
-        <a-descriptions-item label="UpdatedAt">
+        <a-descriptions-item label="UpdatedAt" :span="4">
           {{ moment(stationData.updatedAt).format('YYYY-MM-DD h:mm:ss a') }}
         </a-descriptions-item>
         <a-descriptions-item :key="index" v-for="(station, index) in stationData.stations" :label="station.stationName"
