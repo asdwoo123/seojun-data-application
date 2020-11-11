@@ -27,29 +27,18 @@ export const mongodbConnect = (callback) => {
             bus.$emit('mongodb', true)
             callback()
 
-            /*range(1, 1000).forEach(() => {
-                ['A/C', 'CSD', 'DSD'].forEach(pn => {
-                    const productId = random(10000, 99999).toString();
-                    saveStation({productName: pn, stationName: `station1`, productId, data: getData()}, () => {
-                        saveStation({productName: pn, stationName: `station2`, productId, data: getData()}, () => {
-                            saveStation({productName: pn, stationName: `station3`, productId, data: getData()})
-                        })
-                    })
-                })
-            })*/
+            const project = getDB('project')[0]
 
-            /*setInterval(() => {
+            setInterval(() => {
                 const productId = random(10000, 99999).toString();
-                saveStation({productName: 'A/C', stationName: `station1`, productId, data: getData()}, () => {
+                project.stations.forEach((s, si) => {
+                    const { stationName, data } = s;
+                    const dataV = data.map(d => ({ dataName: d.dataName, dataValue: random(1, 100) }))
                     setTimeout(() => {
-                        saveStation({productName: 'A/C', stationName: `station2`, productId, data: getData()}, () => {
-                            setTimeout(() => {
-                                saveStation({productName: 'A/C', stationName: `station3`, productId, data: getData()})
-                            }, 3000)
-                        }, 3000)
-                    })
+                        saveStation({ productName: project.productName, stationName, productId, data: dataV })
+                    }, si * 300)
                 })
-            }, 9000)*/
+            }, 500)
 
         }
     })
