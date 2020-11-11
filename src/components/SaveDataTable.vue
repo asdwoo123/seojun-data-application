@@ -53,6 +53,9 @@
         <a-descriptions-item label="CreatedAt">
           {{ moment(stationData.createdAt).format('YYYY-MM-DD h:mm:ss a') }}
         </a-descriptions-item>
+        <a-descriptions-item label="UpdatedAt">
+          {{ moment(stationData.updatedAt).format('YYYY-MM-DD h:mm:ss a') }}
+        </a-descriptions-item>
         <a-descriptions-item :key="index" v-for="(station, index) in stationData.stations" :label="station.stationName"
                              :span="3">
           <p class="flex between" :key="data.dataName" v-for="data in station.data">
@@ -93,9 +96,6 @@ export default {
             if (this.stationData) {
               this.visible = true
             }
-          },
-          hover: () => {
-
           }
         }
       }

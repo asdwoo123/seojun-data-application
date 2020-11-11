@@ -5,6 +5,7 @@ import bus from '../utils/bus'
 import {searchStation, saveStation} from '@/utils/mongodb'
 import path from 'path'
 import {remote} from 'electron'
+import moment from 'moment'
 
 const {app} = remote
 
@@ -48,6 +49,7 @@ export const connectOPC = () => {
             store.commit('insertRealTime', {
                 productName,
                 productId: '',
+                updatedAt: '',
                 stationName,
                 state: false,
                 data: [
@@ -159,7 +161,7 @@ export const connectOPC = () => {
                 const productId = await dmcFormat(session, station.barcode)
                 const result = (await session.readVariableValue(station.result)).value.value
                 if (!productId || result !== 1) return
-
+                console.log(stationName)
                 const stationData = await Promise.all(
                     station.data.map(async node => {
                         const {nodeId, dataName} = node
@@ -178,6 +180,7 @@ export const connectOPC = () => {
                     productName,
                     stationName,
                     productId,
+                    updatedAt: moment().format('YYYY-MM-DD h:mm:ss a'),
                     state: true,
                     data: [
                         ...stationData.filter(d => monitorFilter.some(n => d.dataName === n))
@@ -189,7 +192,7 @@ export const connectOPC = () => {
                     stationName,
                     productId,
                     data: [
-                        ...stationData.filter(d => saveFilter.some(n => d.dataName === n))
+                        ...stationData/*.filter(d => saveFilter.some(n => d.dataName === n))*/
                     ]
                 })
 
