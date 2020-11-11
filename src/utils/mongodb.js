@@ -27,7 +27,7 @@ export const mongodbConnect = (callback) => {
             bus.$emit('mongodb', true)
             callback()
 
-            const project = getDB('project')[0]
+            /*const project = getDB('project')[0]
 
             setInterval(() => {
                 const productId = random(10000, 99999).toString();
@@ -38,7 +38,7 @@ export const mongodbConnect = (callback) => {
                         saveStation({ productName: project.productName, stationName, productId, data: dataV })
                     }, si * 300)
                 })
-            }, 500)
+            }, 500)*/
 
         }
     })
