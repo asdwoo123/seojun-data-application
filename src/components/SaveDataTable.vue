@@ -29,7 +29,7 @@
               </a-popover>
             </div>
             <template slot-scope="text">
-              <div style="text-align: center; padding: 16px;" :class="selectColor(text, dc.standard)">{{ text || '' }}</div>
+              <div style="text-align: center; padding: 16px;" :class="selectColor(text, dc.standard)">{{ text }}</div>
             </template>
           </a-table-column>
         </a-table-column-group>

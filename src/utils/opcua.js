@@ -158,8 +158,8 @@ export const connectOPC = () => {
             opcUASubscribe(productName, subscription, station.done, async () => {
                 const productId = await dmcFormat(session, station.barcode)
                 const result = (await session.readVariableValue(station.result)).value.value
+                console.log(result)
                 if (!productId || result !== 1) return
-                console.log(stationName)
                 const stationData = await Promise.all(
                     station.data.map(async node => {
                         const {nodeId, dataName} = node
