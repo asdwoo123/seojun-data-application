@@ -292,7 +292,7 @@ export default {
       })
     },
     opcViewOpen() {
-      spawn('nvh-client')
+      spawn('opcua-client')
     },
 
     async importSettingFile() {
