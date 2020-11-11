@@ -88,7 +88,6 @@ export const connectOPC = () => {
                             dataType: DataType.Boolean,
                             value: isLive
                         }).then(() => {
-                            console.log(isLive)
                             isLive = !isLive
                             state = true
                         }).catch(() => {
