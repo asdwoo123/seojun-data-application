@@ -1,11 +1,24 @@
 <template>
   <a-layout-content style="padding: 28px;">
+    <div class="flex" style="justify-content: flex-end; margin-bottom: 20px;">
+      <a-popover trigger="click" placement="bottom">
+        <template slot="content">
+          <div class="flex">
+            <a-input-password v-model="password" style="margin-right: 10px;"/>
+            <a-button @click="deleteLogAll">Delete All</a-button>
+          </div>
+        </template>
+        <a-button type="danger">
+          Delete All
+        </a-button>
+      </a-popover>
+    </div>
     <a-table :columns="column" :data-source="dataSource" :pagination="{ pageSize: 30 }" />
   </a-layout-content>
 </template>
 
 <script>
-import { getDB } from '@/utils/lowdb'
+import { getDB, deleteAllDB } from '@/utils/lowdb'
 import moment from 'moment'
 import bus from '../utils/bus'
 
@@ -37,7 +50,8 @@ export default {
   data: () => ({
     column,
     dataSource: [],
-    pageSize: 30
+    pageSize: 30,
+    password: ''
   }),
   methods: {
     loadDataSource() {
@@ -48,6 +62,12 @@ export default {
       });
 
       this.dataSource = dataSource
+    },
+    deleteLogAll() {
+      if (this.password === getDB('password')) {
+        deleteAllDB('log')
+        this.loadDataSource()
+      }
     }
   },
   mounted() {

@@ -62,5 +62,7 @@ export const addDB = (name, value) => {
   db.get(name).unshift(value).write()
 }
 
-
+export const deleteAllDB = name => {
+  db.set(name, []).write()
+}
 

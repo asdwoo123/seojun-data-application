@@ -39,7 +39,6 @@ export default {
 
 
     bus.$on('stationCheck', ({ productName, stationName }) => {
-      console.log(productName, stationName)
       this.$notification['warning']({
         message: '이전 공정의 작업이 완료되었는지 확인해주세요',
         description: `${productName} - ${stationName}`,

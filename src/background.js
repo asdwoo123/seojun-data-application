@@ -78,8 +78,10 @@ app.on('ready', async () => {
     createWindow()
 
 
-    win.setFullScreen(true)
-    win.setMenuBarVisibility(false)
+    if (!isDevelopment) {
+        win.setFullScreen(true)
+        win.setMenuBarVisibility(false)
+    }
 
     const autoLauncher = new AutoLaunch({
         name: 'SEOJUNENG-APPLICATION'
