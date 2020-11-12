@@ -4,7 +4,11 @@ import { app, protocol, BrowserWindow } from 'electron'
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import path from 'path'
+import AutoLaunch from 'auto-launch'
 const isDevelopment = process.env.NODE_ENV !== 'production'
+
+
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -26,7 +30,7 @@ function createWindow() {
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
       enableRemoteModule: true
     },
-    icon: path.join(app.getAppPath(), 'assets/icon.ico')
+    icon: path.join(app.getAppPath(), '..', 'assets/icon.ico')
   })
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
@@ -79,6 +83,15 @@ app.on('ready', async () => {
     win.setFullScreen(true)
     win.setMenuBarVisibility(false)
   }
+
+  const autoLauncher = new AutoLaunch({
+    name: 'seojuneng-application'
+  })
+
+  autoLauncher.isEnabled()
+      .then((isEnabled) => {
+        if (!isEnabled) autoLauncher.enable()
+      })
 })
 
 // Exit cleanly on request from parent process in development mode.
