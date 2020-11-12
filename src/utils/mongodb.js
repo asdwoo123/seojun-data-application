@@ -1,6 +1,7 @@
 import {getDB} from './lowdb'
 import bus from '../utils/bus'
 import {range, random} from 'lodash'
+import {v4 as uuidv4} from 'uuid'
 
 const Mongod = require('mongod')
 const MongoClient = require('mongodb').MongoClient
@@ -26,6 +27,46 @@ export const mongodbConnect = (callback) => {
             db = client.db('seojunDB4')
             bus.$emit('mongodb', true)
             callback()
+
+/*            const collection = db.collection('A/C')
+
+            const productData = range(1, 1000001).map(n => (
+                {
+                    id: n,
+                    productId: uuidv4(),
+                    stations: [
+                        {
+                            stationName: 'station1',
+                            data: [
+                                ...range(1, 7).map(nn => ({
+                                    dataName: 'iLVDT' + nn,
+                                    dataValue: random(1, 100)
+                                })),
+                                ...range(1, 7).map(nn => ({
+                                    dataName: 'iLoadcell' + nn,
+                                    dataValue: random(1, 100)
+                                })),
+                            ]
+                        },{
+                            stationName: 'station2',
+                            data: [
+                                ...range(1, 6).map(nn => ({
+                                    dataName: 'rAngle-' + nn,
+                                    dataValue: random(1, 100)
+                                })),
+                                ...range(1, 6).map(nn => ({
+                                    dataName: 'rTorque-' + nn,
+                                    dataValue: random(1, 100)
+                                })),
+                            ]
+                        }
+                    ],
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+            ))
+
+            collection?.insertMany(productData)*/
 
             /*const project = getDB('project')[0]
 
@@ -139,8 +180,6 @@ export const saveStation = ({productName, stationName, productId, data}, callbac
             })
         }
     })
-
-
 
 
 }

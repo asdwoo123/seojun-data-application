@@ -32,6 +32,7 @@
     "mongod": "^2.0.0",
     "mongodb": "^3.6.2",
     "node-opcua": "^2.2.0",
+    "uuid": "^8.3.1",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vue-smooth-dnd": "^0.8.1",
