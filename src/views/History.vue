@@ -20,23 +20,34 @@
             <a-menu-item key="0">Search data</a-menu-item>
             <a-menu-item key="1">All data</a-menu-item>
           </a-menu>
-          <a-button type="primary" style="width: 140px; margin-right: 10px;">
+          <a-button type="primary" style="width: 140px; margin-right: 30px;">
             Export to CSV
             <a-icon type="down"/>
           </a-button>
         </a-dropdown>
+        <a-popover trigger="click" placement="bottom">
+          <template slot="content">
+            <div class="flex">
+              <a-input-password v-model="password" style="margin-right: 10px;"/>
+              <a-button @click="deleteRowSelected">Delete</a-button>
+            </div>
+          </template>
+          <a-button type="danger" style="margin-right: 8px;">
+            Delete
+          </a-button>
+        </a-popover>
+        <a-popover trigger="click" placement="bottom">
+          <template slot="content">
+            <div class="flex">
+              <a-input-password v-model="password" style="margin-right: 10px;"/>
+              <a-button @click="deleteAll">Delete All</a-button>
+            </div>
+          </template>
+          <a-button type="danger">
+            Delete All
+          </a-button>
+        </a-popover>
       </div>
-      <a-popover trigger="click" placement="bottom">
-        <template slot="content">
-          <div class="flex">
-            <a-input-password v-model="password" style="margin-right: 8px;"/>
-            <a-button @click="deleteRowSelected">Delete</a-button>
-          </div>
-        </template>
-        <a-button type="danger" style="margin-right: 10px;">
-          Delete
-        </a-button>
-      </a-popover>
     </div>
     <SaveDataTable :columns="columns" :dataSource="dataSource" :loading="loading" :pageCount="pageCount" :completes="completes" :productName="productName"
                    :project="project" :option="option" :loadColumns="loadColumns"
@@ -152,6 +163,15 @@ export default {
             this.loadDataSource()
           })
         });
+      }
+    },
+    deleteAll() {
+      if (this.password === getDB('password')) {
+        this.collections[this.option].deleteMany({}, (err) => {
+          if (err) return;
+          this.password = ''
+          this.loadDataSource()
+        })
       }
     },
     loadColumns() {

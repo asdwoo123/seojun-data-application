@@ -12,17 +12,25 @@ const {app} = remote
 let clients = []
 let sessions = []
 
-const options = {
-    certificateFile: '../assets/client_selfsigned_cert_2048.pem',
-    privateKeyFile: '../assets/private_key.pem',
-    endpoint_must_exist: false
-}
+let options;
 
-/*const options = {
-    certificateFile: path.join('..', 'assets', 'client_selfsigned_cert_2048.pem'),
-    privateKeyFile: path.join('..', 'assets', 'private_key.pem'),
-    endpoint_must_exist: false
-}*/
+const isDevelopment = process.env.NODE_ENV !== 'production'
+
+console.log(__filename)
+
+if (isDevelopment) {
+    options = {
+        certificateFile: path.join(app.getAppPath(), 'assets/client_selfsigned_cert_2048.pem'),
+        privateKeyFile: path.join(app.getAppPath(), 'assets/private_key.pem'),
+        endpoint_must_exist: false
+    }
+} else {
+    options = {
+        certificateFile: '../assets/client_selfsigned_cert_2048.pem',
+        privateKeyFile: '../assets/private_key.pem',
+        endpoint_must_exist: false
+    }
+}
 
 export const testingOPC = (url, callback) => {
     const opcUrl = `opc.tcp://${url}`
@@ -125,7 +133,6 @@ export const connectOPC = () => {
                     }, 500)
 
 
-
                 }())
             })
 
@@ -143,7 +150,7 @@ export const connectOPC = () => {
                 if (isPass) {
                     nodeId = 'pass'
                 } else {
-                    bus.$emit('stationCheck', { productName, stationName })
+                    bus.$emit('stationCheck', {productName, stationName})
                 }
 
 
