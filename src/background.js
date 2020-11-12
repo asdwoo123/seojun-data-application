@@ -89,7 +89,7 @@ app.on('ready', async () => {
 
     autoLauncher.isEnabled()
         .then((isEnabled) => {
-            if (!isEnabled) autoLauncher.enable()
+            if (isEnabled) autoLauncher.disable()
         })
 
 })
