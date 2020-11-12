@@ -76,15 +76,15 @@ app.on('ready', async () => {
             console.error('Vue Devtools failed to install:', e.toString())
         }
     }
-
-
     createWindow()
+
+
     win.setFullScreen(true)
     win.setMenuBarVisibility(false)
 
-
     const autoLauncher = new AutoLaunch({
-        name: 'seojuneng-application'
+        name: 'seojuneng-application',
+        path: app.getAppPath()
     })
 
     autoLauncher.isEnabled()
