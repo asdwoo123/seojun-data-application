@@ -76,24 +76,22 @@ app.on('ready', async () => {
             console.error('Vue Devtools failed to install:', e.toString())
         }
     }
+
+
     createWindow()
-
-    if (!isDevelopment) {
-        win.setFullScreen(true)
-        win.setMenuBarVisibility(false)
-    }
+    win.setFullScreen(true)
+    win.setMenuBarVisibility(false)
 
 
-    if (!isDevelopment) {
-        const autoLauncher = new AutoLaunch({
-            name: 'seojuneng-application'
+    const autoLauncher = new AutoLaunch({
+        name: 'seojuneng-application'
+    })
+
+    autoLauncher.isEnabled()
+        .then((isEnabled) => {
+            if (!isEnabled) autoLauncher.enable()
         })
 
-        autoLauncher.isEnabled()
-            .then((isEnabled) => {
-                if (!isEnabled) autoLauncher.enable()
-            })
-    }
 })
 
 // Exit cleanly on request from parent process in development mode.
