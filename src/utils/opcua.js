@@ -13,10 +13,16 @@ let clients = []
 let sessions = []
 
 const options = {
-    certificateFile: path.join(app.getAppPath(), '..', 'assets/client_selfsigned_cert_2048.pem'),
-    privateKeyFile: path.join(app.getAppPath(), '..', 'assets/private_key.pem'),
+    certificateFile: '../assets/client_selfsigned_cert_2048.pem',
+    privateKeyFile: '../assets/private_key.pem',
     endpoint_must_exist: false
 }
+
+/*const options = {
+    certificateFile: path.join('..', 'assets', 'client_selfsigned_cert_2048.pem'),
+    privateKeyFile: path.join('..', 'assets', 'private_key.pem'),
+    endpoint_must_exist: false
+}*/
 
 export const testingOPC = (url, callback) => {
     const opcUrl = `opc.tcp://${url}`
