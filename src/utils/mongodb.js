@@ -28,7 +28,7 @@ export const mongodbConnect = (callback) => {
             bus.$emit('mongodb', true)
             callback()
 
-/*            const collection = db.collection('A/C')
+            /*const collection = db.collection('A/C')
 
             const productData = range(1, 1000001).map(n => (
                 {
@@ -66,9 +66,9 @@ export const mongodbConnect = (callback) => {
                 }
             ))
 
-            collection?.insertMany(productData)*/
+            collection?.insertMany(productData)
 
-            /*const project = getDB('project')[0]
+            const project = getDB('project')[0]
 
             setInterval(() => {
                 const productId = random(10000, 99999).toString();
