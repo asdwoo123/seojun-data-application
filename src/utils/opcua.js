@@ -26,8 +26,8 @@ if (isDevelopment) {
     }
 } else {
     options = {
-        certificateFile: '../assets/client_selfsigned_cert_2048.pem',
-        privateKeyFile: '../assets/private_key.pem',
+        certificateFile: path.join(app.getAppPath(), '..', 'assets/client_selfsigned_cert_2048.pem'),
+        privateKeyFile: path.join(app.getAppPath(), '..', 'assets/private_key.pem'),
         endpoint_must_exist: false
     }
 }

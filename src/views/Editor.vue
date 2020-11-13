@@ -88,10 +88,12 @@
              @cancel="modalClose">
       <template v-if="station">
         <div class="flex between">
-          <div class="flex between" style="margin-bottom: 8px; width: 450px;">
+          <div class="flex between" style="margin-bottom: 8px; width: 712px;">
             <a-tooltip placement="topLeft" :title="tooltips.stationName"><span style="flex: 1;">station name</span></a-tooltip>
             <a-input style="flex: 3;" v-model="station.stationName"/>
             <a-button type="primary" style="margin-left: 20px;" :loading="netLoading" @click="connectTest">Connect test</a-button>
+            <a-button type="primary" style="margin-left: 20px;" @click="copyStation">Copy station</a-button>
+            <a-button type="primary" style="margin-left: 20px;" @click="pasteStation">Paste station</a-button>
           </div>
           <a-button type="primary" @click="addData(station)">Add data</a-button>
         </div>
@@ -149,7 +151,7 @@ import { spawn } from 'child_process'
 import fs from 'fs'
 import { remote } from 'electron'
 
-const { dialog } = remote
+const { dialog, clipboard } = remote
 
 
 export default {
@@ -317,6 +319,17 @@ export default {
         this.$message.success('Export successfully');
       } catch {
         this.$message.error('Export failed');
+      }
+    },
+    copyStation() {
+      clipboard.writeText(JSON.stringify(this.station))
+    },
+    pasteStation() {
+      let stationInfo = clipboard.readText()
+      stationInfo = JSON.parse(stationInfo)
+      const isValid = ['stationName', 'url', 'barcode', 'pcState', 'scan', 'pass', 'notPass', 'done', 'result', 'data'].every(pn => stationInfo?.hasOwnProperty(pn))
+      if (isValid) {
+        this.station = stationInfo
       }
     }
   }

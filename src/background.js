@@ -29,7 +29,7 @@ function createWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             enableRemoteModule: true
         },
-        icon: (isDevelopment) ? path.join(app.getAppPath(), 'assets/icon.ico') : './assets/icon.ico'
+        icon: path.join(app.getAppPath(), '..', 'assets/icon.ico')
     })
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
