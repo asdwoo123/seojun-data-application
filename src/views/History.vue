@@ -195,7 +195,7 @@ export default {
         },
         ...getDB('project')[this.option].stations.map(station => ({
           title: upperFirst(station.stationName),
-          children: station.data.filter(v => v.save).map(v => ({
+          children: station.data.filter(v => v.use).map(v => ({
             title: upperFirst(v.dataName),
             dataIndex: `${v.dataName}-${station.stationName}`,
             key: v.dataName,
@@ -236,6 +236,10 @@ export default {
             const updatedAt = moment(complete.updatedAt).format('YYYY-MM-DD h:mm:ss a');
             const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) => {
               let dataValue = one.dataValue
+
+              if (typeof dataValue === 'boolean') {
+                dataValue = (dataValue) ? 'True' : 'False'
+              }
 
               if (!Number.isInteger(dataValue)) {
                 dataValue = dataValue.toFixed(1)
@@ -291,9 +295,14 @@ export default {
                     const barcode = complete.productId;
                     const createdAt = moment(complete.createdAt).format('YYYY-MM-DD h:mm:ss a');
                     const updatedAt = moment(complete.updatedAt).format('YYYY-MM-DD h:mm:ss a');
-                    const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) => (
-                        {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
-                    ), {}));
+                    const com = (complete['station'] || complete['stations']).map((station) => station.data.reduce((acc, one) =>
+                    {
+                      if (typeof one.dataValue === 'boolean') {
+                        one.dataValue = (one.dataValue) ? 'True' : 'False'
+                      }
+
+                      return {...acc, [one.dataName + '-' + (station.stationName)]: one.dataValue}
+                    }, {}));
                     const data = com.reduce((acc, one) => ({...acc, ...one}), {});
                     return {
                       barcode,

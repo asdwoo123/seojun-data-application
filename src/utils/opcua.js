@@ -16,7 +16,6 @@ let options;
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-console.log(__filename)
 
 if (isDevelopment) {
     options = {
@@ -32,21 +31,31 @@ if (isDevelopment) {
     }
 }
 
-export const testingOPC = (url, callback) => {
-    const opcUrl = `opc.tcp://${url}`
-    const client = OPCUAClient.create(options)
-    client.connect(opcUrl).then(() => {
-        client.disconnect().then(() => {
-            callback(true)
-        })
-    }).catch(() => {
+export const testingOPC = async (url, callback) => {
+    try {
+        const opcUrl = `opc.tcp://${url}`
+        const client = OPCUAClient.create(options)
+        await client.connect(opcUrl)
+        const session = await client.createSession()
+        const browseResult = await session.browse("ns=3;s=\"As\".\"DATA\"")
+        const nodes = await Promise.all(browseResult.references.map(async b => {
+            const dataName = b.browseName.name
+            const nodeId = 'ns=3;s=' + b.nodeId.value
+            const dataValue = (await session.readVariableValue(nodeId)).value.value
+            return {dataName, dataValue: (Array.isArray(dataValue)) ? dataValue[1] : dataValue, nodeId, use: false, standard: { min: 0, max: 0, equal: 'True' }}
+        }))
+        await client.disconnect()
+        callback(nodes)
+    } catch (e) {
         callback(false)
-    })
+    }
 }
+
 
 
 export const connectOPC = () => {
     const project = getDB('project')
+    console.log(project)
     store.commit('insertRealTime', [])
     project.forEach((product, productIndex) => {
         const productName = product.productName
@@ -66,7 +75,7 @@ export const connectOPC = () => {
                 stationName,
                 state: false,
                 data: [
-                    ...station.data.filter(v => v.dataName && v.nodeId).filter(v => v.monitor).map(
+                    ...station.data.filter(v => v.dataName && v.nodeId).filter(v => v.use).map(
                         v => ({
                             dataName: v.dataName,
                             dataValue: ''
@@ -172,7 +181,7 @@ export const connectOPC = () => {
                 const result = (await session.readVariableValue(station.result)).value.value
                 if (!productId || result !== 1) return
                 const stationData = await Promise.all(
-                    station.data.map(async node => {
+                    station.data.filter(v => v.use).map(async node => {
                         const {nodeId, dataName} = node
                         if (!(nodeId && dataName)) return
 
@@ -182,8 +191,6 @@ export const connectOPC = () => {
                 )
 
 
-                const [monitorFilter, saveFilter] = ['monitor', 'save'].map(n => station.data.filter(v => v[n]).map(v => v.dataName))
-
 
                 store.commit('insertRealTime', {
                     productName,
@@ -192,7 +199,7 @@ export const connectOPC = () => {
                     updatedAt: moment().format('YYYY-MM-DD h:mm:ss a'),
                     state: true,
                     data: [
-                        ...stationData.filter(d => monitorFilter.some(n => d.dataName === n))
+                        ...stationData
                     ]
                 })
 

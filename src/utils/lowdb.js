@@ -38,17 +38,7 @@ db.defaults({
     notPass: "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
     done: "ns=3;s=\"As\".\"DATA\".\"Done\"",
     result: "ns=3;s=\"As\".\"DATA\".\"Result\"",
-    data: range(1, 10).map(d => ({
-      nodeId: `ns=1;s=light${d}`,
-      dataName: 'signal' + d,
-      monitor: true,
-      save: true,
-      standard: {
-        maximum: 0,
-        minimum: 0,
-        same: 0
-      }
-    }))
+    data: []
   }))
 }))).write()*/
 

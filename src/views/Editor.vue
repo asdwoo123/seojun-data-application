@@ -84,25 +84,28 @@
       </a-col>
     </a-row>
 
-    <a-modal :visible="visible" style="top: 20px;" :width="1024" :closable="false" :maskClosable="false" @ok="saveStation"
+    <a-modal :visible="visible" style="top: 20px;" :width="1524" :closable="false" :maskClosable="false"
+             @ok="saveStation"
              @cancel="modalClose">
       <template v-if="station">
-        <div class="flex between">
-          <div class="flex between" style="margin-bottom: 8px; width: 712px;">
-            <a-tooltip placement="topLeft" :title="tooltips.stationName"><span style="flex: 1;">station name</span></a-tooltip>
-            <a-input style="flex: 3;" v-model="station.stationName"/>
-            <a-button type="primary" style="margin-left: 20px;" :loading="netLoading" @click="connectTest">Connect test</a-button>
-            <a-button type="primary" style="margin-left: 20px;" @click="copyStation">Copy station</a-button>
-            <a-button type="primary" style="margin-left: 20px;" @click="pasteStation">Paste station</a-button>
+        <div class="flex between" style="margin-bottom: 30px;">
+          <div class="flex between" style=" width: 450px;">
+            <a-tooltip placement="topLeft" :title="tooltips.stationName"><span style="width: 100px;">station name</span>
+            </a-tooltip>
+            <a-input style="width: 250px;" v-model="station.stationName"/>
+            <a-button type="primary" style="margin-left: 20px;" :loading="netLoading" @click="connectTest">Connect
+            </a-button>
+            <!--            <a-button type="primary" style="margin-left: 20px;" @click="copyStation">Copy station</a-button>
+                        <a-button type="primary" style="margin-left: 20px;" @click="pasteStation">Paste station</a-button>-->
           </div>
           <a-button type="primary" @click="addData(station)">Add data</a-button>
         </div>
-        <a-row>
-          <a-col :span="10"
+        <a-row style="margin-bottom: 30px;">
+          <a-col :span="6"
                  v-for="[key] in Object.entries(station).filter(v => ['stationName', 'data'].every(k => k !== v[0]))"
                  :key="key">
             <div class="flex" style="margin-bottom: 8px;">
-              <a-tooltip placement="topLeft" :title="tooltips[key]"><span style="width: 70px;">
+              <a-tooltip placement="topLeft" :title="tooltips[key]"><span style="width: 100px;">
               {{ key }}
             </span></a-tooltip>
               <a-input style="width: 250px;" v-model="station[key]"/>
@@ -112,29 +115,51 @@
 
         <div>
           <div class="flex" v-for="(v, vi) in station.data" :key="vi" style="margin-bottom: 8px;">
-            <a-col :span="10">
-            <div class="flex">
-              <span style="width: 70px;">Data name</span>
+
+            <div class="flex" style="margin-right: 19px;">
+              <span style="width: 100px;">Data name</span>
               <a-input style="width: 250px;" v-model="v.dataName"/>
             </div>
-            </a-col>
-            <a-col :span="14" class="flex">
-            <div class="flex">
-              <span style="width: 70px;">Node id</span>
+
+
+            <div class="flex" style="margin-right: 19px;">
+              <span style="width: 100px;">Node id</span>
               <a-input style="width: 250px;" v-model="v.nodeId"/>
             </div>
-            <div class="flex center-v" style="margin-left: 10px; margin-right: 5px;">
-              <a-checkbox v-model="v.monitor">
-                Monitor
+            <div class="flex center-v" style="margin-right: 5px;">
+              <div class="flex" style="margin-right: 19px;">
+                <span style="width: 100px;">Data Type</span>
+                <a-input disabled style="width: 100px;" :default-value="typeof v.dataValue"/>
+              </div>
+              <span style="width: 100px;">Standard</span>
+              <template v-if="typeof v.dataValue === 'number'">
+                <a-input addon-before="Min" v-model="v.standard.min" style="width: 100px; margin-right: 10px;"/>
+                <a-input addon-before="Max" v-model="v.standard.max" style="width: 100px; margin-right: 19px;"/>
+              </template>
+              <template v-if="typeof v.dataValue === 'boolean'">
+                <a-select :default-value="v.standard.equal" style="margin-right: 19px; width: 100px;" @change="handleChange($event, v)">
+                  <a-select-option :value="'True'">
+                    True
+                  </a-select-option>
+                  <a-select-option :value="'False'">
+                    False
+                  </a-select-option>
+                </a-select>
+              </template>
+              <a-checkbox v-model="v.use">
+                Use
               </a-checkbox>
-              <a-checkbox v-model="v.save">
-                Save
-              </a-checkbox>
+              <!--              <a-checkbox v-model="v.monitor">
+                              Monitor
+                            </a-checkbox>
+                            <a-checkbox v-model="v.save">
+                              Save
+                            </a-checkbox>-->
             </div>
-            <div>
-              <a-button type="danger" shape="circle" icon="delete" @click="removeData(station, vi)"/>
-            </div>
-            </a-col>
+            <!--            <div>
+                          <a-button type="danger" shape="circle" icon="delete" @click="removeData(station, vi)"/>
+                        </div>-->
+
           </div>
         </div>
       </template>
@@ -147,11 +172,11 @@ import {connectOPC, disconnect, testingOPC} from '@/utils/opcua'
 import {cloneDeep} from 'lodash'
 import {Container, Draggable} from 'vue-smooth-dnd'
 import {getDB, setDB} from '@/utils/lowdb'
-import { spawn } from 'child_process'
+import {spawn} from 'child_process'
 import fs from 'fs'
-import { remote } from 'electron'
+import {remote} from 'electron'
 
-const { dialog, clipboard } = remote
+const {dialog, clipboard} = remote
 
 
 export default {
@@ -178,10 +203,18 @@ export default {
       result: '제품의 합/불 여부'
     }
   }),
+  computed: {
+    stationNodes() {
+      return this.$store.state.stationNodes
+    }
+  },
   components: {
     Container, Draggable
   },
   methods: {
+    handleChange(value, v) {
+      v.standard.equal = value
+    },
     addProject() {
       const newProject = {
         productName: 'Untitled',
@@ -221,11 +254,13 @@ export default {
       this.visible = true
     },
     addData(station) {
-      station.data.push({dataName: '', nodeId: '', monitor: true, save: true, standard: {
+      station.data.push({
+        dataName: '', nodeId: '', monitor: true, save: true, standard: {
           maximum: 0,
           minimum: 0,
           same: 0
-        }})
+        }
+      })
     },
     removeData(station, dataIndex) {
       station.data.splice(dataIndex, 1)
@@ -292,6 +327,7 @@ export default {
 
         if (result) {
           this.$message.success('connect')
+          this.station.data = result
         } else {
           this.$message.error('not connect')
         }

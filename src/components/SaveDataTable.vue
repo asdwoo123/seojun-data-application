@@ -119,14 +119,18 @@ export default {
       .every(v => {
         let r
         switch (v[0]) {
-          case 'minimum':
+          case 'min':
             r = value >= v[1]
                 break
-          case 'maximum':
+          case 'max':
             r = value <= v[1];
             break
-          case 'same':
-            r = true;
+          case 'equal':
+            if (['True', 'False'].some(i => value === i)) {
+              r = value === v[1]
+            } else {
+              r = true;
+            }
             break
           default:
             r = false

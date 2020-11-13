@@ -9,7 +9,8 @@ export default new Vuex.Store({
     stationData: [],
     theme: {},
     confirmVisible: false,
-    confirmMessage: ''
+    confirmMessage: '',
+    stationNodes: []
   },
   mutations: {
     insertRealTime(state, payload) {
@@ -39,6 +40,10 @@ export default new Vuex.Store({
     },
     closeConfirm(state) {
       state.confirmVisible = false
+    },
+    insertStationNodes(state, payload) {
+      console.log(payload)
+      state.stationNodes = payload
     }
   }
 })
