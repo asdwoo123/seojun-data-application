@@ -7,7 +7,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     stationData: [],
-    theme: {}
+    theme: {},
+    confirmVisible: false,
+    confirmMessage: ''
   },
   mutations: {
     insertRealTime(state, payload) {
@@ -30,6 +32,13 @@ export default new Vuex.Store({
       } else {
         state.stationData.push(payload)
       }
+    },
+    showConfirm(state, message) {
+      state.confirmVisible = true
+      state.confirmMessage = message
+    },
+    closeConfirm(state) {
+      state.confirmVisible = false
     }
   }
 })
