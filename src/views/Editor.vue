@@ -88,7 +88,7 @@
              @cancel="modalClose">
       <template v-if="station">
         <div class="flex between">
-          <div class="flex between" style="margin-bottom: 8px; width: 450px;">
+          <div class="flex between" style="margin-bottom: 8px; width: 712px;">
             <a-tooltip placement="topLeft" :title="tooltips.stationName"><span style="flex: 1;">station name</span></a-tooltip>
             <a-input style="flex: 3;" v-model="station.stationName"/>
             <a-button type="primary" style="margin-left: 20px;" :loading="netLoading" @click="connectTest">Connect test</a-button>
@@ -326,10 +326,11 @@ export default {
     },
     pasteStation() {
       let stationInfo = clipboard.readText()
-      if (stationInfo) {
-        stationInfo = JSON.parse(stationInfo)
+      stationInfo = JSON.parse(stationInfo)
+      const isValid = ['stationName', 'url', 'barcode', 'pcState', 'scan', 'pass', 'notPass', 'done', 'result', 'data'].every(pn => stationInfo?.hasOwnProperty(pn))
+      if (isValid) {
+        this.station = stationInfo
       }
-      console.log(stationInfo)
     }
   }
 }
