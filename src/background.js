@@ -4,6 +4,7 @@ import {app, protocol, BrowserWindow} from 'electron'
 import {createProtocol} from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
 import AutoLaunch from 'auto-launch'
+import path from 'path'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -28,7 +29,7 @@ function createWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             enableRemoteModule: true
         },
-        icon: './assets/icon.ico'
+        icon: path.join(app.getAppPath(), '..', 'assets/icon.ico')
     })
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
