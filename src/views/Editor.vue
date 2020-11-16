@@ -108,7 +108,7 @@
               <a-tooltip placement="topLeft" :title="tooltips[key]"><span style="width: 100px;">
               {{ key }}
             </span></a-tooltip>
-              <a-input style="width: 250px;" v-model="station[key]"/>
+              <a-input style="width: 250px;" :default-value="station[key]" v-model="station[key]"/>
             </div>
           </a-col>
         </a-row>
@@ -118,13 +118,13 @@
 
             <div class="flex" style="margin-right: 19px;">
               <span style="width: 100px;">Data name</span>
-              <a-input style="width: 250px;" v-model="v.dataName"/>
+              <a-input style="width: 250px;" :default-value="v.dataName" v-model="v.dataName"/>
             </div>
 
 
             <div class="flex" style="margin-right: 19px;">
               <span style="width: 100px;">Node id</span>
-              <a-input style="width: 250px;" v-model="v.nodeId"/>
+              <a-input style="width: 250px;" :default-value="v.nodeId" v-model="v.nodeId"/>
             </div>
             <div class="flex center-v" style="margin-right: 5px;">
               <div class="flex" style="margin-right: 19px;">
@@ -133,8 +133,8 @@
               </div>
               <span style="width: 100px;">Standard</span>
               <template v-if="typeof v.dataValue === 'number'">
-                <a-input addon-before="Min" v-model="v.standard.min" style="width: 100px; margin-right: 10px;"/>
-                <a-input addon-before="Max" v-model="v.standard.max" style="width: 100px; margin-right: 19px;"/>
+                <a-input addon-before="Min" :default-value="v.standard.min" v-model="v.standard.min" style="width: 100px; margin-right: 10px;"/>
+                <a-input addon-before="Max" :default-value="v.standard.max" v-model="v.standard.max" style="width: 100px; margin-right: 19px;"/>
               </template>
               <template v-if="typeof v.dataValue === 'boolean'">
                 <a-select :default-value="v.standard.equal" style="margin-right: 19px; width: 100px;" @change="handleChange($event, v)">
@@ -320,7 +320,7 @@ export default {
       this.netLoading = true
       setTimeout(() => {
         this.netLoading = false
-      }, 5000)
+      }, 20000)
 
       testingOPC(this.station.url, (result) => {
         this.netLoading = false
