@@ -10,7 +10,7 @@
       <a-popover trigger="click" placement="bottom">
         <template slot="content">
           <div class="flex">
-            <NumKeyBoard type="password" :value="password">
+            <NumKeyBoard type="password" v-model="password">
               <a-input-password v-model="password" style="margin-right: 8px;"/>
             </NumKeyBoard>
             <a-button @click="saveProject">Save</a-button>
