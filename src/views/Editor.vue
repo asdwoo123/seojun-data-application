@@ -1,16 +1,18 @@
 <template>
   <a-layout-content style="padding: 28px; background-color: #f0f2f5;">
     <div class="flex" style="margin-bottom: 24px; justify-content: flex-end;">
-      <a-button type="primary" style="margin-right: 8px;" @click="importSettingFile">Import Settings</a-button>
-      <a-button type="primary" style="margin-right: 8px;" @click="exportSettingFile">Export Settings</a-button>
-      <a-button type="primary" style="margin-right: 8px;" @click="opcViewOpen">OPC viewer open</a-button>
+      <!--      <a-button type="primary" style="margin-right: 8px;" @click="importSettingFile">Import Settings</a-button>
+            <a-button type="primary" style="margin-right: 8px;" @click="exportSettingFile">Export Settings</a-button>
+            <a-button type="primary" style="margin-right: 8px;" @click="opcViewOpen">OPC viewer open</a-button>-->
       <a-button type="primary" style="margin-right: 8px;" @click="addProject">
         Add project
       </a-button>
       <a-popover trigger="click" placement="bottom">
         <template slot="content">
           <div class="flex">
-            <a-input-password v-model="password" style="margin-right: 8px;"/>
+            <NumKeyBoard type="password" :value="password">
+              <a-input-password v-model="password" style="margin-right: 8px;"/>
+            </NumKeyBoard>
             <a-button @click="saveProject">Save</a-button>
           </div>
         </template>
@@ -98,7 +100,11 @@
             <!--            <a-button type="primary" style="margin-left: 20px;" @click="copyStation">Copy station</a-button>
                         <a-button type="primary" style="margin-left: 20px;" @click="pasteStation">Paste station</a-button>-->
           </div>
-          <a-button type="primary" @click="addData(station)">Add data</a-button>
+          <!--          <a-button type="primary" @click="addData(station)">Add data</a-button>-->
+          <div style="margin-right: 20px;">
+            <a-button @click="modalClose">Cancel</a-button>
+            <a-button type="primary" style="margin-left: 8px;" @click="saveStation">OK</a-button>
+          </div>
         </div>
         <a-row style="margin-bottom: 30px;">
           <a-col :span="6"
@@ -108,61 +114,65 @@
               <a-tooltip placement="topLeft" :title="tooltips[key]"><span style="width: 100px;">
               {{ key }}
             </span></a-tooltip>
-              <a-input style="width: 250px;" :default-value="station[key]" v-model="station[key]"/>
+              <a-input :disabled="key !== 'url'" style="width: 250px;" :default-value="station[key]"
+                       v-model="station[key]"/>
             </div>
           </a-col>
         </a-row>
 
         <div>
-          <Container @drop="dataDrop($event)">
+          <Container :drag-begin-delay="500" @drop="dataDrop($event)">
             <Draggable v-for="(v, vi) in station.data" :key="vi" style="cursor: pointer;">
-          <div class="flex dataItem" style="margin-bottom: 8px;">
+              <div class="flex dataItem" style="margin-bottom: 8px;">
 
-            <div class="flex" style="margin-right: 19px;">
-              <span style="width: 100px;">Data name</span>
-              <a-input style="width: 250px;" :default-value="v.dataName" v-model="v.dataName"/>
-            </div>
+                <div class="flex" style="margin-right: 19px;">
+                  <span style="width: 100px;">Data name</span>
+                  <a-input style="width: 250px;" disabled :default-value="v.dataName" v-model="v.dataName"/>
+                </div>
 
 
-            <div class="flex" style="margin-right: 19px;">
-              <span style="width: 100px;">Node id</span>
-              <a-input style="width: 250px;" :default-value="v.nodeId" v-model="v.nodeId"/>
-            </div>
-            <div class="flex center-v" style="margin-right: 5px;">
-              <div class="flex" style="margin-right: 19px;">
-                <span style="width: 100px;">Data Type</span>
-                <a-input disabled style="width: 100px;" :default-value="typeof v.dataValue"/>
+                <div class="flex" style="margin-right: 19px;">
+                  <span style="width: 100px;">Node id</span>
+                  <a-input style="width: 250px;" disabled :default-value="v.nodeId" v-model="v.nodeId"/>
+                </div>
+                <div class="flex center-v" style="margin-right: 5px;">
+                  <div class="flex" style="margin-right: 19px;">
+                    <span style="width: 100px;">Data Type</span>
+                    <a-input disabled style="width: 100px;" :default-value="typeof v.dataValue"/>
+                  </div>
+                  <span style="width: 100px;">Standard</span>
+                  <template v-if="typeof v.dataValue === 'number'">
+                    <a-input addon-before="Min" :default-value="v.standard.min" v-model="v.standard.min"
+                             style="width: 100px; margin-right: 10px;"/>
+                    <a-input addon-before="Max" :default-value="v.standard.max" v-model="v.standard.max"
+                             style="width: 100px; margin-right: 19px;"/>
+                  </template>
+                  <template v-if="typeof v.dataValue === 'boolean'">
+                    <a-select :default-value="v.standard.equal" style="margin-right: 19px; width: 100px;"
+                              @change="handleChange($event, v)">
+                      <a-select-option :value="'True'">
+                        True
+                      </a-select-option>
+                      <a-select-option :value="'False'">
+                        False
+                      </a-select-option>
+                    </a-select>
+                  </template>
+                  <a-checkbox v-model="v.use">
+                    Use
+                  </a-checkbox>
+                  <!--              <a-checkbox v-model="v.monitor">
+                                  Monitor
+                                </a-checkbox>
+                                <a-checkbox v-model="v.save">
+                                  Save
+                                </a-checkbox>-->
+                </div>
+                <!--            <div>
+                              <a-button type="danger" shape="circle" icon="delete" @click="removeData(station, vi)"/>
+                            </div>-->
+
               </div>
-              <span style="width: 100px;">Standard</span>
-              <template v-if="typeof v.dataValue === 'number'">
-                <a-input addon-before="Min" :default-value="v.standard.min" v-model="v.standard.min" style="width: 100px; margin-right: 10px;"/>
-                <a-input addon-before="Max" :default-value="v.standard.max" v-model="v.standard.max" style="width: 100px; margin-right: 19px;"/>
-              </template>
-              <template v-if="typeof v.dataValue === 'boolean'">
-                <a-select :default-value="v.standard.equal" style="margin-right: 19px; width: 100px;" @change="handleChange($event, v)">
-                  <a-select-option :value="'True'">
-                    True
-                  </a-select-option>
-                  <a-select-option :value="'False'">
-                    False
-                  </a-select-option>
-                </a-select>
-              </template>
-              <a-checkbox v-model="v.use">
-                Use
-              </a-checkbox>
-              <!--              <a-checkbox v-model="v.monitor">
-                              Monitor
-                            </a-checkbox>
-                            <a-checkbox v-model="v.save">
-                              Save
-                            </a-checkbox>-->
-            </div>
-            <!--            <div>
-                          <a-button type="danger" shape="circle" icon="delete" @click="removeData(station, vi)"/>
-                        </div>-->
-
-          </div>
             </Draggable>
           </Container>
         </div>
@@ -179,6 +189,7 @@ import {getDB, setDB} from '@/utils/lowdb'
 import {spawn} from 'child_process'
 import fs from 'fs'
 import {remote} from 'electron'
+import NumKeyBoard from "@/components/NumKeyBoard";
 
 const {dialog, clipboard} = remote
 
@@ -205,7 +216,8 @@ export default {
       notPass: '이전 공정이 완료가 안되었을때 PLC에서 펄스신호로 받을 노드',
       done: '생산이 완료되었을때 PC로 보내는 완료신호 노드',
       result: '제품의 합/불 여부'
-    }
+    },
+    rock: true
   }),
   computed: {
     stationNodes() {
@@ -213,6 +225,7 @@ export default {
     }
   },
   components: {
+    NumKeyBoard,
     Container, Draggable
   },
   methods: {
@@ -235,6 +248,9 @@ export default {
     },
     saveStation() {
       this.project[this.productIndex].stations[this.stationIndex] = this.station
+      const project = getDB('project')
+      project[this.productIndex] = this.project[this.productIndex]
+      setDB('project', project)
       this.visible = false
     },
     removeStation(productIndex, stationIndex) {
@@ -307,13 +323,13 @@ export default {
       this.project[projectIndex].stations.push({
         stationName: 'Untitled',
         url: '',
-        barcode: [],
-        pcState: '',
-        scan: '',
-        pass: '',
-        notPass: '',
-        done: '',
-        result: '',
+        barcode: "ns=3;s=\"As\".\"DATA\".\"DMC\"",
+        pcState: "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
+        scan: "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
+        pass: "ns=3;s=\"As\".\"DATA\".\"iOK_DMC_forPC\"",
+        notPass: "ns=3;s=\"As\".\"DATA\".\"iNOK_DMC_forPC\"",
+        done: "ns=3;s=\"As\".\"DATA\".\"Done\"",
+        result: "ns=3;s=\"As\".\"DATA\".\"Result\"",
         data: []
       })
     },

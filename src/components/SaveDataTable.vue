@@ -25,8 +25,8 @@
                     </a-button>
                   </div>
                 </template>
-                <span>{{ dc.title }}</span>-->
-              </a-popover>
+                <span>{{ dc.title }}</span>
+              </a-popover>-->
               <span>{{ dc.title }}</span>
             </div>
             <template slot-scope="text">
