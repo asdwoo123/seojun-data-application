@@ -104,7 +104,7 @@
           <a-col :span="6"
                  v-for="[key] in Object.entries(station).filter(v => ['stationName', 'data'].every(k => k !== v[0]))"
                  :key="key">
-            <div class="flex" style="margin-bottom: 8px;">
+            <div class="flex" style="margin-bottom: 14px;">
               <a-tooltip placement="topLeft" :title="tooltips[key]"><span style="width: 100px;">
               {{ key }}
             </span></a-tooltip>
@@ -114,7 +114,9 @@
         </a-row>
 
         <div>
-          <div class="flex" v-for="(v, vi) in station.data" :key="vi" style="margin-bottom: 8px;">
+          <Container @drop="dataDrop($event)">
+            <Draggable v-for="(v, vi) in station.data" :key="vi" style="cursor: pointer;">
+          <div class="flex dataItem" style="margin-bottom: 8px;">
 
             <div class="flex" style="margin-right: 19px;">
               <span style="width: 100px;">Data name</span>
@@ -161,6 +163,8 @@
                         </div>-->
 
           </div>
+            </Draggable>
+          </Container>
         </div>
       </template>
     </a-modal>
@@ -269,6 +273,12 @@ export default {
       const {removedIndex, addedIndex} = e
       const [removed] = this.project[productIndex].stations.splice(removedIndex, 1)
       this.project[productIndex].stations.splice(addedIndex, 0, removed)
+      this.$forceUpdate()
+    },
+    dataDrop(e) {
+      const {removedIndex, addedIndex} = e
+      const [removed] = this.station.data.splice(removedIndex, 1)
+      this.station.data.splice(addedIndex, 0, removed)
       this.$forceUpdate()
     },
     saveProject() {
@@ -380,4 +390,7 @@ export default {
   background: #ffffff;
 }
 
+.dataItem {
+  padding: 3px 0;
+}
 </style>

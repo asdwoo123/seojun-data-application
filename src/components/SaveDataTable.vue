@@ -15,7 +15,7 @@
           <a-table-column v-for="(dc, dcIndex) in column.children" :key="dc.key" :data-index="dc.dataIndex">
             <div style="cursor: pointer;" slot="title">
               <!--조건 에디터-->
-              <a-popover trigger="click" @click="initStandard(columnIndex - 3, dcIndex)">
+<!--              <a-popover trigger="click" @click="initStandard(columnIndex - 3, dcIndex)">
                 <template slot="content">
                   <div class="flex column">
                     <a-input :key="n" style="width: 200px; margin-bottom: 10px;" :addonBefore="upperFirst(n)"
@@ -25,8 +25,9 @@
                     </a-button>
                   </div>
                 </template>
-                <span>{{ dc.title }}</span>
+                <span>{{ dc.title }}</span>-->
               </a-popover>
+              <span>{{ dc.title }}</span>
             </div>
             <template slot-scope="text">
               <div style="text-align: center; padding: 16px;" :class="selectColor(text, dc.standard)">{{ text }}</div>

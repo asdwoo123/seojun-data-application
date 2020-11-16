@@ -33,30 +33,19 @@ if (isDevelopment) {
 
 export const testingOPC = async (url, callback) => {
     try {
-        const startTime = new Date()
-
         const opcUrl = `opc.tcp://${url}`
         const client = OPCUAClient.create(options)
         await client.connect(opcUrl)
 
-        const connectTime = new Date()
-
         const session = await client.createSession()
         const browseResult = await session.browse("ns=3;s=\"As\".\"DATA\"")
 
-        const browseTime = new Date()
         const nodes = await Promise.all(browseResult.references.map(async b => {
             const dataName = b.browseName.name
             const nodeId = 'ns=3;s=' + b.nodeId.value
             const dataValue = (await session.readVariableValue(nodeId)).value.value
             return {dataName, dataValue: (Array.isArray(dataValue)) ? dataValue[1] : dataValue, nodeId, use: false, standard: { min: 0, max: 0, equal: 'True' }}
         }))
-
-        const endTime = new Date()
-
-        console.log('connectTime', connectTime - startTime)
-        console.log('browseTime', browseTime - startTime)
-        console.log('endTime', endTime - startTime)
 
         await client.disconnect()
         callback(nodes)
