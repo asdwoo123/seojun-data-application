@@ -274,6 +274,7 @@ export default {
     },
     saveStation() {
       this.project[this.productIndex].stations[this.stationIndex] = this.station
+      console.log(this.station)
       const project = getDB('project')
       project[this.productIndex] = this.project[this.productIndex]
       setDB('project', project)
@@ -427,7 +428,6 @@ export default {
       arp.table((err, entry) => {
         if (err) return
         if (this.ipList.indexOf(entry.ip) === -1) {
-          console.log(entry.ip)
           this.ipList = [entry.ip, ...this.ipList]
         }
       })

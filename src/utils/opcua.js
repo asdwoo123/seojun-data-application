@@ -58,6 +58,7 @@ export const testingOPC = async (url, callback) => {
 
 export const connectOPC = () => {
     const project = getDB('project')
+    console.log(project)
     store.commit('insertRealTime', [])
     project.forEach((product, productIndex) => {
         const productName = product.productName
