@@ -92,15 +92,15 @@
       <template v-if="station">
         <div class="flex between" style="margin-bottom: 30px;">
           <div class="flex between">
-            <div>
-              <a-tooltip placement="topLeft" :title="tooltips.stationName"><span
-                  style="width: 100px;">station name</span>
+            <div class="flex" style="margin-right: 19px;">
+              <a-tooltip placement="topLeft" :title="tooltips.stationName"><div
+                  style="width: 100px;">station name</div>
               </a-tooltip>
               <a-input style="width: 250px;" v-model="station.stationName"/>
             </div>
-            <div>
-              <a-tooltip placement="topLeft" :title="tooltips.url"><span
-                  style="width: 100px;">url</span>
+            <div class="flex" style="margin-right: 19px;">
+              <a-tooltip placement="topLeft" :title="tooltips.url"><div
+                  style="width: 100px;">url</div>
               </a-tooltip>
 <!--              <a-input style="width: 250px;" v-model="station.url"/>-->
               <a-select :default-value="ipList[0] || ''" style="width: 250px;" v-model="station.url">
@@ -110,6 +110,11 @@
                   </a-select-option>
                 </template>
               </a-select>
+            </div>
+            <div class="flex">
+              <div
+                  style="width: 100px;">port</div>
+              <a-input default-value="4840" style="width: 100px;" v-model="station.port"/>
             </div>
 <!--            <a-button type="primary">
               IP search
@@ -345,6 +350,7 @@ export default {
       this.project[projectIndex].stations.push({
         stationName: 'Untitled',
         url: '',
+        port: '4840',
         barcode: "ns=3;s=\"As\".\"DATA\".\"DMC\"",
         pcState: "ns=3;s=\"As\".\"DATA\".\"State_PC\"",
         scan: "ns=3;s=\"As\".\"DATA\".\"oDMC_toPC\"",
@@ -420,8 +426,10 @@ export default {
 
       arp.table((err, entry) => {
         if (err) return
-        if (this.ipList.indexOf(entry.ip) ===! -1) return;
-        this.ipList = [entry.ip, ...this.ipList]
+        if (this.ipList.indexOf(entry.ip) === -1) {
+          console.log(entry.ip)
+          this.ipList = [entry.ip, ...this.ipList]
+        }
       })
     }
   }

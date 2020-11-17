@@ -65,7 +65,7 @@ export const connectOPC = () => {
         if (!productName || !Array.isArray(product.stations)) return
         product.stations.forEach(async (station, stationIndex) => {
 
-            const checkStationProperty = ['stationName', 'url', 'barcode', 'pcState', 'scan', 'pass', 'notPass', 'done', 'result', 'data']
+            const checkStationProperty = ['stationName', 'url', 'port', 'barcode', 'pcState', 'scan', 'pass', 'notPass', 'done', 'result', 'data']
 
             if (checkStationProperty.some(p => !station[p])) return
             const stationName = station.stationName
@@ -86,7 +86,7 @@ export const connectOPC = () => {
                 ]
             })
 
-            const url = `opc.tcp://${station.url}`
+            const url = `opc.tcp://${station.url}:${station.port}`
 
             const client = OPCUAClient.create(options)
 
