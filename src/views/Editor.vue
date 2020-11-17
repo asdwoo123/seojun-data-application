@@ -91,10 +91,29 @@
              @cancel="modalClose">
       <template v-if="station">
         <div class="flex between" style="margin-bottom: 30px;">
-          <div class="flex between" style=" width: 450px;">
-            <a-tooltip placement="topLeft" :title="tooltips.stationName"><span style="width: 100px;">station name</span>
-            </a-tooltip>
-            <a-input style="width: 250px;" v-model="station.stationName"/>
+          <div class="flex between">
+            <div>
+              <a-tooltip placement="topLeft" :title="tooltips.stationName"><span
+                  style="width: 100px;">station name</span>
+              </a-tooltip>
+              <a-input style="width: 250px;" v-model="station.stationName"/>
+            </div>
+            <div>
+              <a-tooltip placement="topLeft" :title="tooltips.url"><span
+                  style="width: 100px;">url</span>
+              </a-tooltip>
+<!--              <a-input style="width: 250px;" v-model="station.url"/>-->
+              <a-select :default-value="ipList[0] || ''" style="width: 250px;" v-model="station.url">
+                <template v-for="ip in ipList">
+                  <a-select-option :key="ip" :value="ip">
+                    {{ ip }}
+                  </a-select-option>
+                </template>
+              </a-select>
+            </div>
+<!--            <a-button type="primary">
+              IP search
+            </a-button>-->
             <a-button type="primary" style="margin-left: 20px;" :loading="netLoading" @click="connectTest">Connect
             </a-button>
             <!--            <a-button type="primary" style="margin-left: 20px;" @click="copyStation">Copy station</a-button>
@@ -108,7 +127,7 @@
         </div>
         <a-row style="margin-bottom: 30px;">
           <a-col :span="6"
-                 v-for="[key] in Object.entries(station).filter(v => ['stationName', 'data'].every(k => k !== v[0]))"
+                 v-for="[key] in Object.entries(station).filter(v => ['stationName', 'url', 'data'].every(k => k !== v[0]))"
                  :key="key">
             <div class="flex" style="margin-bottom: 14px;">
               <a-tooltip placement="topLeft" :title="tooltips[key]"><span style="width: 100px;">
@@ -184,6 +203,7 @@
 <script>
 import {connectOPC, disconnect, testingOPC} from '@/utils/opcua'
 import {cloneDeep} from 'lodash'
+import arp from 'arp-a'
 import {Container, Draggable} from 'vue-smooth-dnd'
 import {getDB, setDB} from '@/utils/lowdb'
 import {spawn} from 'child_process'
@@ -217,7 +237,8 @@ export default {
       done: '생산이 완료되었을때 PC로 보내는 완료신호 노드',
       result: '제품의 합/불 여부'
     },
-    rock: true
+    rock: true,
+    ipList: []
   }),
   computed: {
     stationNodes() {
@@ -271,6 +292,7 @@ export default {
       this.productIndex = productIndex
       this.stationIndex = stationIndex
       this.station = cloneDeep(this.project[productIndex].stations[stationIndex])
+      this.searchIP()
       this.visible = true
     },
     addData(station) {
@@ -362,7 +384,6 @@ export default {
     opcViewOpen() {
       spawn('opcua-client')
     },
-
     async importSettingFile() {
       const {filePaths} = await dialog.showOpenDialog(null)
       const data = JSON.parse(fs.readFileSync(filePaths[0]))
@@ -393,6 +414,15 @@ export default {
       if (isValid) {
         this.station = stationInfo
       }
+    },
+    searchIP() {
+      this.ipList = []
+
+      arp.table((err, entry) => {
+        if (err) return
+        if (this.ipList.indexOf(entry.ip) ===! -1) return;
+        this.ipList = [entry.ip, ...this.ipList]
+      })
     }
   }
 }

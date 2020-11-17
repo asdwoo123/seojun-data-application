@@ -45,15 +45,16 @@ export default {
 
        if (n === '←') {
          value = value.substr(0, value.length - 1)
-       } else if (n === 'Clear')
-       else (n !== 'Enter' && n !== 'Clear') {
+       } /*else if (n === 'Clear') {
+
+       } else (n !== 'Enter' && n !== 'Clear') {
          const index = value.indexOf('.')
          if (n === '.' && index !== -1) return
          if (index !== -1 && value.length - 1 > index) return;
 
          value = (value === '0' && n !== '.') ? n + '' : value + n
        }
-
+*/
       this.$emit('input', value)
     },
     handleOpenShow() {
