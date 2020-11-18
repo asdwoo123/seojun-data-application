@@ -128,12 +128,26 @@ export default {
             const updatedAt = moment(complete.updatedAt).format('YYYY-MM-DD h:mm:ss a');
             const station = complete['stations'].find(s => s.stationName === stationName);
             if (station) {
+            const data = station.data.reduce((acc, one) => {
+              let dataValue = one.dataValue
+
+              if (typeof dataValue === 'boolean') {
+                dataValue = (dataValue) ? 'True' : 'False'
+              }
+
+              if (!Number.isInteger(dataValue)) {
+                dataValue = dataValue.toFixed(1)
+              }
+
+              return {...acc, [one.dataName]: dataValue}
+            }, {});
+
               return {
                 key,
                 productId,
                 createdAt,
                 updatedAt,
-                ...station.data
+                ...data
               }
             } else {
               return null
@@ -155,7 +169,7 @@ export default {
     },
     modalClose() {
       this.visible = false
-    },
+    }
   }
 }
 </script>

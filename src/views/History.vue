@@ -229,6 +229,7 @@ export default {
         if (err) return
         if (completes.length > 0) {
           this.completes = completes
+          console.log(completes)
           const dataSource = completes.map(complete => {
             const key = complete.id.toString() || '1'
             const productId = complete.productId || ''
@@ -257,7 +258,6 @@ export default {
               ...data
             }
           })
-
           this.dataSource = [...dataSource]
         } else {
           this.dataSource = []

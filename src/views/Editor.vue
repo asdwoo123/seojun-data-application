@@ -10,7 +10,7 @@
       <a-popover trigger="click" placement="bottom">
         <template slot="content">
           <div class="flex">
-            <NumKeyBoard type="password" v-model="password">
+            <NumKeyBoard v-model="password">
               <a-input-password v-model="password" style="margin-right: 8px;"/>
             </NumKeyBoard>
             <a-button @click="saveProject">Save</a-button>
@@ -93,16 +93,19 @@
         <div class="flex between" style="margin-bottom: 30px;">
           <div class="flex between">
             <div class="flex" style="margin-right: 19px;">
-              <a-tooltip placement="topLeft" :title="tooltips.stationName"><div
-                  style="width: 100px;">station name</div>
+              <a-tooltip placement="topLeft" :title="tooltips.stationName">
+                <div
+                    style="width: 100px;">station name
+                </div>
               </a-tooltip>
               <a-input style="width: 250px;" v-model="station.stationName"/>
             </div>
             <div class="flex" style="margin-right: 19px;">
-              <a-tooltip placement="topLeft" :title="tooltips.url"><div
-                  style="width: 100px;">url</div>
-              </a-tooltip>
-<!--              <a-input style="width: 250px;" v-model="station.url"/>-->
+              <div
+                  style="width: 100px;">url
+              </div>
+
+              <!--              <a-input style="width: 250px;" v-model="station.url"/>-->
               <a-select :default-value="ipList[0] || ''" style="width: 250px;" v-model="station.url">
                 <template v-for="ip in ipList">
                   <a-select-option :key="ip" :value="ip">
@@ -113,12 +116,13 @@
             </div>
             <div class="flex">
               <div
-                  style="width: 100px;">port</div>
+                  style="width: 100px;">port
+              </div>
               <a-input default-value="4840" style="width: 100px;" v-model="station.port"/>
             </div>
-<!--            <a-button type="primary">
-              IP search
-            </a-button>-->
+            <!--            <a-button type="primary">
+                          IP search
+                        </a-button>-->
             <a-button type="primary" style="margin-left: 20px;" :loading="netLoading" @click="connectTest">Connect
             </a-button>
             <!--            <a-button type="primary" style="margin-left: 20px;" @click="copyStation">Copy station</a-button>
@@ -132,12 +136,12 @@
         </div>
         <a-row style="margin-bottom: 30px;">
           <a-col :span="6"
-                 v-for="[key] in Object.entries(station).filter(v => ['stationName', 'url', 'data'].every(k => k !== v[0]))"
+                 v-for="[key] in Object.entries(station).filter(v => ['stationName', 'url', 'port', 'data'].every(k => k !== v[0]))"
                  :key="key">
             <div class="flex" style="margin-bottom: 14px;">
-              <a-tooltip placement="topLeft" :title="tooltips[key]"><span style="width: 100px;">
+              <span style="width: 100px;">
               {{ key }}
-            </span></a-tooltip>
+            </span>
               <a-input :disabled="key !== 'url'" style="width: 250px;" :default-value="station[key]"
                        v-model="station[key]"/>
             </div>
@@ -274,10 +278,11 @@ export default {
     },
     saveStation() {
       this.project[this.productIndex].stations[this.stationIndex] = this.station
-      console.log(this.station)
       const project = getDB('project')
-      project[this.productIndex] = this.project[this.productIndex]
-      setDB('project', project)
+      if (project[this.productIndex].productName === this.project[this.productIndex].productName) {
+        project[this.productIndex] = this.project[this.productIndex]
+        setDB('project', project)
+      }
       this.visible = false
     },
     removeStation(productIndex, stationIndex) {
@@ -336,15 +341,18 @@ export default {
         })
 
         if (result) {
-          this.$message.error('중복되는 프로젝트명이 있습니다');
+          this.$message.error('There is a duplicate project name');
           return;
         }
 
+        this.$message.success('The project has been saved')
         setDB('project', this.project)
         this.password = ''
         setTimeout(() => {
           disconnect(connectOPC)
         }, 100)
+      } else {
+        this.$message.error('Passwords do not match')
       }
     },
     addStation(projectIndex) {
@@ -368,7 +376,10 @@ export default {
           setDB('password', this.changePassword)
           this.password = ''
           this.changePassword = ''
+          this.$message.success('Password has been changed')
         }
+      } else {
+        this.$message.error('Passwords do not match')
       }
     },
     connectTest() {
@@ -377,7 +388,7 @@ export default {
         this.netLoading = false
       }, 20000)
 
-      testingOPC(this.station.url, (result) => {
+      testingOPC(this.station.url, this.station.port, (result) => {
         this.netLoading = false
 
         if (result) {

@@ -31,9 +31,9 @@ if (isDevelopment) {
     }
 }
 
-export const testingOPC = async (url, callback) => {
+export const testingOPC = async (url, port, callback) => {
     try {
-        const opcUrl = `opc.tcp://${url}`
+        const opcUrl = `opc.tcp://${url}:${port}`
         const client = OPCUAClient.create(options)
         await client.connect(opcUrl)
 
@@ -58,7 +58,6 @@ export const testingOPC = async (url, callback) => {
 
 export const connectOPC = () => {
     const project = getDB('project')
-    console.log(project)
     store.commit('insertRealTime', [])
     project.forEach((product, productIndex) => {
         const productName = product.productName
@@ -80,8 +79,8 @@ export const connectOPC = () => {
                 data: [
                     ...station.data.filter(v => v.dataName && v.nodeId).filter(v => v.use).map(
                         v => ({
-                            dataName: v.dataName,
-                            dataValue: ''
+                            dataValue: '',
+                            dataName: v.dataName
                         })
                     )
                 ]

@@ -13,7 +13,7 @@
         </a-button>
       </a-popover>
     </div>
-    <a-table :columns="column" :data-source="dataSource" :pagination="{ pageSize: 30 }" />
+    <a-table :columns="column" :data-source="dataSource" :pagination="{ pageSize: 10 }" />
   </a-layout-content>
 </template>
 
