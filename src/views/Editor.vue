@@ -7,34 +7,38 @@
       <a-button type="primary" style="margin-right: 8px;" @click="addProject">
         Add project
       </a-button>
-      <a-popover trigger="click" placement="bottom">
+<!--      <a-popover trigger="click" placement="bottom" v-model="pwdVisible">
         <template slot="content">
           <div class="flex">
-            <NumKeyBoard v-model="password">
+            <NumKeyBoard v-model="password" type="password">
               <a-input-password v-model="password" style="margin-right: 8px;"/>
             </NumKeyBoard>
             <a-button @click="saveProject">Save</a-button>
           </div>
-        </template>
-        <a-button type="primary" style="margin-right: 8px;">
+        </template>-->
+        <a-button type="primary" style="margin-right: 8px;" @click="pwdVisible=true">
           Save project
         </a-button>
-      </a-popover>
+<!--      </a-popover>-->
       <a-button type="primary" style="margin-right: 8px;" @click="resetProject">
         Reset project
       </a-button>
-      <a-popover trigger="click" placement="bottom">
+<!--      <a-popover trigger="click" placement="bottom" v-model="pwdChangeVisible">
         <template slot="content">
           <div class="flex">
-            <a-input-password placeholder="Password" v-model="password" style="margin-right: 8px;"/>
-            <a-input-password placeholder="Change password" v-model="changePassword" style="margin-right: 8px;"/>
-            <a-button @click="handleChangePassword">Change</a-button>
+            <NumKeyBoard v-model="password">
+              <a-input-password placeholder="Password" v-model="password" style="margin-right: 8px;"/>
+            </NumKeyBoard>
+            <NumKeyBoard v-model="changePassword">
+              <a-input-password placeholder="Change password" v-model="changePassword" style="margin-right: 8px;"/>
+            </NumKeyBoard>
+            <a-button @click="handleChangePassword" @submit="handleChangePassword">Change</a-button>
           </div>
-        </template>
-        <a-button type="primary">
+        </template>-->
+        <a-button type="primary" @click="pwdChangeVisible=true">
           Change password
         </a-button>
-      </a-popover>
+<!--      </a-popover>-->
     </div>
     <a-row :gutter="16">
       <a-col :sm="12" :xl="8" :xxl="6" v-for="(product, index) in project" :key="index">
@@ -118,7 +122,9 @@
               <div
                   style="width: 100px;">port
               </div>
+              <NumKeyBoard v-model="station.port">
               <a-input default-value="4840" style="width: 100px;" v-model="station.port"/>
+              </NumKeyBoard>
             </div>
             <!--            <a-button type="primary">
                           IP search
@@ -170,10 +176,14 @@
                   </div>
                   <span style="width: 100px;">Standard</span>
                   <template v-if="typeof v.dataValue === 'number'">
-                    <a-input addon-before="Min" :default-value="v.standard.min" v-model="v.standard.min"
-                             style="width: 100px; margin-right: 10px;"/>
-                    <a-input addon-before="Max" :default-value="v.standard.max" v-model="v.standard.max"
-                             style="width: 100px; margin-right: 19px;"/>
+                    <NumKeyBoard v-model="v.standard.min">
+                      <a-input addon-before="Min" :default-value="v.standard.min" v-model="v.standard.min"
+                               style="width: 100px; margin-right: 10px;"/>
+                    </NumKeyBoard>
+                    <NumKeyBoard v-model="v.standard.max">
+                      <a-input addon-before="Max" :default-value="v.standard.max" v-model="v.standard.max"
+                               style="width: 100px; margin-right: 19px;"/>
+                    </NumKeyBoard>
                   </template>
                   <template v-if="typeof v.dataValue === 'boolean'">
                     <a-select :default-value="v.standard.equal" style="margin-right: 19px; width: 100px;"
@@ -206,6 +216,44 @@
         </div>
       </template>
     </a-modal>
+    <a-modal :visible="pwdVisible" @cancel="pwdVisible=false" title="Please enter a password">
+      <a-form @submit="saveProject">
+        <div class="label">
+          Password
+        </div>
+        <NumKeyBoard v-model="password" type="password">
+          <a-input-password v-model="password"/>
+        </NumKeyBoard>
+        <a-button type="primary" html-type="submit" style="width: 100%; margin-top: 20px;">
+          Save
+        </a-button>
+      </a-form>
+      <template slot="footer">
+        <div/>
+      </template>
+    </a-modal>
+    <a-modal :visible="pwdChangeVisible" @cancel="pwdChangeVisible=false" title="Please enter a password">
+      <a-form @submit="handleChangePassword">
+        <div class="label">
+          Password
+        </div>
+        <NumKeyBoard v-model="password" type="password">
+          <a-input-password v-model="password"/>
+        </NumKeyBoard>
+        <div class="label">
+          New password
+        </div>
+        <NumKeyBoard v-model="changePassword" type="password">
+          <a-input-password v-model="changePassword"/>
+        </NumKeyBoard>
+        <a-button type="primary" html-type="submit" style="width: 100%; margin-top: 20px;">
+          Change
+        </a-button>
+      </a-form>
+      <template slot="footer">
+        <div/>
+      </template>
+    </a-modal>
   </a-layout-content>
 </template>
 
@@ -229,9 +277,12 @@ export default {
     project: [...getDB('project')],
     password: '',
     changePassword: '',
+    formLayout: 'vertical',
     station: null,
     visible: false,
     visible2: false,
+    pwdVisible: false,
+    pwdChangeVisible: false,
     netLoading: false,
     productIndex: 0,
     stationIndex: 0,
@@ -437,7 +488,7 @@ export default {
       this.ipList = []
 
       arp.table((err, entry) => {
-        if (err) return
+        if (err || (!entry || !entry.hasOwnProperty('ip'))) return
         if (this.ipList.indexOf(entry.ip) === -1) {
           this.ipList = [entry.ip, ...this.ipList]
         }
@@ -457,5 +508,11 @@ export default {
 
 .dataItem {
   padding: 3px 0;
+}
+
+.label {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 15px;
 }
 </style>

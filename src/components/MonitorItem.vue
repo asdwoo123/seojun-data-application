@@ -62,7 +62,6 @@ export default {
     pageCount: null,
     visible: false,
     pageNumber: 1,
-    productName: '',
     stationName: ''
   }),
   computed: {
@@ -101,7 +100,6 @@ export default {
       ]
 
       this.loadDataSource(productName, stationName, null, () => {
-        console.log('complete')
         this.visible = true
         this.productName = productName
         this.stationName = stationName

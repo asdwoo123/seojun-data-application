@@ -30,7 +30,7 @@
               <span>{{ dc.title }}</span>
             </div>
             <template slot-scope="text">
-              <div style="text-align: center; padding: 16px;" :class="selectColor(text, dc.standard)">{{ text }}</div>
+              <div style="text-align: center;" :class="selectColor(text, dc.standard)">{{ text }}</div>
             </template>
           </a-table-column>
         </a-table-column-group>
@@ -73,6 +73,7 @@
 import moment from "moment";
 import {upperFirst, cloneDeep} from 'lodash';
 import {setDB} from '@/utils/lowdb';
+import $ from 'jquery';
 
 export default {
   name: "SaveDataTable",
@@ -88,6 +89,10 @@ export default {
       same: 0
     }
   }),
+  updated() {
+    $('.misData').parent().addClass('misData2')
+    $('.yesData').parent().addClass('yesData2')
+  },
   methods: {
     handleRow(record, index) {
       return {
@@ -152,13 +157,5 @@ export default {
 </script>
 
 <style scoped>
-.misData {
-  background-color: #f6ccd1;
-  color: #e26777;
-}
 
-.yesData {
-  background-color: #a0f69a;
-  color: #000000;
-}
 </style>

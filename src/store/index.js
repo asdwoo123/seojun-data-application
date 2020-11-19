@@ -42,7 +42,6 @@ export default new Vuex.Store({
       state.confirmVisible = false
     },
     insertStationNodes(state, payload) {
-      console.log(payload)
       state.stationNodes = payload
     }
   }

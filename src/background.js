@@ -18,6 +18,8 @@ protocol.registerSchemesAsPrivileged([
     {scheme: 'app', privileges: {secure: true, standard: true}}
 ])
 
+const icon = (isDevelopment) ? path.join(app.getAppPath(), 'assets/icon.ico') : path.join(app.getAppPath(), '..', '..', 'assets/icon.ico')
+
 function createWindow() {
     // Create the browser window.
     win = new BrowserWindow({
@@ -29,8 +31,10 @@ function createWindow() {
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
             enableRemoteModule: true
         },
-        icon: path.join(app.getAppPath(), '..', 'assets/icon.ico')
+        icon
     })
+
+    console.log(app.getAppPath())
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode

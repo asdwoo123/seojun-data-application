@@ -9,7 +9,7 @@
         </a-menu-item>
         </template>
       </a-menu>
-      <NumKeyBoard v-model="num" />
+<!--      <NumKeyBoard v-model="num" />-->
     </a-layout-header>
       <router-view />
   </a-layout>

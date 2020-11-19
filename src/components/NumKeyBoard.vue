@@ -1,13 +1,13 @@
 <template>
-  <a-popver placement="bottom" v-model="visible" @show="handleOpenShow">
-    <template slot="content">
-      <div class="con-box"
+  <a-popover  placement="rightBottom" v-model="visible" @show="handleOpenShow" trigger="click">
+      <div class="con-box" slot="content"
            style="width: 300px; padding: 10px; background-color: #fff;">
-        <div class="key-screen">
+        <div class="key-screen" @keyup="handleOnKeyUp">
           {{ value }}
         </div>
-        <div class="flex" style="flex-wrap: wrap;" @keyup="handleOnKeyUp">
-          <div :key="n" v-for="n in [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0]"
+        <div class="flex">
+        <div class="flex" style="flex-wrap: wrap;" >
+          <div :key="n" v-for="n in [7, 8, 9, 4, 5, 6, 1, 2, 3, 0, '']"
                @click="handleKeyClick(n)" class="flex center key-box">
             {{ n }}
           </div>
@@ -17,28 +17,38 @@
             .
           </div>
         </div>
-        <div class="flex column">
-          <div @click="handleKeyClick('←')"
-               class="flex center key-box">
-            ←
-          </div>
-          <div class="flex center key-box" @click="handleKeyClick('Clear')">
-            Clear
-          </div>
-          <div class="flex center key-box" @click="visible=false">
-            Enter
+          <div class="flex column">
+            <div @click="handleKeyClick('←')"
+                 class="flex center key-box">
+              ←
+            </div>
+            <div class="flex center key-box" @click="handleKeyClick('Clear')">
+              Clear
+            </div>
+            <div class="flex center key-box" @click="visible=false" style="height: 130px;">
+              Enter
+            </div>
           </div>
         </div>
+
+
+<!--        <div class="flex column">
+
+
+
+        </div>-->
       </div>
-    </template>
-  <a-button slot="reference" @click="visible=true" style="position: absolute; top: 0; right: 0;" :style="{width: width || '184px', height: height || '32px'}">
+
+<!--  <a-button @click="visible=true" :style="{width: width || '184px', height: height || '32px'}" @keyup="handleOnKeyUp">
     {{ value }}
-  </a-button>
-<!--    <slot></slot>-->
-  </a-popver>
+  </a-button>-->
+    <slot></slot>
+  </a-popover>
 </template>
 
 <script>
+import {range} from 'lodash'
+
 export default {
   name: "NumKeyBoard",
   props: ['type', 'value', 'width', 'height'],
@@ -46,6 +56,14 @@ export default {
     visible: false,
     reset: false
   }),
+  computed: {
+    numBlind() {
+      return this.value.split('').map(() => '●').join('')
+    },
+    numNonBlind() {
+      return this.value
+    }
+  },
   methods: {
     handleKeyClick(n) {
       let value = this.value.toString()
@@ -72,7 +90,14 @@ export default {
       this.reset = true
     },
     handleOnKeyUp(e) {
-      console.log(e)
+      const key = e.key
+      if (key === 'Enter') {
+        this.visible = false
+      } else if (key === 'Backspace') {
+        this.handleKeyClick('←')
+      } else if (range(10).some(n => n.toString() === key)) {
+        this.handleKeyClick(key)
+      }
     }
   }
 }
@@ -85,6 +110,9 @@ export default {
   height: 60px;
   margin-left: 5px;
   border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 20px;
+  padding: 15px 20px;
 }
 .key-box {
   width: 60px;
