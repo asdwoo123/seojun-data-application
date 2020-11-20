@@ -149,7 +149,10 @@ export const saveStation = ({productName, stationName, productId, data}, callbac
                     updatedAt
                 }
             }, null, err => {
-                if (!err) bus.$emit('historyUpdate', productName)
+                if (!err) {
+                    bus.$emit('historyUpdate', productName)
+                    bus.$emit('MonitorUpdate', productName, stationName)
+                }
                 if (callback) callback()
             })
 
@@ -175,6 +178,7 @@ export const saveStation = ({productName, stationName, productId, data}, callbac
                     updatedAt
                 }, {}, () => {
                     bus.$emit('historyUpdate', productName)
+                    bus.$emit('MonitorUpdate', {productName, stationName})
                     if (callback) callback()
                 })
             })

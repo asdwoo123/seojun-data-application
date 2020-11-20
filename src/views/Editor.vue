@@ -440,7 +440,7 @@ export default {
       this.netLoading = true
       setTimeout(() => {
         this.netLoading = false
-      }, 20000)
+      }, 10000)
 
       testingOPC(this.station.url, this.station.port, (result) => {
         this.netLoading = false

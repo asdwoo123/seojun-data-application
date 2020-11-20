@@ -29,9 +29,17 @@
         </a-card>
       </a-col>
     </a-row>
-    <a-modal :visible="visible" :width="1524" @cancel="modalClose">
+    <a-modal :visible="visible" :width="1624" @cancel="modalClose">
       <div class="con-box">
-        <a-table :columns="columns" :data-source="dataSource" :pagination="false"  />
+        <a-table :columns="columns" :data-source="dataSource" :pagination="false" :bordered="true">
+          <template v-for="column in columns.slice(3)">
+            <a-table-column :key="column.key" :title="column.title" :data-index="column.dataIndex">
+              <template slot-scope="text">
+                <div style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
+              </template>
+            </a-table-column>
+          </template>
+        </a-table>
         <div v-if="pageCount" style="float: right; margin-top: 15px;">
           <a-pagination show-quick-jumper :current="pageNumber" :default-current="1" :total="pageCount"
                         @change="pageChange"/>
@@ -51,6 +59,8 @@ import {upperFirst} from 'lodash';
 import {getDB} from '@/utils/lowdb';
 import {getCollection} from '@/utils/mongodb';
 import moment from "moment";
+import $ from 'jquery';
+import bus from '@/utils/bus';
 
 
 export default {
@@ -62,12 +72,27 @@ export default {
     pageCount: null,
     visible: false,
     pageNumber: 1,
+    productName: '',
     stationName: ''
   }),
   computed: {
     projectData() {
       return chain(this.$store.state.stationData).groupBy('productName').toPairs().value().find(p => p[0] === this.productName)
     }
+  },
+  mounted() {
+    bus.$on('monitorUpdate', ({productName, stationName}) => {
+      if (this.visible) {
+        this.loadDataSource(productName, stationName, null)
+      }
+    })
+  },
+  beforeDestroy() {
+    bus.$off('monitorUpdate')
+  },
+  updated() {
+    $('.misData').parent().addClass('misData2')
+    $('.yesData').parent().addClass('yesData2')
   },
   methods: {
     showStationHistory(productName, stationName) {
@@ -167,6 +192,40 @@ export default {
     },
     modalClose() {
       this.visible = false
+    },
+    selectColor(value, standard) {
+      if (!value || !standard) return ''
+
+      const result = Object.entries(standard).filter(v => v[1] !== '')
+          .every(v => {
+            let r
+            switch (v[0]) {
+              case 'min':
+                r = value >= v[1]
+                break
+              case 'max':
+                r = value <= v[1];
+                break
+              case 'equal':
+                if (['True', 'False'].some(i => value === i)) {
+                  r = value === v[1]
+                } else {
+                  r = true;
+                }
+                break
+              default:
+                r = false
+                break
+            }
+
+            return r
+          })
+
+      if (result) {
+        return 'yesData'
+      } else {
+        return 'misData'
+      }
     }
   }
 }
