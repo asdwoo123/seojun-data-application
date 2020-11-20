@@ -333,6 +333,9 @@ export default {
       if (project[this.productIndex].productName === this.project[this.productIndex].productName) {
         project[this.productIndex] = this.project[this.productIndex]
         setDB('project', project)
+        setTimeout(() => {
+          disconnect(connectOPC)
+        }, 100)
       }
       this.visible = false
     },
