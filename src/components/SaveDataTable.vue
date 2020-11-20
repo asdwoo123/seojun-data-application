@@ -89,6 +89,10 @@ export default {
       same: 0
     }
   }),
+  mounted() {
+    $('.misData').parent().addClass('misData2')
+    $('.yesData').parent().addClass('yesData2')
+  },
   updated() {
     $('.misData').parent().addClass('misData2')
     $('.yesData').parent().addClass('yesData2')
@@ -119,7 +123,7 @@ export default {
       this.$message.success('Standard save')
     },
     selectColor(value, standard) {
-      if (!value || !standard) return ''
+      if ((value === null || value === undefined) || !standard) return ''
 
       const result = Object.entries(standard).filter(v => v[1] !== '')
       .every(v => {

@@ -13,12 +13,19 @@
         </a-button>
       </a-popover>
     </div>
-    <a-table :columns="column" :data-source="dataSource" :pagination="{ pageSize: 10 }" />
+    <a-table :columns="column" :data-source="dataSource" :pagination="{ pageSize: 10 }"/>
+    <a-modal :visible="passwordVisible" @cancel="passwordVisible=false" title="Please enter a password">
+      <a-form @submit="deleteLogAll">
+        <div class="label">
+          Password
+        </div>
+      </a-form>
+    </a-modal>
   </a-layout-content>
 </template>
 
 <script>
-import { getDB, deleteAllDB } from '@/utils/lowdb'
+import {getDB, deleteAllDB} from '@/utils/lowdb'
 import moment from 'moment'
 import bus from '../utils/bus'
 
@@ -51,7 +58,8 @@ export default {
     column,
     dataSource: [],
     pageSize: 30,
-    password: ''
+    password: '',
+    passwordVisible: false
   }),
   methods: {
     loadDataSource() {
@@ -81,5 +89,9 @@ export default {
 </script>
 
 <style scoped>
-
+.label {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
 </style>

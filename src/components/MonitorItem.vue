@@ -31,14 +31,15 @@
     </a-row>
     <a-modal :visible="visible" :width="1624" @cancel="modalClose">
       <div class="con-box" style="overflow: scroll;">
-        <a-table :columns="columns" :data-source="dataSource" :pagination="false" :bordered="true">
-          <template v-for="(column, columnIndex) in columns">
-            <a-table-column :key="column.key" :title="column.title" :data-index="column.dataIndex">
+        <a-table :columns="columns" :data-source="dataSource" :pagination="false" bordered>
+          <template slot-scope="text" :slot="column.dataIndex" v-for="column in columns.slice(3)">
+            <div :key="column.key" style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
+<!--            <a-table-column :key="column.key" :title="column.title" :data-index="column.dataIndex">
               <template slot-scope="text">
                 <div v-if="columnIndex < 3" style="text-align: center;">{{ text }}</div>
                 <div v-else style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
               </template>
-            </a-table-column>
+            </a-table-column>-->
           </template>
         </a-table>
         <div v-if="pageCount" style="float: right; margin-top: 15px;">
