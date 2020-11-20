@@ -25,35 +25,48 @@
             <a-icon type="down"/>
           </a-button>
         </a-dropdown>
-        <a-popover trigger="click" placement="bottom">
+<!--        <a-popover trigger="click" placement="bottom">
           <template slot="content">
             <div class="flex">
               <a-input-password v-model="password" style="margin-right: 10px;"/>
               <a-button @click="deleteRowSelected">Delete</a-button>
             </div>
-          </template>
-          <a-button type="danger" style="margin-right: 8px;">
+          </template>-->
+          <a-button type="danger" style="margin-right: 8px;" @click="showPwdModal('one')">
             Delete
           </a-button>
-        </a-popover>
-        <a-popover trigger="click" placement="bottom">
-          <template slot="content">
-            <div class="flex">
-              <a-input-password v-model="password" style="margin-right: 10px;"/>
-              <a-button @click="deleteAll">Delete All</a-button>
-            </div>
-          </template>
-          <a-button type="danger">
+          <!--         </a-popover>
+                 <a-popover trigger="click" placement="bottom">
+                    <template slot="content">
+                      <div class="flex">
+                        <a-input-password v-model="password" style="margin-right: 10px;"/>
+                        <a-button @click="deleteAll">Delete All</a-button>
+                      </div>
+                    </template>-->
+          <a-button type="danger" @click="showPwdModal('all')">
             Delete All
           </a-button>
-        </a-popover>
+<!--        </a-popover>-->
       </div>
     </div>
     <SaveDataTable :columns="columns" :dataSource="dataSource" :loading="loading" :pageCount="pageCount" :completes="completes" :productName="productName"
                    :project="project" :option="option" :loadColumns="loadColumns"
                    :pageNumber="pageNumber" :pageChange="pageChange" :rowSelection="rowSelection"/>
-    <a-modal :visible="passwordVisible" @ok="deleteRowSelected" >
-
+    <a-modal :visible="passwordVisible" @cancel="passwordVisible=false" title="Please enter a password">
+      <a-form @submit="deleteRow">
+        <div class="label">
+          Password
+        </div>
+        <NumKeyBoard v-model="password" type="password">
+          <a-input-password v-model="password" />
+        </NumKeyBoard>
+        <a-button type="primary" html-type="submit" style="width: 100%; margin-top: 20px;">
+          {{ (deleteType === 'one') ? 'Delete' : 'Delete all' }}
+        </a-button>
+      </a-form>
+      <template slot="footer">
+        <div />
+      </template>
     </a-modal>
   </a-layout-content>
 </template>
@@ -68,13 +81,14 @@ import {getDB} from '@/utils/lowdb'
 import {getCollection} from '@/utils/mongodb'
 import SaveDataTable from "@/components/SaveDataTable";
 import bus from '@/utils/bus'
+import NumKeyBoard from "@/components/NumKeyBoard";
 
 const { dialog } = remote
 
 
 export default {
   name: "History",
-  components: {SaveDataTable},
+  components: {NumKeyBoard, SaveDataTable},
   data: () => ({
     project: [],
     productNames: [],
@@ -96,7 +110,8 @@ export default {
     selectedRowKeys: [],
     password: '',
     popupVisible: false,
-    passwordVisible: false
+    passwordVisible: false,
+    deleteType: null
   }),
   created() {
     this.project = getDB('project')
@@ -104,7 +119,6 @@ export default {
     this.defaultProductName = this.productNames[0]
     this.productName = this.defaultProductName
     this.collections = this.productNames.map(n => getCollection(n))
-
   },
   mounted() {
     this.loadColumns()
@@ -115,12 +129,15 @@ export default {
         this.loadDataSource()
       }
     })
-
   },
   beforeDestroy() {
     bus.$off('historyUpdate')
   },
   methods: {
+    showPwdModal(type) {
+      this.deleteType = type
+      this.passwordVisible = true
+    },
     optionChange(option) {
       this.productName = option
       this.option = this.productNames.indexOf(option)
@@ -154,8 +171,16 @@ export default {
         }
       }
     },
-    deleteRowSelected() {
+    deleteRow() {
+      if (!this.deleteType) return;
       if (this.password === getDB('password')) {
+        if (this.deleteType === 'one') this.deleteRowSelected()
+        else this.deleteAll()
+
+        this.passwordVisible = false
+      }
+    },
+    deleteRowSelected() {
         this.selectedRowKeys.forEach(({productId}) => {
           this.collections[this.option].deleteOne({productId}, (err) => {
             if (err) return
@@ -163,16 +188,13 @@ export default {
             this.loadDataSource()
           })
         });
-      }
     },
     deleteAll() {
-      if (this.password === getDB('password')) {
         this.collections[this.option].deleteMany({}, (err) => {
           if (err) return;
           this.password = ''
           this.loadDataSource()
         })
-      }
     },
     loadColumns() {
       if (this.productNames.length === 0) return
@@ -341,5 +363,9 @@ export default {
 </script>
 
 <style scoped>
-
+.label {
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
 </style>

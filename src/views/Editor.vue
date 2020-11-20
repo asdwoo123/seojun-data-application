@@ -402,6 +402,7 @@ export default {
         this.$message.success('The project has been saved')
         setDB('project', this.project)
         this.password = ''
+        this.pwdVisible = false
         setTimeout(() => {
           disconnect(connectOPC)
         }, 100)
@@ -430,6 +431,7 @@ export default {
           setDB('password', this.changePassword)
           this.password = ''
           this.changePassword = ''
+          this.pwdChangeVisible = false
           this.$message.success('Password has been changed')
         }
       } else {

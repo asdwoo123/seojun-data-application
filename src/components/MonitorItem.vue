@@ -30,12 +30,13 @@
       </a-col>
     </a-row>
     <a-modal :visible="visible" :width="1624" @cancel="modalClose">
-      <div class="con-box">
+      <div class="con-box" style="overflow: scroll;">
         <a-table :columns="columns" :data-source="dataSource" :pagination="false" :bordered="true">
-          <template v-for="column in columns.slice(3)">
+          <template v-for="(column, columnIndex) in columns">
             <a-table-column :key="column.key" :title="column.title" :data-index="column.dataIndex">
               <template slot-scope="text">
-                <div style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
+                <div v-if="columnIndex < 3" style="text-align: center;">{{ text }}</div>
+                <div v-else style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
               </template>
             </a-table-column>
           </template>
@@ -72,7 +73,6 @@ export default {
     pageCount: null,
     visible: false,
     pageNumber: 1,
-    productName: '',
     stationName: ''
   }),
   computed: {
