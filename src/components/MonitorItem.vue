@@ -81,14 +81,14 @@ export default {
     }
   },
   mounted() {
-    bus.$on('monitorUpdate', ({productName, stationName}) => {
+    bus.$on('MonitorUpdate', ({productName, stationName}) => {
       if (this.visible) {
         this.loadDataSource(productName, stationName, null)
       }
     })
   },
   beforeDestroy() {
-    bus.$off('monitorUpdate')
+    bus.$off('MonitorUpdate')
   },
   updated() {
     $('.misData').parent().addClass('misData2')
