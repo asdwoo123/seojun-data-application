@@ -1,17 +1,17 @@
 <template>
   <a-layout-content style="padding: 28px;">
     <div class="flex" style="justify-content: flex-end; margin-bottom: 20px;">
-      <a-popover trigger="click" placement="bottom">
+<!--      <a-popover trigger="click" placement="bottom">
         <template slot="content">
           <div class="flex">
             <a-input-password v-model="password" style="margin-right: 10px;"/>
             <a-button @click="deleteLogAll">Delete All</a-button>
           </div>
-        </template>
-        <a-button type="danger">
+        </template>-->
+        <a-button type="danger" @click="passwordVisible=true">
           Delete All
         </a-button>
-      </a-popover>
+<!--      </a-popover>-->
     </div>
     <a-table :columns="column" :data-source="dataSource" :pagination="{ pageSize: 10 }"/>
     <a-modal :visible="passwordVisible" @cancel="passwordVisible=false" title="Please enter a password">
@@ -19,6 +19,12 @@
         <div class="label">
           Password
         </div>
+        <NumKeyBoard v-model="password" type="password">
+          <a-input-password v-model="password" />
+        </NumKeyBoard>
+        <a-button type="primary" html-type="submit" style="width: 100%; margin-top: 20px;">
+          Delete all
+        </a-button>
       </a-form>
     </a-modal>
   </a-layout-content>
@@ -28,6 +34,7 @@
 import {getDB, deleteAllDB} from '@/utils/lowdb'
 import moment from 'moment'
 import bus from '../utils/bus'
+import NumKeyBoard from "@/components/NumKeyBoard";
 
 const column = [
   {
@@ -54,6 +61,7 @@ const column = [
 
 export default {
   name: "Log",
+  components: {NumKeyBoard},
   data: () => ({
     column,
     dataSource: [],
@@ -75,6 +83,8 @@ export default {
       if (this.password === getDB('password')) {
         deleteAllDB('log')
         this.loadDataSource()
+        this.password = ''
+        this.passwordVisible = false
       }
     }
   },

@@ -11,7 +11,9 @@
              :key="index">
         <a-card class="con-box" :title="station.stationName">
           <div slot="extra" class="flex center-v">
-            <a-button style="margin-right: 20px;" @click="showStationHistory(productName, station.stationName)">History</a-button>
+            <a-button style="margin-right: 20px;" @click="showStationHistory(productName, station.stationName)">
+              History
+            </a-button>
             <div :class="(station.state) ? 'led-green' : 'led-red'"></div>
           </div>
           <p class="flex between" style="padding-bottom: 8px;">
@@ -32,21 +34,22 @@
     <a-modal :visible="visible" :width="1624" @cancel="modalClose">
       <div class="con-box" style="overflow: scroll;">
         <a-table :columns="columns" :data-source="dataSource" :pagination="false" bordered>
-          <template slot-scope="text" :slot="column.dataIndex" v-for="column in columns.slice(3)">
-            <div :key="column.key" style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
-<!--            <a-table-column :key="column.key" :title="column.title" :data-index="column.dataIndex">
-              <template slot-scope="text">
-                <div v-if="columnIndex < 3" style="text-align: center;">{{ text }}</div>
-                <div v-else style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
-              </template>
-            </a-table-column>-->
+          <template v-for="column in columns.slice(3)">
+            <span :key="column.key" :slot="column.dataIndex" slot-scope="text">{{ text + 1 }}</span>
+<!--                        <div :key="column.key" style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
+                        <a-table-column :key="column.key" :title="column.title" :data-index="column.dataIndex">
+                          <template slot-scope="text">
+                            <div v-if="columnIndex < 3" style="text-align: center;">{{ text }}</div>
+                            <div v-else style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
+                          </template>
+                        </a-table-column>-->
           </template>
         </a-table>
         <div v-if="pageCount" style="float: right; margin-top: 15px;">
           <a-pagination show-quick-jumper :current="pageNumber" :default-current="1" :total="pageCount"
                         @change="pageChange"/>
         </div>
-        <div style="clear: both;" />
+        <div style="clear: both;"/>
       </div>
       <template slot="footer">
         <div/>
@@ -117,12 +120,12 @@ export default {
           dataIndex: 'updatedAt',
           key: 'updatedAt'
         },
-          ...station.data.filter(v => v.use).map(v => ({
-            title: upperFirst(v.dataName),
-            dataIndex: v.dataName,
-            key: v.dataName,
-            standard: v.standard
-          }))
+        ...station.data.filter(v => v.use).map(v => ({
+          title: upperFirst(v.dataName),
+          dataIndex: v.dataName,
+          key: v.dataName,
+          standard: v.standard
+        }))
       ]
 
       this.loadDataSource(productName, stationName, null, () => {
@@ -143,7 +146,7 @@ export default {
 
       collection.find({}).sort({createdAt: -1}).limit(30)
           .skip((paging - 1) * 30).toArray((err, completes) => {
-            if (err) return
+        if (err) return
         if (completes.length > 0) {
           const dataSource = completes.map(complete => {
             const key = complete.id.toString() || '1'
@@ -152,19 +155,19 @@ export default {
             const updatedAt = moment(complete.updatedAt).format('YYYY-MM-DD h:mm:ss a');
             const station = complete['stations'].find(s => s.stationName === stationName);
             if (station) {
-            const data = station.data.reduce((acc, one) => {
-              let dataValue = one.dataValue
+              const data = station.data.reduce((acc, one) => {
+                let dataValue = one.dataValue
 
-              if (typeof dataValue === 'boolean') {
-                dataValue = (dataValue) ? 'True' : 'False'
-              }
+                if (typeof dataValue === 'boolean') {
+                  dataValue = (dataValue) ? 'True' : 'False'
+                }
 
-              if (!Number.isInteger(dataValue)) {
-                dataValue = dataValue.toFixed(1)
-              }
+                if (!Number.isInteger(dataValue)) {
+                  dataValue = dataValue.toFixed(1)
+                }
 
-              return {...acc, [one.dataName]: dataValue}
-            }, {});
+                return {...acc, [one.dataName]: dataValue}
+              }, {});
 
               return {
                 key,
