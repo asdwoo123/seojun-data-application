@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content style="padding: 28px; background-color: #f0f2f5;">
+  <a-layout-content style="padding: 28px; background-color: #1a1b37;">
     <div class="flex" style="margin-bottom: 24px; justify-content: flex-end;">
       <!--      <a-button type="primary" style="margin-right: 8px;" @click="importSettingFile">Import Settings</a-button>
             <a-button type="primary" style="margin-right: 8px;" @click="exportSettingFile">Export Settings</a-button>

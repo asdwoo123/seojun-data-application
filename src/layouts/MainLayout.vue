@@ -9,7 +9,7 @@
         </a-menu-item>
         </template>
       </a-menu>
-<!--      <NumKeyBoard v-model="num" />-->
+
     </a-layout-header>
       <router-view />
   </a-layout>
@@ -18,13 +18,11 @@
 <script>
 import router from "@/router";
 import routes from '@/router/routes'
-import NumKeyBoard from "@/components/NumKeyBoard";
 
 const routeNames = routes.map(r => r.name)
 
 export default {
   name: "MainLayout",
-  components: {NumKeyBoard},
   router,
   data: () => ({
     current: [routeNames[0]],

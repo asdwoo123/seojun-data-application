@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content style="padding: 28px;">
+  <a-layout-content style="padding: 28px; background-color: #1a1b37;">
     <div class="flex" style="justify-content: flex-end; margin-bottom: 20px;">
 <!--      <a-popover trigger="click" placement="bottom">
         <template slot="content">

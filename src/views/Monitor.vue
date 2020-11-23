@@ -1,5 +1,5 @@
 <template>
-  <a-layout style="height: 100%;">
+  <a-layout style="height: 100%; background-color: #1a1b37;">
     <a-layout-sider style="width: 200px;">
       <a-menu v-model="current" v-if="productNames.length > 0" :default-selected-keys="[0]"
               theme="dark" style="height: 100%;">
