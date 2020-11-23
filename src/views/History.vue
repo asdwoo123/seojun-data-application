@@ -186,6 +186,8 @@ export default {
             if (err) return
             this.password = ''
             this.loadDataSource()
+            this.passwordVisible = false
+            this.$message.success('The selected data has been deleted')
           })
         });
     },
@@ -194,6 +196,8 @@ export default {
           if (err) return;
           this.password = ''
           this.loadDataSource()
+          this.passwordVisible = false
+          this.$message.success('All data has been deleted')
         })
     },
     loadColumns() {

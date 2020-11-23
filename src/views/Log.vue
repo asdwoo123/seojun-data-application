@@ -85,6 +85,9 @@ export default {
         this.loadDataSource()
         this.password = ''
         this.passwordVisible = false
+        this.$message.success('All logs have been deleted')
+      } else {
+        this.$message.error('Passwords do not match')
       }
     }
   },
