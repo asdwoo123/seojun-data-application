@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content style="padding: 28px; background-color: #1a1b37;">
+  <a-layout-content style="padding: 28px; ">
     <div class="flex between" style="margin-bottom: 20px;">
       <div class="row">
         <a-select :default-value="defaultProductName" style="width: 120px; margin-right: 10px;" @change="optionChange">
@@ -252,6 +252,7 @@ export default {
 
       collection.find(query).sort({createdAt: -1}).limit(10)
           .skip((paging - 1) * 10).toArray((err, completes) => {
+
         if (err) return
         if (completes.length > 0) {
           this.completes = completes

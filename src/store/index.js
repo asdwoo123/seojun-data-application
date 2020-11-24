@@ -13,6 +13,12 @@ export default new Vuex.Store({
     stationNodes: []
   },
   mutations: {
+    changeTheme(state, payload) {
+      state.theme = {
+        ...state.theme,
+        ...payload
+      }
+    },
     insertRealTime(state, payload) {
       if (Array.isArray(payload) && payload.length === 0) {
         state.stationData = []

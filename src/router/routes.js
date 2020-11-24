@@ -18,5 +18,10 @@ export default [
         path: '/log',
         name: 'Log',
         component: () => import('../views/Log')
+    },
+    {
+        path: '/theme',
+        name: 'Theme',
+        component: () => import('../views/ThemeEditor')
     }
 ]

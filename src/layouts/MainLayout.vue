@@ -17,7 +17,8 @@
 
 <script>
 import router from "@/router";
-import routes from '@/router/routes'
+import routes from '@/router/routes';
+import { ipcRenderer } from 'electron';
 
 const routeNames = routes.map(r => r.name)
 
@@ -35,6 +36,13 @@ export default {
     } else {
       this.$router.push('/monitor')
     }
+
+    ipcRenderer.on('route', (event, message) => {
+      if (this.$route.name !== message) {
+        this.$router.push(`/${message.toLowerCase()}`)
+        setTimeout(() => this.current = [this.$route.name], 500)
+      }
+    })
   },
   methods: {
     onModeChange({ key }) {

@@ -5,6 +5,7 @@ import {createProtocol} from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
 import AutoLaunch from 'auto-launch'
 import path from 'path'
+import contextMenu from 'electron-context-menu'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -29,12 +30,19 @@ function createWindow() {
             // Use pluginOptions.nodeIntegration, leave this alone
             // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
             nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-            enableRemoteModule: true
+            enableRemoteModule: true,
+            spellcheck: true
         },
         icon
     })
 
-    console.log(app.getAppPath())
+    contextMenu({
+        prepend: (defaultActions, params, browserWindow) =>
+            ['Monitor', 'History', 'Editor', 'Log', 'Theme'].map(r => ({ label: r,
+                click: () => {
+                    win.webContents.send('route', r)
+                } }))
+    })
 
     if (process.env.WEBPACK_DEV_SERVER_URL) {
         // Load the url of the dev server if in development mode

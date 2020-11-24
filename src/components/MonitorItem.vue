@@ -11,7 +11,7 @@
              :key="index">
         <a-card class="con-box" :title="station.stationName">
           <div slot="extra" class="flex center-v">
-            <a-button style="margin-right: 20px;" @click="showStationHistory(productName, station.stationName)">
+            <a-button type="primary" style="margin-right: 20px;" @click="showStationHistory(productName, station.stationName)">
               History
             </a-button>
             <div :class="(station.state) ? 'led-green' : 'led-red'"></div>

@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content style="padding: 28px; background-color: #1a1b37;">
+  <a-layout-content style="padding: 28px; background-color: #f0f2f5;">
     <div class="flex" style="margin-bottom: 24px; justify-content: flex-end;">
       <!--      <a-button type="primary" style="margin-right: 8px;" @click="importSettingFile">Import Settings</a-button>
             <a-button type="primary" style="margin-right: 8px;" @click="exportSettingFile">Export Settings</a-button>
@@ -45,10 +45,10 @@
         <a-card class="con-box" style="margin-bottom: 16px;" :title="product.productName">
           <div slot="extra">
             <div class="flex">
-              <a-button size="small" style="margin-right: 8px; margin-bottom: 8px;" @click="addStation(index)">
+              <a-button type="primary" size="small" style="margin-right: 8px; margin-bottom: 8px;" @click="addStation(index)">
                 Add station
               </a-button>
-              <a-button size="small" @click="removeProject(index)">
+              <a-button type="primary" size="small" @click="removeProject(index)">
                 Remove project
               </a-button>
             </div>
@@ -59,9 +59,9 @@
                     <a-input style="width: 120px; margin-right: 10px;" v-model="product.productName"/>
                   </div>
                 </template>
-                <a-button size="small" style="margin-right: 8px;">Rename</a-button>
+                <a-button type="primary" size="small" style="margin-right: 8px;">Rename</a-button>
               </a-popover>
-              <a-dropdown-button size="small">
+              <a-dropdown-button type="primary" size="small">
                 {{ index + 1 }}st order
                 <a-menu slot="overlay" @click="orderChange(index, $event)">
                   <a-menu-item v-for="(product, i) in project" :key="i">
@@ -76,10 +76,10 @@
               <div class="flex between draggable">
                 <span>{{ station.stationName }}</span>
                 <div>
-                  <a-button style="margin-right: 8px;" @click="showStationDetail(index, ii)">
+                  <a-button type="primary" style="margin-right: 8px;" @click="showStationDetail(index, ii)">
                     Detail
                   </a-button>
-                  <a-button @click="removeStation(index, ii)">
+                  <a-button type="danger" @click="removeStation(index, ii)">
                     Delete
                   </a-button>
                 </div>
@@ -90,7 +90,7 @@
       </a-col>
     </a-row>
 
-    <a-modal :visible="visible" style="top: 20px;" :width="1524" :closable="false" :maskClosable="false"
+    <a-modal :visible="visible" :width="1524" :closable="false"
              @ok="saveStation"
              @cancel="modalClose">
       <template v-if="station">

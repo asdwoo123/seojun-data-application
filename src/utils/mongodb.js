@@ -28,7 +28,7 @@ export const mongodbConnect = (callback) => {
             bus.$emit('mongodb', true)
             callback()
 
-            /*const collection = db.collection('A/C')
+           /* const collection = db.collection('A/C')
 
             const productData = range(1, 1000001).map(n => (
                 {
@@ -66,7 +66,7 @@ export const mongodbConnect = (callback) => {
                 }
             ))
 
-            collection?.insertMany(productData)
+            collection?.insertMany(productData)*/
 
             const project = getDB('project')[0]
 
@@ -75,11 +75,9 @@ export const mongodbConnect = (callback) => {
                 project.stations.forEach((s, si) => {
                     const { stationName, data } = s;
                     const dataV = data.map(d => ({ dataName: d.dataName, dataValue: random(1, 100) }))
-                    setTimeout(() => {
-                        saveStation({ productName: project.productName, stationName, productId, data: dataV })
-                    }, si * 300)
+                    saveStation({ productName: project.productName, stationName, productId, data: dataV })
                 })
-            }, 500)*/
+            }, 1000)
 
         }
     })
