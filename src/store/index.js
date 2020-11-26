@@ -10,7 +10,8 @@ export default new Vuex.Store({
     theme: {},
     confirmVisible: false,
     confirmMessage: '',
-    stationNodes: []
+    stationNodes: [],
+    darkMode: false
   },
   mutations: {
     changeTheme(state, payload) {
@@ -18,6 +19,9 @@ export default new Vuex.Store({
         ...state.theme,
         ...payload
       }
+    },
+    changeMode(state, payload) {
+      state.darkMode = payload
     },
     insertRealTime(state, payload) {
       if (Array.isArray(payload) && payload.length === 0) {

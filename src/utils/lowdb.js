@@ -14,7 +14,7 @@ const password = '123'
 
 const project = []
 
-const theme = {}
+const settings = {}
 
 const log = []
 
@@ -22,7 +22,7 @@ db.defaults({
   databaseInfo,
   password,
   project,
-  theme,
+  settings,
   log
 }).write()
 /*db.set('project', ['A/C', 'CSD', 'DSD'].map((s, ii) => ({

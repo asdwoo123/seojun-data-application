@@ -1,5 +1,5 @@
 <template>
-  <a-layout-content style="padding: 28px; background-color: #f0f2f5;">
+  <a-layout-content style="padding: 28px;">
     <div class="flex" style="margin-bottom: 24px; justify-content: flex-end;">
       <!--      <a-button type="primary" style="margin-right: 8px;" @click="importSettingFile">Import Settings</a-button>
             <a-button type="primary" style="margin-right: 8px;" @click="exportSettingFile">Export Settings</a-button>
@@ -90,7 +90,7 @@
       </a-col>
     </a-row>
 
-    <a-modal :visible="visible" :width="1524" :closable="false"
+    <a-modal :class="(darkMode) ? 'dark-mode' : null" :visible="visible" :width="1524" :closable="false"
              @ok="saveStation"
              @cancel="modalClose">
       <template v-if="station">
@@ -98,14 +98,14 @@
           <div class="flex between">
             <div class="flex" style="margin-right: 19px;">
               <a-tooltip placement="topLeft" :title="tooltips.stationName">
-                <div
+                <div class="dark-label"
                     style="width: 100px;">station name
                 </div>
               </a-tooltip>
               <a-input style="width: 250px;" v-model="station.stationName"/>
             </div>
             <div class="flex" style="margin-right: 19px;">
-              <div
+              <div class="dark-label"
                   style="width: 100px;">url
               </div>
 
@@ -119,7 +119,7 @@
               </a-select>
             </div>
             <div class="flex">
-              <div
+              <div class="dark-label"
                   style="width: 100px;">port
               </div>
               <NumKeyBoard v-model="station.port">
@@ -145,7 +145,7 @@
                  v-for="[key] in Object.entries(station).filter(v => ['stationName', 'url', 'port', 'data'].every(k => k !== v[0]))"
                  :key="key">
             <div class="flex" style="margin-bottom: 14px;">
-              <span style="width: 100px;">
+              <span style="width: 100px;" class="dark-label">
               {{ key }}
             </span>
               <a-input :disabled="key !== 'url'" style="width: 250px;" :default-value="station[key]"
@@ -160,21 +160,21 @@
               <div class="flex dataItem" style="margin-bottom: 8px;">
 
                 <div class="flex" style="margin-right: 19px;">
-                  <span style="width: 100px;">Data name</span>
+                  <span style="width: 100px;" class="dark-label">Data name</span>
                   <a-input style="width: 250px;" disabled :default-value="v.dataName" v-model="v.dataName"/>
                 </div>
 
 
                 <div class="flex" style="margin-right: 19px;">
-                  <span style="width: 100px;">Node id</span>
+                  <span style="width: 100px;" class="dark-label">Node id</span>
                   <a-input style="width: 250px;" disabled :default-value="v.nodeId" v-model="v.nodeId"/>
                 </div>
                 <div class="flex center-v" style="margin-right: 5px;">
                   <div class="flex" style="margin-right: 19px;">
-                    <span style="width: 100px;">Data Type</span>
+                    <span style="width: 100px;" class="dark-label">Data Type</span>
                     <a-input disabled style="width: 100px;" :default-value="typeof v.dataValue"/>
                   </div>
-                  <span style="width: 100px;">Standard</span>
+                  <span style="width: 100px;" class="dark-label">Standard</span>
                   <template v-if="typeof v.dataValue === 'number'">
                     <NumKeyBoard v-model="v.standard.min">
                       <a-input addon-before="Min" :default-value="v.standard.min" v-model="v.standard.min"
@@ -303,6 +303,9 @@ export default {
   computed: {
     stationNodes() {
       return this.$store.state.stationNodes
+    },
+    darkMode() {
+      return this.$store.state.darkMode
     }
   },
   components: {

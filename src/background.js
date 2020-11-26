@@ -38,7 +38,7 @@ function createWindow() {
 
     contextMenu({
         prepend: (defaultActions, params, browserWindow) =>
-            ['Monitor', 'History', 'Editor', 'Log', 'Theme'].map(r => ({ label: r,
+            ['Monitor', 'History', 'Editor', 'Log', 'Setting'].map(r => ({ label: r,
                 click: () => {
                     win.webContents.send('route', r)
                 } }))

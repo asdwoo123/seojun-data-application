@@ -1,7 +1,7 @@
 <template>
   <div v-if="projectData">
     <div class="flex">
-      <div style="font-size: 1.3125rem; font-weight: 500; padding: 14px 0 25px 24px;">{{ productName }}</div>
+      <div class="product-title" style="font-size: 1.3125rem; font-weight: 500; padding: 14px 0 25px 24px;">{{ productName }}</div>
       <a-alert v-if="projectData && !projectData[1].every(station => station.state)"
                style="height: 40px; margin-top: 7px; margin-left: 30px;"
                type="error" message="All machine must be connected"/>
@@ -31,11 +31,11 @@
         </a-card>
       </a-col>
     </a-row>
-    <a-modal :visible="visible" :width="1624" @cancel="modalClose">
+    <a-modal :class="(darkMode) ? 'dark-mode' : null" :visible="visible" :width="1624" @cancel="modalClose">
       <div class="con-box" style="overflow: scroll;">
         <a-table :columns="columns" :data-source="dataSource" :pagination="false" bordered>
-          <template v-for="column in columns.slice(3)">
-            <span :key="column.key" :slot="column.dataIndex" slot-scope="text">{{ text + 1 }}</span>
+            <span v-for="column in columns.slice(3)" :key="column.key" :slot="column.dataIndex" slot-scope="text"
+                  :class="selectColor(text, column.standard)">{{ text }}</span>
 <!--                        <div :key="column.key" style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
                         <a-table-column :key="column.key" :title="column.title" :data-index="column.dataIndex">
                           <template slot-scope="text">
@@ -43,7 +43,6 @@
                             <div v-else style="text-align: center;" :class="selectColor(text, column.standard)">{{ text }}</div>
                           </template>
                         </a-table-column>-->
-          </template>
         </a-table>
         <div v-if="pageCount" style="float: right; margin-top: 15px;">
           <a-pagination show-quick-jumper :current="pageNumber" :default-current="1" :total="pageCount"
@@ -82,6 +81,9 @@ export default {
   computed: {
     projectData() {
       return chain(this.$store.state.stationData).groupBy('productName').toPairs().value().find(p => p[0] === this.productName)
+    },
+    darkMode() {
+      return this.$store.state.darkMode
     }
   },
   mounted() {
@@ -144,8 +146,8 @@ export default {
         paging = 1;
       }
 
-      collection.find({}).sort({createdAt: -1}).limit(30)
-          .skip((paging - 1) * 30).toArray((err, completes) => {
+      collection.find({}).sort({createdAt: -1}).limit(10)
+          .skip((paging - 1) * 10).toArray((err, completes) => {
         if (err) return
         if (completes.length > 0) {
           const dataSource = completes.map(complete => {

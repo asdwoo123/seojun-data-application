@@ -1,17 +1,17 @@
 <template>
   <a-layout-content style="padding: 28px;">
     <div class="flex" style="justify-content: flex-end; margin-bottom: 20px;">
-<!--      <a-popover trigger="click" placement="bottom">
-        <template slot="content">
-          <div class="flex">
-            <a-input-password v-model="password" style="margin-right: 10px;"/>
-            <a-button @click="deleteLogAll">Delete All</a-button>
-          </div>
-        </template>-->
-        <a-button type="danger" @click="passwordVisible=true">
-          Delete All
-        </a-button>
-<!--      </a-popover>-->
+      <!--      <a-popover trigger="click" placement="bottom">
+              <template slot="content">
+                <div class="flex">
+                  <a-input-password v-model="password" style="margin-right: 10px;"/>
+                  <a-button @click="deleteLogAll">Delete All</a-button>
+                </div>
+              </template>-->
+      <a-button type="danger" @click="passwordVisible=true">
+        Delete All
+      </a-button>
+      <!--      </a-popover>-->
     </div>
     <a-table :columns="column" :data-source="dataSource" :pagination="{ pageSize: 10 }"/>
     <a-modal :visible="passwordVisible" @cancel="passwordVisible=false" title="Please enter a password">
@@ -20,7 +20,7 @@
           Password
         </div>
         <NumKeyBoard v-model="password" type="password">
-          <a-input-password v-model="password" />
+          <a-input-password v-model="password"/>
         </NumKeyBoard>
         <a-button type="primary" html-type="submit" style="width: 100%; margin-top: 20px;">
           Delete all
@@ -69,6 +69,11 @@ export default {
     password: '',
     passwordVisible: false
   }),
+  computed: {
+    darkMode() {
+      return this.$store.state.darkMode
+    }
+  },
   methods: {
     loadDataSource() {
       const dataSource = getDB('log').sort((a, b) => new Date(b.time) - new Date(a.time)).map((v, i) => {
@@ -101,10 +106,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .label {
   font-size: 15px;
   font-weight: 500;
   margin-bottom: 15px;
+}
+
+.layout {
+  background-color: #f0f2f5;
+}
+
+.dark-layout {
+  background-color: #252b3f;
 }
 </style>

@@ -113,6 +113,11 @@ export default {
     passwordVisible: false,
     deleteType: null
   }),
+  computed: {
+    darkMode() {
+      return this.$store.state.darkMode
+    }
+  },
   created() {
     this.project = getDB('project')
     this.productNames = this.project.map(p => p.productName)

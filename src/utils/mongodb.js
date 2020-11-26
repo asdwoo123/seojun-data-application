@@ -68,7 +68,7 @@ export const mongodbConnect = (callback) => {
 
             collection?.insertMany(productData)*/
 
-            const project = getDB('project')[0]
+           /* const project = getDB('project')[0]
 
             setInterval(() => {
                 const productId = random(10000, 99999).toString();
@@ -77,7 +77,7 @@ export const mongodbConnect = (callback) => {
                     const dataV = data.map(d => ({ dataName: d.dataName, dataValue: random(1, 100) }))
                     saveStation({ productName: project.productName, stationName, productId, data: dataV })
                 })
-            }, 1000)
+            }, 1000)*/
 
         }
     })

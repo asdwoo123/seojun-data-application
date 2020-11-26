@@ -32,6 +32,9 @@ export default {
   computed: {
     stationData() {
       return this.$store.state.stationData
+    },
+    darkMode() {
+      return this.$store.state.darkMode
     }
   },
   created() {

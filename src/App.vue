@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <MainLayout v-if="isConnect" />
+    <MainLayout v-if="isConnect" :class="(darkMode) ? 'dark-mode' : null" />
     <DatabaseLoading v-else />
   </div>
 </template>
@@ -11,6 +11,7 @@ import { mongodbConnect } from '@/utils/mongodb';
 import { connectOPC } from '@/utils/opcua';
 import bus from '@/utils/bus';
 import DatabaseLoading from "@/layouts/DatabaseLoading";
+import { getDB } from '@/utils/lowdb';
 
 export default {
   name: 'app',
@@ -21,12 +22,22 @@ export default {
   data: () => ({
     isConnect: false
   }),
+  computed: {
+    darkMode() {
+      return this.$store.state.darkMode
+    }
+  },
   mounted() {
     bus.$on('mongodb', () => {
       this.isConnect = true
     })
 
     mongodbConnect(connectOPC)
+    const settings = getDB('settings')
+    const darkMode = settings['darkMode']
+    if (darkMode) {
+      this.$store.commit('changeMode', true)
+    }
   }
 }
 </script>

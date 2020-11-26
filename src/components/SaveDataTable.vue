@@ -40,7 +40,7 @@
       <a-pagination show-quick-jumper :current="pageNumber" :default-current="1" :total="pageCount"
                     @change="pageChange"/>
     </div>
-    <a-modal :width="1024" :visible="visible" @cancel="modalClose">
+    <a-modal :class="(darkMode) ? 'dark-mode' : null" :width="1024" :visible="visible" @cancel="modalClose">
       <template slot="footer">
         <div/>
       </template>
@@ -96,6 +96,11 @@ export default {
   updated() {
     $('.misData').parent().addClass('misData2')
     $('.yesData').parent().addClass('yesData2')
+  },
+  computed: {
+    darkMode() {
+      return this.$store.state.darkMode;
+    }
   },
   methods: {
     handleRow(record, index) {

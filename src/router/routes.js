@@ -20,8 +20,8 @@ export default [
         component: () => import('../views/Log')
     },
     {
-        path: '/theme',
-        name: 'Theme',
-        component: () => import('../views/ThemeEditor')
+        path: '/setting',
+        name: 'Setting',
+        component: () => import('../views/Setting')
     }
 ]
