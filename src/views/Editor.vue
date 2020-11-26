@@ -92,7 +92,7 @@
 
     <a-modal :class="(darkMode) ? 'dark-mode' : null" :visible="visible" :width="1524" :closable="false"
              @ok="saveStation"
-             @cancel="modalClose">
+             @cancel="modalClose" :dialog-style="{ top: '20px' }">
       <template v-if="station">
         <div class="flex between" style="margin-bottom: 30px;">
           <div class="flex between">

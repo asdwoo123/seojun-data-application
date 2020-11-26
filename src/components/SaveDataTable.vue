@@ -5,7 +5,7 @@
       <template v-for="(column, columnIndex) in columns">
         <a-table-column v-if="columnIndex < 3" :key="column.key" :title="column.title" :data-index="column.dataIndex">
           <template slot-scope="text">
-            <div style="text-align: center; ">{{ text }}</div>
+            <div style="text-align: center;">{{ text }}</div>
           </template>
         </a-table-column>
         <a-table-column-group :key="columnIndex" v-else>
