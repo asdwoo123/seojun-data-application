@@ -87,25 +87,35 @@ div::-webkit-scrollbar-button {
   border-bottom: none;
 }
 
-.misData {
-  background-color: #f6ccd1 !important;
-  color: #e26777;
-}
-
-.yesData {
-  background-color: #a0f69a !important;
-  color: #000000;
-}
-
 .misData2 {
   background-color: #f6ccd1 !important;
-  color: #e26777;
+
+  div {
+    color: #e26777;
+  }
 }
 
 .yesData2 {
   background-color: #a0f69a !important;
-  color: #000000;
+
+  div {
+    color: #000000;
+  }
 }
+
+
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > .misData2 {
+  background-color: #ffb3bd !important;
+
+
+}
+
+.ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > .yesData2 {
+  background-color: #83fc7c !important;
+
+
+}
+
 
 .setting-item {
   display: flex;
@@ -139,7 +149,6 @@ div::-webkit-scrollbar-button {
     background-color: #44464f;
     border-color: #fff;
   }
-
 
 
   .con-box {
@@ -226,6 +235,10 @@ div::-webkit-scrollbar-button {
 
   .ant-checkbox-inner {
     background-color: #494b54;
+  }
+
+  .ant-table-tbody > tr:hover:not(.ant-table-expanded-row):not(.ant-table-row-selected) > td {
+    background-color: #313238;
   }
 
 }

@@ -14,7 +14,9 @@ const password = '123'
 
 const project = []
 
-const settings = {}
+const settings = {
+
+}
 
 const log = []
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="con-box" style="padding: 24px 16px; background-color: white; overflow: scroll;">
+  <div class="con-box" style="padding: 24px 16px; background-color: white; overflow-x: scroll;">
     <a-table :customRow="handleRow" :bordered="true" :pagination="false" :loading="loading"
              :data-source="dataSource" :row-selection="rowSelection()">
       <template v-for="(column, columnIndex) in columns">

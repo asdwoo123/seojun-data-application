@@ -11,7 +11,8 @@ export default new Vuex.Store({
     confirmVisible: false,
     confirmMessage: '',
     stationNodes: [],
-    darkMode: false
+    darkMode: false,
+    autoSave: false
   },
   mutations: {
     changeTheme(state, payload) {
@@ -22,6 +23,9 @@ export default new Vuex.Store({
     },
     changeMode(state, payload) {
       state.darkMode = payload
+    },
+    changeAutoSave(state, payload) {
+      state.autoSave = payload
     },
     insertRealTime(state, payload) {
       if (Array.isArray(payload) && payload.length === 0) {

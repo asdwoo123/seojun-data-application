@@ -11,11 +11,29 @@
         </div>
         <a-switch v-model="settings.autoLaunch" @change="autoLaunchOnChange"/>
       </div>
-      <div class="setting-item" :class="(darkMode) ? 'dark-item' : null">
+      <div class="setting-item">
         <div class="setting-label">
           Dark mode
         </div>
         <a-switch v-model="settings.darkMode" @change="modeOnChange"/>
+      </div>
+      <div class="setting-item">
+        <div>
+          <div class="setting-label">
+            History auto save
+          </div>
+          <a-switch v-model="settings.autoSave" @change="autoSaveChange"/>
+        </div>
+        <div>
+          <div class="setting-label">
+            <div>
+              {{ folderPath }}
+            </div>
+            <a-button @click="selectFolder">
+              Folder select
+            </a-button>
+          </div>
+        </div>
       </div>
     </div>
   </a-layout-content>
@@ -23,7 +41,10 @@
 
 <script>
 import AutoLaunch from 'auto-launch'
-import { getDB, setDB } from '@/utils/lowdb'
+import {getDB, setDB} from '@/utils/lowdb'
+import {remote} from 'electron'
+
+const {dialog} = remote
 
 const autoLauncher = new AutoLaunch({
   name: 'SEOJUNENG-APPLICATION'
@@ -34,8 +55,10 @@ export default {
   data: () => ({
     settings: {
       darkMode: false,
-      autoLaunch: false
-    }
+      autoLaunch: false,
+      autoSave: false
+    },
+    folderPath: ''
   }),
   computed: {
     darkMode() {
@@ -63,6 +86,28 @@ export default {
       setDB('settings', {
         ...settings,
         darkMode: checked
+      })
+    },
+    autoSaveChange(checked) {
+      this.$store.commit('changeAutoSave', checked)
+      const settings = getDB('settings')
+      setDB('settings', {
+        ...settings,
+        autoSave: checked
+      })
+    },
+    selectFolder() {
+      dialog.showOpenDialog({
+        properties: ['openDirectory']
+      }).then(({filePaths}) => {
+        if (filePaths.length > 0) {
+          this.folderPath = filePaths[0]
+          const settings = getDB('settings')
+          setDB('settings', {
+            ...settings,
+            folderPath: this.folderPath
+          })
+        }
       })
     }
   }

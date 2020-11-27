@@ -32,6 +32,9 @@
               <a-button @click="deleteRowSelected">Delete</a-button>
             </div>
           </template>-->
+        <a-button type="primary" @click="calenderVisible = true">
+          Calendar
+        </a-button>
           <a-button type="danger" style="margin-right: 8px;" @click="showPwdModal('one')">
             Delete
           </a-button>
@@ -67,6 +70,16 @@
       <template slot="footer">
         <div />
       </template>
+    </a-modal>
+    <a-modal :visible="calenderVisible" @cancel="calenderVisible=false">
+      <div>
+        <Calendar startDate="2020-11-27">
+          <div slot="header-left">
+            <Button>month</Button>
+            <Button>week</Button>
+          </div>
+        </Calendar>
+      </div>
     </a-modal>
   </a-layout-content>
 </template>
@@ -111,7 +124,8 @@ export default {
     password: '',
     popupVisible: false,
     passwordVisible: false,
-    deleteType: null
+    deleteType: null,
+    calenderVisible: false
   }),
   computed: {
     darkMode() {

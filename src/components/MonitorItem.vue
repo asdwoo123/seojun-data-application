@@ -32,7 +32,7 @@
       </a-col>
     </a-row>
     <a-modal :class="(darkMode) ? 'dark-mode' : null" :visible="visible" :width="1624" @cancel="modalClose">
-      <div class="con-box" style="overflow: scroll;">
+      <div class="con-box" style="overflow-x: scroll; padding-bottom: 20px;">
         <a-table :columns="columns" :data-source="dataSource" :pagination="false" bordered>
             <span v-for="column in columns.slice(3)" :key="column.key" :slot="column.dataIndex" slot-scope="text"
                   :class="selectColor(text, column.standard)">{{ text }}</span>
