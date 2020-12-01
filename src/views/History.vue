@@ -20,11 +20,14 @@
             <a-menu-item key="0">Search data</a-menu-item>
             <a-menu-item key="1">All data</a-menu-item>
           </a-menu>
-          <a-button type="primary" style="width: 140px; margin-right: 30px;">
+          <a-button type="primary" style="width: 140px; margin-right: 10px;">
             Export to CSV
             <a-icon type="down"/>
           </a-button>
         </a-dropdown>
+<!--        <a-button type="primary" @click="showCalender" style="margin-right: 20px;">
+          Calendar
+        </a-button>-->
 <!--        <a-popover trigger="click" placement="bottom">
           <template slot="content">
             <div class="flex">
@@ -32,9 +35,7 @@
               <a-button @click="deleteRowSelected">Delete</a-button>
             </div>
           </template>-->
-        <a-button type="primary" @click="calenderVisible = true">
-          Calendar
-        </a-button>
+
           <a-button type="danger" style="margin-right: 8px;" @click="showPwdModal('one')">
             Delete
           </a-button>
@@ -73,12 +74,7 @@
     </a-modal>
     <a-modal :visible="calenderVisible" @cancel="calenderVisible=false">
       <div>
-        <Calendar startDate="2020-11-27">
-          <div slot="header-left">
-            <Button>month</Button>
-            <Button>week</Button>
-          </div>
-        </Calendar>
+
       </div>
     </a-modal>
   </a-layout-content>
@@ -95,14 +91,17 @@ import {getCollection} from '@/utils/mongodb'
 import SaveDataTable from "@/components/SaveDataTable";
 import bus from '@/utils/bus'
 import NumKeyBoard from "@/components/NumKeyBoard";
+import 'vue2-event-calendar/dist/vue2-event-calendar.css';
+import { Calendar } from 'vue2-event-calendar';
 
 const { dialog } = remote
 
 
 export default {
   name: "History",
-  components: {NumKeyBoard, SaveDataTable},
+  components: {NumKeyBoard, SaveDataTable, Calendar},
   data: () => ({
+    moment,
     project: [],
     productNames: [],
     productName: '',
@@ -153,6 +152,10 @@ export default {
     bus.$off('historyUpdate')
   },
   methods: {
+    showCalender() {
+      const collection = this.collections[this.option]
+      this.calenderVisible = true
+    },
     showPwdModal(type) {
       this.deleteType = type
       this.passwordVisible = true

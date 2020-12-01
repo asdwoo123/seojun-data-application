@@ -19,7 +19,7 @@ protocol.registerSchemesAsPrivileged([
     {scheme: 'app', privileges: {secure: true, standard: true}}
 ])
 
-const icon = (isDevelopment) ? path.join(app.getAppPath(), 'assets/icon.ico') : path.join(app.getAppPath(), '..', '..', 'assets/icon.ico')
+const icon = (isDevelopment) ? path.join(app.getAppPath(), 'assets/icon.ico') : path.join(app.getAppPath(), '..', '..', '..', 'assets/icon.ico')
 
 function createWindow() {
     // Create the browser window.

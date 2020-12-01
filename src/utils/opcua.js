@@ -25,11 +25,12 @@ if (isDevelopment) {
     }
 } else {
     options = {
-        certificateFile: path.join(app.getAppPath(), '..', 'assets/client_selfsigned_cert_2048.pem'),
-        privateKeyFile: path.join(app.getAppPath(), '..', 'assets/private_key.pem'),
+        certificateFile: path.join(app.getAppPath(), '..', '..', '..', 'assets/client_selfsigned_cert_2048.pem'),
+        privateKeyFile: path.join(app.getAppPath(), '..', '..', '..', 'assets/private_key.pem'),
         endpoint_must_exist: false
     }
 }
+
 
 export const testingOPC = async (url, port, callback) => {
     try {
@@ -44,7 +45,13 @@ export const testingOPC = async (url, port, callback) => {
             const dataName = b.browseName.name
             const nodeId = 'ns=3;s=' + b.nodeId.value
             const dataValue = (await session.readVariableValue(nodeId)).value.value
-            return {dataName, dataValue: (Array.isArray(dataValue)) ? dataValue[1] : dataValue, nodeId, use: false, standard: { min: 0, max: 0, equal: 'True' }}
+            return {
+                dataName,
+                dataValue: (Array.isArray(dataValue)) ? dataValue[1] : dataValue,
+                nodeId,
+                use: false,
+                standard: {min: 0, max: 0, equal: 'True'}
+            }
         }))
 
         await client.disconnect()
@@ -53,7 +60,6 @@ export const testingOPC = async (url, port, callback) => {
         callback(false)
     }
 }
-
 
 
 export const connectOPC = () => {
@@ -191,7 +197,6 @@ export const connectOPC = () => {
                         return {dataName, dataValue: (Array.isArray(dataValue)) ? dataValue[1] : dataValue}
                     })
                 )
-
 
 
                 store.commit('insertRealTime', {

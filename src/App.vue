@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <MainLayout v-if="isConnect" :class="(darkMode) ? 'dark-mode' : null" />
-    <DatabaseLoading v-else />
+    <MainLayout v-if="isConnect" :class="(darkMode) ? 'dark-mode' : null"/>
+    <DatabaseLoading v-else/>
   </div>
 </template>
 
 <script>
 import MainLayout from "@/layouts/MainLayout";
-import { mongodbConnect } from '@/utils/mongodb';
-import { connectOPC } from '@/utils/opcua';
+import {mongodbConnect} from '@/utils/mongodb';
+import {connectOPC} from '@/utils/opcua';
 import bus from '@/utils/bus';
 import DatabaseLoading from "@/layouts/DatabaseLoading";
-import { getDB } from '@/utils/lowdb';
+import {getDB} from '@/utils/lowdb';
+
+
+
 
 export default {
   name: 'app',
@@ -34,10 +37,12 @@ export default {
 
     mongodbConnect(connectOPC)
     const settings = getDB('settings')
-    const darkMode = settings['darkMode']
+    const {darkMode} = settings
     if (darkMode) {
       this.$store.commit('changeMode', true)
     }
+
+
   }
 }
 </script>
